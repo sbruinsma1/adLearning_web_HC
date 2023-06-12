@@ -1,17 +1,17 @@
 {
-  "name": "honeycomb",
+  "name": "adlearning_web_HC",
   "description": "all-in-one task starter app with jsPsych + React + Electron + psiturk ",
   "author": {
-    "name": "Brown CCV",
-    "email": "ccv-bot@brown.edu",
-    "url": "https://ccv.brown.edu"
+    "name": "Luning He",
+    "email": "luninghepsy@gmail.com",
+    "url": "https://github.com/heeluning/adLearning_web_HC.git"
   },
   "version": "3.0.1",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
   "homepage": ".",
-  "repository": "https://github.com/brown-ccv/honeycomb",
+  "repository": "https://github.com/heeluning/adLearning_web_HC.git",
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
@@ -19,6 +19,7 @@
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
     "@jspsych/plugin-image-keyboard-response": "^1.1.1",
     "@jspsych/plugin-survey-multi-select": "^1.1.1",
+    "@jspsych/plugin-fullscreen": "^1.1.1",
     "bootstrap": "^5.2.0-beta1",
     "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
@@ -34,7 +35,10 @@
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
     "react-scripts": "5.0.1",
-    "wait-on": "^7.0.1"
+    "wait-on": "^7.0.1",
+
+
+    "mathjs":"^3.4.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.64",
@@ -57,6 +61,7 @@
     "lint-staged": "^13.2.0",
     "require-context.macro": "^1.1.1",
     "wait-on": "^7.0.1"
+
   },
   "scripts": {
     "commit": "git-cz",
