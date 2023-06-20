@@ -67,7 +67,7 @@ class Click {
           y: rect.top + rect.height / 2,
         };
 
-      const transform = () => {
+      var transform = function() {
         ///
 
         var prefs = ['t', 'WebkitT', 'MozT', 'msT', 'OT'],
@@ -77,6 +77,7 @@ class Click {
         for (var i = 0, len = prefs.length; i < len; i++) {
           if ((p = prefs[i] + 'ransform') in style) return p; //  + 'ransform' ？？
         }
+        console.log('p')
 
         alert('your browser doesnt support css transforms!');
       };
@@ -123,18 +124,19 @@ class Click {
         $('#h').toggle(true);
         $('#v').toggle(true);
         $('#shield').toggle(true);
-        shield.style[transform] =
+        shield.style.transform =
           'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(-50deg)';
-        console.log(event.pageX);
-        console.log(event.pageY);
-        picker.style[transform] = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
+        // picker.style[transform] = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
+        // console.log('rotate(' + rotate(event.pageX, event.pageY) + 'deg)');
+        picker.style.transform = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
+
         var getClickTime = performance.now();
         clickTime.push(getClickTime);
       };
 
       // DRAGEND
 
-      const PickerData = () => {
+      function PickerData() {
         var rotate = $('#picker').css('transform');
         var a = rotate.indexOf('(');
         var b = rotate.indexOf(',');
@@ -143,6 +145,13 @@ class Click {
         var pickerSin = rotate.slice(b + 1, c);
         var pickerTan = pickerSin / pickerCos;
         var pickerAngle = (Math.atan(pickerTan) / Math.PI) * 180;
+
+        // console.log(a + 1, b)
+        // console.log(pickerCos)
+        // console.log(pickerSin)
+        // console.log(pickerTan)
+        // console.log(pickerAngle)
+        
         if (pickerCos < 0 && pickerSin < 0) {
           pickerAngle = pickerAngle + 180;
         } else if (pickerCos < 0 && pickerSin > 0) {
@@ -165,6 +174,9 @@ class Click {
         info.rt = clickTime - startTime;
         info.delay = startTime;
         info.prediction = data;
+
+        // console.log(data); 
+
         after_response(info);
       };
 
@@ -197,6 +209,7 @@ class Click {
         rt: response.rt,
         delay: response.delay,
         prediction: response.prediction,
+        
       };
 
       // clear the display
@@ -204,6 +217,7 @@ class Click {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
+      // console.log(trial_data);
     };
 
     // function to handle responses by the subject
@@ -220,9 +234,11 @@ class Click {
         }, trial.trial_duration);
       }
     };
+
   }
 }
 Click.info = info;
+
 // return Click;
 // })(jsPsychModule);
 

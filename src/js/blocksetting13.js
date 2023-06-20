@@ -13,7 +13,13 @@ import * as Math from 'mathjs';
 import Click from '../js/prediction';
 import Blank from '../js/blank';
 import Position from '../js/outcome';
+// import Click from '../js/template-js/prediction';
+// import Blank from '../js/template-js/blank';
+// import Position from '../js/template-js/outcome';
+
+
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
+
 import { images } from '../lib/utils';
 
 const colors3 = ['#3edcff', '#ff9800', '#fff43f'];
