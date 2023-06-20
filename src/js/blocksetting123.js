@@ -3,23 +3,52 @@ some required definition in the task
  */
 //pseudo random color
 //3 colors version
-const colors3 = ["#3edcff", "#ff9800","#fff43f"];
+
+import { initJsPsych } from 'jspsych';
+const jsPsych = initJsPsych();
+
+import $ from 'jquery';
+import * as Math from 'mathjs';
+
+import Click from '../js/prediction';
+import Blank from '../js/blank';
+import Position from '../js/outcome';
+
+
+import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
+
+import { images } from '../lib/utils';
+
+// design
+const n_TrialPerBlock = 200;
+const n_TrialPractice = 30;
+const n_SamePosition = 5;
+
+
+
+const colors2 = ["#ff9800","#fff43f"];
+// const colors2 = ["#ffa4f1","#b0ff64"];
+let color2=jsPsych.randomization.shuffle(colors2);
+for(let h=0;h<100;h++) { //h<100
+    let colorRepeat=jsPsych.randomization.shuffle(colors2);
+//     let a = color2.slice(color2.length-2); // a: first color
+//     if (colorRepeat.toString() !== a.toString() && colorRepeat[0] !== color2[color2.length-1]){
+//           
+//           color2 = color2.concat(colorRepeat)
+//     }  else h--;
+        color2 = color2.concat(colorRepeat)
+
+}
+
+
+//6 colors version
+const colors3 = ["#ffa4f1","#b0ff64","#8d5fff"];
 let color3=jsPsych.randomization.shuffle(colors3);
 for(let h=0;h<67;h++) {
     let colorRepeat=jsPsych.randomization.shuffle(colors3);
-    let a = color3.slice(color3.length-3);
-    if (colorRepeat.toString() !== a.toString() && colorRepeat[0] !== color3[color3.length-1]){
-          color3 = color3.concat(colorRepeat)
-    } else h--;
-}
-//6 colors version
-const colors6 = ["#3edcff", "#ff9800","#fff43f","#ffa4f1","#b0ff64","#8d5fff"];
-let color6=jsPsych.randomization.shuffle(colors6);
-for(let h=0;h<35;h++) {
-    let colorRepeat=jsPsych.randomization.shuffle(colors6);
-    let b = color6.slice(color6.length-6);
-    if (colorRepeat.toString() !== b.toString() && colorRepeat[0] !== color6[color6.length-1]){
-        color6 = color6.concat(colorRepeat)
+    let b = color3.slice(color3.length-3);
+    if (colorRepeat.toString() !== b.toString() && colorRepeat[0] !== color3[color3.length-1]){
+        color3 = color3.concat(colorRepeat)
     } else h--;
 }
 
@@ -77,7 +106,7 @@ const nums10 = angle_array();
 
 function angle_array() {
     let nums=[];
-    nums.length=201;
+    nums.length= n_TrialPerBlock+1;
     for (let i = 1; i < nums.length; i++) {
         nums[i] = Math.floor(Math.random() * 359);
         for (let j = 0; j < i; j++) {
@@ -93,24 +122,29 @@ function angle_array() {
 const score_array=[];
 let score;
 let counter=0;
-function assessPerformance(){
-counter++;
+function assessPerformance(jsPsych){
+    counter++;
     let outcome_data = jsPsych.data.get().select('outcome').values;
+
     let prediction_data = jsPsych.data.get().select('prediction').values;
+    console.log(outcome_data);
+    console.log(prediction_data);
     for (let i = 0; i < counter; i++) {
         i=counter-1;
         if (outcome_data[i] <= (prediction_data[i] + 20) && outcome_data[i] >= (prediction_data[i] - 20)){
-            score_array.push(1);
-            score= math.sum(score_array);
+            score_array.push(i);
+            // score_array.push(1);
+            score= Math.sum(score_array);
             jsPsych.data.addDataToLastTrial({score})
         }
     }
+    console.log(score_array);
 }
 
 const pr_score_array=[];
 let pr_score;
 let pr_counter=0;
-function assessPractice(){
+function assessPractice(jsPsych){
     pr_counter++;
     let outcome_pr = jsPsych.data.get().select('outcome').values;
     let prediction_pr = jsPsych.data.get().select('prediction').values;
@@ -118,7 +152,8 @@ function assessPractice(){
         i = pr_counter - 1;
         if (outcome_pr[i] <= (prediction_pr[i] + 20) && outcome_pr[i] >= (prediction_pr[i] - 20)) {
             pr_score_array.push (1);
-            pr_score = math.sum (pr_score_array);
+            console.log( pr_score_array);
+            pr_score = Math.sum (pr_score_array);
             jsPsych.data.addDataToLastTrial ({pr_score})
         }
     }
@@ -141,17 +176,17 @@ function pr_scoreCheck(){
 
 
 /***
-*practice block
+*practice block n < 31
 */
-function practice_block(){
+function practice_block(timeline,jsPsych){
     let counterP = 0;
-    for (let n = 1; n < 31; n++) {
+    for (let n = 1; n < n_TrialPractice+1; n++) {
         const colorStyleP = colorP[n-1];
         var x2;
         let outcome;
         let mean;
 
-        if (colorStyleP ===  "#ff9800") {
+        if (colorStyleP ===  colorsP[0] ) {
             counterP++;
             if (counterP < 8) {
                 x2=195;
@@ -159,15 +194,15 @@ function practice_block(){
             if (counterP > 7) {
                 x2=85;
             }
-            outcome = math.mod (normalRandomScaled (x2, 15), 360);
+            outcome = Math.mod (normalRandomScaled (x2, 15), 360);
             mean = x2;
         }
-        if (colorStyleP === "#b0ff64") {
+        if (colorStyleP === colorsP[1]) {
             mean=325;
-            outcome = math.mod (normalRandomScaled (325, 15), 360);
+            outcome = Math.mod (normalRandomScaled (325, 15), 360);
         }
         var prediction = {
-            type: 'click',
+            type: Click,
             on_load: function () {
                 $ ("#counter").text(31-n);
                 $ ("#center-circle").css ("background-color", colorStyleP);
@@ -178,19 +213,19 @@ function practice_block(){
                     })
             },
              on_finish:function(data){
-                 psiturk.recordTrialData(data);
-                 psiturk.saveData();
+                //  psiturk.recordTrialData(data);
+                //  psiturk.saveData();
              }
         };
         var blank = {
-            type: 'blank',
+            type: Blank,
             on_load: function () {
                 $ ("#counter").text(31 - n);
             }
         };
 
         var position = {
-            type: 'position',
+            type: Position,
             data:{type:['practice']},
             on_load: function () {
                 $("#shield").toggle(true);
@@ -206,10 +241,10 @@ function practice_block(){
                 data.outcome=outcome;
                 data.mean=mean;
                 data.color=colorStyleP;
-                assessPractice ();
-                // jsPsych.data.addDataToLastTrial ({outcome, mean});
-                psiturk.recordTrialData(data);
-                psiturk.saveData();
+                assessPractice (jsPsych);
+                jsPsych.data.addDataToLastTrial ({outcome, mean});
+                // psiturk.recordTrialData(data);
+                // psiturk.saveData();
             }
         };
 
@@ -223,24 +258,24 @@ function practice_block(){
 
 
 /*****
-1color block
+1color block n < 201
  *****/
-function block1(){
+function block1(timeline,jsPsych){
     var block1_intro={
-        type:'html-button-response',
-        stimulus:'<div><img src=\'../static/images/zombie.png\' style=\'top:20%; left: 10% ;height:300px;width: 300px\'><p>In this block, you will face one group of zombies.</p></div>',
+        type:jsPsychHtmlbuttonResponse,
+        stimulus:`<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face one group of zombies.</p></div>`,
         choices:['Start']
     };
     timeline.push(block1_intro);
     let counter1 = 0;
-    for (let n = 1; n < 201; n++) {
+    for (let n = 1; n < n_TrialPerBlock+1; n++) {
         const colorStyle = "#3edcff";
         counter1++;
         var x;
         if (counter1 < 5) {
             counter1 = counter1;
         } else if (counter1 > 5) {
-            counter1 = math.mod (counter1, 5)
+            counter1 = Math.mod (counter1, 5)
         }
         if (counter1 === 1) {
             x = nums1[n]
@@ -248,11 +283,11 @@ function block1(){
         if (counter1 !== 1) {
             x = x
         }
-        const outcome = math.mod (normalRandomScaled (x, 20), 360);
+        const outcome = Math.mod (normalRandomScaled (x, 20), 360);
         const mean = x;
 
         var prediction = {
-            type: 'click',
+            type: Click,
             on_load: function () {
                 $ ("#counter").text(201 - n);
                 $ ("#center-circle").css ("background-color", colorStyle);
@@ -263,14 +298,14 @@ function block1(){
                 })
             },
             on_finish:function(data){
-                psiturk.recordTrialData([data]);
-                psiturk.saveData();
+                // psiturk.recordTrialData([data]);
+                // psiturk.saveData();
             }
         };
 
 
         var blank = {
-            type: 'blank',
+            type: Blank,
             on_load: function () {
                 $ ("#counter").text(201 - n);
             }
@@ -278,7 +313,7 @@ function block1(){
 
 
         var position = {
-            type: 'position',
+            type: Position,
             data:{type:['block1']},
             on_load: function () {
                 $("#shield").toggle(true);
@@ -293,9 +328,9 @@ function block1(){
             on_finish: function (data) {
                 data.outcome=outcome;
                 data.mean=mean;
-                assessPerformance ();
-                psiturk.recordTrialData([data]);
-                psiturk.saveData();
+                assessPerformance (jsPsych);
+                // psiturk.recordTrialData([data]);
+                // psiturk.saveData();
             }
         };
         var block1 = {
@@ -305,111 +340,299 @@ function block1(){
     }
 }
 
-/***
-//3 colors block
+/*** 
+//2 colors block n < 201
  ***/
-function block3() {
-    var block3_intro={
-        type:'html-button-response',
-        stimulus:'<div><img src=\'../static/images/zombie.png\' style=\'top:20%; left: 10% ;height:300px;width: 300px\'><p>In this block, you will face three groups of zombies.</p></div>',
+function block2(timeline, jsPsych) {
+    var block2_intro={
+        type: jsPsychHtmlbuttonResponse,
+        stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face two groups of zombies.</p></div>`,
         choices:['Start']
     };
-    timeline.push(block3_intro);
-    let counter3_1 = 0;
-    let counter3_2 = 0;
-    let counter3_3 = 0;
-    for (let n = 1; n < 201; n++) {
-        const colorStyle3 = color3[n-1];
+    timeline.push(block2_intro);
+    let counter2_1 = 0;
+    let counter2_2 = 0;
+  //  let counter2_3 = 0;
+    for (let n = 1; n < n_TrialPerBlock+1; n++) {
+        const colorStyle2 = color2[n-1];
         var x1;
         var x2;
-        var x3;
+     //   var x3;
         let outcome;
         let mean;
-        if (colorStyle3 === "#3edcff") {
-            counter3_1++;
-            if (counter3_1 < 4) {
-                counter3_1 = counter3_1;
+        if (colorStyle2 === colors2[0]) {
+            counter2_1++;
+            if (counter2_1 < n_SamePosition) {
+                counter2_1 = counter2_1;
             }
-            if (counter3_1 > 4) {
-                counter3_1 = math.mod (counter3_1, 4);
+            if (counter2_1 > n_SamePosition) {
+                counter2_1 = Math.mod (counter2_1, 4);
             }
-            if (counter3_1 === 1) {
+            if (counter2_1 === 1) {
                 x1 = nums2[n];
             }
-            if (counter3_1 !== 1) {
+            if (counter2_1 !== 1) {
                 x1 = x1
             }
-            outcome = math.mod (normalRandomScaled (x1, 20), 360);
+            outcome = Math.mod (normalRandomScaled (x1, 20), 360);
             mean = x1;
         }
-        if (colorStyle3 ===  "#ff9800") {
-            counter3_2++;
-            if (counter3_2 < 5) {
-                counter3_2 = counter3_2;
+        if (colorStyle2 ===  colors2[1]) { // orange
+            counter2_2++;
+            if (counter2_2 < n_SamePosition) {
+                counter2_2 = counter2_2;
             }
-            if (counter3_2 > 5) {
-                counter3_2 = math.mod (counter3_2, 5);
+            if (counter2_2 > n_SamePosition) {
+                counter2_2 = Math.mod (counter2_2, 5);
             }
-            if (counter3_2 === 1) {
+            if (counter2_2 === 1) {
                 x2 = nums3[n]
             }
-            if (counter3_2 !== 1) {
+            if (counter2_2 !== 1) {
                 x2 = x2
             }
-            outcome = math.mod (normalRandomScaled (x2, 20), 360);
+            outcome = Math.mod (normalRandomScaled (x2, 20), 360);
             mean = x2;
         }
-        if (colorStyle3 === "#fff43f") {
-            counter3_3++;
-            if (counter3_3 < 7) {
-                counter3_3 = counter3_3;
-            }
-            if (counter3_3 > 7) {
-                counter3_3 = math.mod (counter3_3, 7)
-            }
-            if (counter3_3 === 1) {
-                x3 = nums4[n]
-            }
-            if (counter3_3 !== 1) {
-                x3 = x3
-            }
-            outcome = math.mod (normalRandomScaled (x3, 20), 360);
-            mean = x3;
-        }
+      //  if (colorStyle2 === "#fff43f") {
+      //      counter2_3++;
+      //      if (counter2_3 < 7) {
+      //          counter2_3 = counter2_3;
+      //      }
+      //      if (counter2_3 > 7) {
+      //          counter2_3 = Math.mod (counter2_3, 7)
+      //      }
+      //      if (counter2_3 === 1) {
+      //          x3 = nums4[n]
+      //      }
+      //      if (counter2_3 !== 1) {
+      //          x3 = x3
+      //      }
+      //      outcome = Math.mod (normalRandomScaled (x3, 20), 360);
+      //      mean = x3;
+      //  }
 
-        var prediction3 = {
-            type: 'click',
+        var prediction2 = {
+            type: Click,
             on_load: function () {
                 $("#counter").text(201 - n);
-                $("#center-circle").css ("background-color",colorStyle3);
+                $("#center-circle").css ("background-color",colorStyle2);
                 $ ("#circle").on ("click", function (event) {
                     if(event.target == this){
                         $ ("#center-circle").css ("background-color", "#A9A9A9")}
                     })
                 },
             on_finish:function (data) {
-                psiturk.recordTrialData([data]);
-                psiturk.saveData();
+                // psiturk.recordTrialData([data]);
+                // psiturk.saveData();
             }
         };
 
-        var blank3 = {
-            type: 'blank',
+        var blank2 = {
+            type: Blank,
             on_load: function () {
                 $ ("#counter").text(201 - n);
             }
         };
 
-        var position3 = {
-            type: 'position',
-            data:{type:['block3']},
+        var position2 = {
+            type: Position,
+            data:{type:['block2']},
             on_load: function() {
+                console.log(outcome);
                 $("#shield").toggle(true);
                 const fullTime= jsPsych.data.get().select('prediction').count();
                 const shield_m= jsPsych.data.get().select('prediction').values[fullTime -1];
                 $("#picker").css("transform","rotate(" + shield_m + "deg)");
                 $("#shield").css("transform","rotate(" + (shield_m + 20) + "deg) skewX(-50deg)");
                 $("#counter").text(201 - n);
+                $ ("#picker-circle").css ("background-color",colorStyle2);
+                $ ("#pickerOutcome").css ("transform", 'rotate(' + outcome + 'deg)');
+            },
+            on_finish: function (data) {
+                data.outcome=outcome;
+                data.mean=mean;
+                data.color=colorStyle2;
+                assessPerformance (jsPsych);
+                // psiturk.recordTrialData([data]);
+                // psiturk.saveData();
+            }
+        };
+        var block2 = {
+            timeline: [prediction2, blank2, position2]
+        };
+        timeline.push(block2);
+    }
+}
+
+/****
+3 colors block
+ ****/
+function block3(timeline, jsPsych) {
+    var block3_intro={
+        type: jsPsychHtmlbuttonResponse,
+        stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face three groups of zombies.</p></div>`,
+
+        choices:['Start']
+    };
+    timeline.push(block3_intro);
+    let counter3_1 = 0,
+        counter3_2 = 0,
+        counter3_3 = 0;
+      //  counter3_4 = 0,
+      //  counter3_5 = 0,
+      //  counter3_6 = 0;
+    for (let n = 1; n < n_TrialPerBlock+1; n++) {
+        const colorStyle3 = color3[n-1];
+        var y1;
+        var y2;
+        var y3;
+      //  var y4;
+      //  var y5;
+      //  var y6;
+        let outcome;
+        let mean;
+        if (colorStyle3 === colors3[0]) {
+            counter3_1++;
+            if (counter3_1 < n_SamePosition) {
+                counter3_1 = counter3_1;
+            }
+            if (counter3_1 > n_SamePosition) {
+                counter3_1 = Math.mod (counter3_1, 3)
+            }
+            if (counter3_1 === 1) {
+                y1 = nums5[n]
+            }
+            if (counter3_1 !== 1) {
+                y1 = y1
+            }
+            outcome = Math.mod (normalRandomScaled (y1, 20), 360);
+            mean = y1;
+        }
+
+        if (colorStyle3 === colors3[1]) {
+            counter3_2++;
+            if (counter3_2 < n_SamePosition) {
+                counter3_2 = counter3_2;
+            }
+            if (counter3_2 > n_SamePosition) {
+                counter3_2 = Math.mod (counter3_2, 4)
+            }
+            if (counter3_2 === 1) {
+                y2 = nums6[n]
+            }
+            if (counter3_2 !== 1) {
+                y2 = y2
+            }
+            outcome = Math.mod (normalRandomScaled (y2, 20), 360);
+            mean = y2;
+        }
+
+        if (colorStyle3 === colors3[2]) {
+            counter3_3++;
+            if (counter3_3 < n_SamePosition) {
+                counter3_3 = counter3_3;
+            }
+            if (counter3_3 > n_SamePosition) {
+                counter3_3 = Math.mod (counter3_3, 5)
+            }
+            if (counter3_3 === 1) {
+                y3 = nums7[n]
+            }
+            if (counter3_3 !== 1) {
+                y3 = y3
+            }
+            outcome = Math.mod (normalRandomScaled (y3, 20), 360);
+            mean = y3;
+        }
+
+     //   if (colorStyle3 === "#ffa4f1") {
+      //      counter3_4++;
+      //      if (counter3_4 < 6) {
+       //         counter3_4 = counter3_4;
+       //     }
+         //   if (counter3_4 > 6) {
+         //       counter3_4 = Math.mod (counter3_4, 6)
+         //   }
+         //   if (counter3_4 === 1) {
+          //      y4 = nums8[n]
+          //  }
+          //  if (counter3_4 !== 1) {
+          //      y4 = y4
+          //  }
+          //  outcome = Math.mod (normalRandomScaled (y4, 20), 360);
+          //  mean = y4;
+        //}
+        // if (colorStyle3 === "#b0ff64") {
+        //     counter3_5++;
+        //     if (counter3_5 < 10) {
+        //         counter3_5 = counter3_5;
+        //     }
+        //     if (counter3_5 > 10) {
+        //         counter3_5 = Math.mod (counter3_5, 10)
+        //     }
+        //     if (counter3_5 === 1) {
+        //         y5 = nums9[n]
+        //     }
+        //     if (counter3_5 !== 1) {
+        //         y5 = y5
+        //     }
+        //     outcome = Math.mod (normalRandomScaled (y5, 20), 360);
+        //     mean = y5;
+        // }
+        //
+        // if (colorStyle3 === "#8d5fff") {
+        //     counter3_6++;
+        //     if (counter3_6 < 7) {
+        //         counter3_6 = counter3_6;
+        //     }
+        //     if (counter3_6 > 7) {
+        //         counter3_6 = Math.mod (counter3_6, 7)
+        //     }
+        //     if (counter3_6 === 1) {
+        //         y6 = nums10[n]
+        //     }
+        //     if (counter3_6 !== 1) {
+        //         y6 = y6
+        //     }
+        //     outcome = Math.mod (normalRandomScaled (y6, 20), 360);
+        //     mean = y6
+        // }
+
+        var prediction3 = {
+            type: Click,
+            on_load: function () {
+                $("#counter").text(201 - n);
+                $ ("#center-circle").css ("background-color", colorStyle3);
+                $ ("#circle").on ("click", function (event) {
+                    if(event.target == this){
+                    $ ("#center-circle").css ("background-color", "#A9A9A9");}
+                })
+            },
+            on_finish:function(data){
+                // psiturk.recordTrialData([data]);
+                // psiturk.saveData();
+            }
+        };
+
+        var blank3 = {
+            type: Blank,
+            on_load: function () {
+                $ ("#counter").text(201 - n);
+            }
+        };
+
+        var position3 = {
+            type: Position,
+            data:{type:['block3']},
+            on_load: function () {
+                console.log(outcome);
+                $("#shield").toggle(true);
+                const fullTime= jsPsych.data.get().select('prediction').count();
+                const shield_m= jsPsych.data.get().select('prediction').values[fullTime -1];
+                $("#picker").css("transform","rotate(" + shield_m + "deg)");
+                $("#shield").css("transform","rotate(" + (shield_m + 20) + "deg) skewX(-50deg)");
+                $ ("#counter").text(201 - n);
                 $ ("#picker-circle").css ("background-color",colorStyle3);
                 $ ("#pickerOutcome").css ("transform", 'rotate(' + outcome + 'deg)');
             },
@@ -417,9 +640,9 @@ function block3() {
                 data.outcome=outcome;
                 data.mean=mean;
                 data.color=colorStyle3;
-                assessPerformance ();
-                psiturk.recordTrialData([data]);
-                psiturk.saveData();
+                assessPerformance (jsPsych);
+                // psiturk.recordTrialData([data]);
+                // psiturk.saveData();
             }
         };
         var block3 = {
@@ -429,189 +652,5 @@ function block3() {
     }
 }
 
-/****
-6 colors block
- ****/
-function block6() {
-    var block6_intro={
-        type:'html-button-response',
-        stimulus:'<div><img src=\'../static/images/zombie.png\' style=\'top:20%; left: 10% ;height:300px;width: 300px\'><p>In this block, you will face six groups of zombies.</p></div>',
-        choices:['Start']
-    };
-    timeline.push(block6_intro);
-    let counter6_1 = 0,
-        counter6_2 = 0,
-        counter6_3 = 0,
-        counter6_4 = 0,
-        counter6_5 = 0,
-        counter6_6 = 0;
-    for (let n = 1; n < 201; n++) {
-        const colorStyle6 = color6[n-1];
-        var y1;
-        var y2;
-        var y3;
-        var y4;
-        var y5;
-        var y6;
-        let outcome;
-        let mean;
-        if (colorStyle6 === "#3edcff") {
-            counter6_1++;
-            if (counter6_1 < 3) {
-                counter6_1 = counter6_1;
-            }
-            if (counter6_1 > 3) {
-                counter6_1 = math.mod (counter6_1, 3)
-            }
-            if (counter6_1 === 1) {
-                y1 = nums5[n]
-            }
-            if (counter6_1 !== 1) {
-                y1 = y1
-            }
-            outcome = math.mod (normalRandomScaled (y1, 20), 360);
-            mean = y1;
-        }
 
-        if (colorStyle6 === "#ff9800") {
-            counter6_2++;
-            if (counter6_2 < 4) {
-                counter6_2 = counter6_2;
-            }
-            if (counter6_2 > 4) {
-                counter6_2 = math.mod (counter6_2, 4)
-            }
-            if (counter6_2 === 1) {
-                y2 = nums6[n]
-            }
-            if (counter6_2 !== 1) {
-                y2 = y2
-            }
-            outcome = math.mod (normalRandomScaled (y2, 20), 360);
-            mean = y2;
-        }
-
-        if (colorStyle6 === "#fff43f") {
-            counter6_3++;
-            if (counter6_3 < 5) {
-                counter6_3 = counter6_3;
-            }
-            if (counter6_3 > 5) {
-                counter6_3 = math.mod (counter6_3, 5)
-            }
-            if (counter6_3 === 1) {
-                y3 = nums7[n]
-            }
-            if (counter6_3 !== 1) {
-                y3 = y3
-            }
-            outcome = math.mod (normalRandomScaled (y3, 20), 360);
-            mean = y3;
-        }
-
-        if (colorStyle6 === "#ffa4f1") {
-            counter6_4++;
-            if (counter6_4 < 6) {
-                counter6_4 = counter6_4;
-            }
-            if (counter6_4 > 6) {
-                counter6_4 = math.mod (counter6_4, 6)
-            }
-            if (counter6_4 === 1) {
-                y4 = nums8[n]
-            }
-            if (counter6_4 !== 1) {
-                y4 = y4
-            }
-            outcome = math.mod (normalRandomScaled (y4, 20), 360);
-            mean = y4;
-        }
-        if (colorStyle6 === "#b0ff64") {
-            counter6_5++;
-            if (counter6_5 < 10) {
-                counter6_5 = counter6_5;
-            }
-            if (counter6_5 > 10) {
-                counter6_5 = math.mod (counter6_5, 10)
-            }
-            if (counter6_5 === 1) {
-                y5 = nums9[n]
-            }
-            if (counter6_5 !== 1) {
-                y5 = y5
-            }
-            outcome = math.mod (normalRandomScaled (y5, 20), 360);
-            mean = y5;
-        }
-
-        if (colorStyle6 === "#8d5fff") {
-            counter6_6++;
-            if (counter6_6 < 7) {
-                counter6_6 = counter6_6;
-            }
-            if (counter6_6 > 7) {
-                counter6_6 = math.mod (counter6_6, 7)
-            }
-            if (counter6_6 === 1) {
-                y6 = nums10[n]
-            }
-            if (counter6_6 !== 1) {
-                y6 = y6
-            }
-            outcome = math.mod (normalRandomScaled (y6, 20), 360);
-            mean = y6
-        }
-
-        var prediction6 = {
-            type: 'click',
-            on_load: function () {
-                $("#counter").text(201 - n);
-                $ ("#center-circle").css ("background-color", colorStyle6);
-                $ ("#circle").on ("click", function (event) {
-                    if(event.target == this){
-                    $ ("#center-circle").css ("background-color", "#A9A9A9");}
-                })
-            },
-            on_finish:function(data){
-                psiturk.recordTrialData([data]);
-                psiturk.saveData();
-            }
-        };
-
-        var blank6 = {
-            type: 'blank',
-            on_load: function () {
-                $ ("#counter").text(201 - n);
-            }
-        };
-
-        var position6 = {
-            type: 'position',
-            data:{type:['block6']},
-            on_load: function () {
-                $("#shield").toggle(true);
-                const fullTime= jsPsych.data.get().select('prediction').count();
-                const shield_m= jsPsych.data.get().select('prediction').values[fullTime -1];
-                $("#picker").css("transform","rotate(" + shield_m + "deg)");
-                $("#shield").css("transform","rotate(" + (shield_m + 20) + "deg) skewX(-50deg)");
-                $ ("#counter").text(201 - n);
-                $ ("#picker-circle").css ("background-color",colorStyle6);
-                $ ("#pickerOutcome").css ("transform", 'rotate(' + outcome + 'deg)');
-            },
-            on_finish: function (data) {
-                data.outcome=outcome;
-                data.mean=mean;
-                data.color=colorStyle6;
-                assessPerformance ();
-                psiturk.recordTrialData([data]);
-                psiturk.saveData();
-            }
-        };
-        var block6 = {
-            timeline: [prediction6, blank6, position6]
-        };
-        timeline.push(block6);
-    }
-}
-
-exports.practice_block() = practice_block;
+export { practice_block, block1, block2, block3 };

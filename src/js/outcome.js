@@ -9,8 +9,8 @@
 
 import $ from 'jquery';
 import { ParameterType } from 'jspsych';
-// var Position = (function (jsPsych) {
-//   "use strict";
+// var Position = (function (jspsych) {
+// //   "use strict";
 
 const info = {
   name: 'Position',
@@ -84,7 +84,7 @@ class Position {
 
 Position.info = info;
 
-//   return PositionPlugin;
-// })(jsPsychModule);
+//   return Position;
+// })();
 
 export default Position;

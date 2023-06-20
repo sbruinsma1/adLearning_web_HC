@@ -52,8 +52,8 @@ class Blank {
 
       const fullTime = this.jsPsych.data.get().select('prediction').count();
       const shield_m = this.jsPsych.data.get().select('prediction').values[fullTime - 1];
-      console.log(shield_m);
-      console.log(this.jsPsych.data.get());
+      // console.log(shield_m);
+      // console.log(this.jsPsych.data.get());
 
       document.querySelector('#picker').style.transform = 'rotate(' + shield_m + 'deg)';
       document.querySelector('#shield').style.transform =
