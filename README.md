@@ -1,5 +1,5 @@
-# Honeycomb
-adaptive learning task on Honeycomb
+# adaptive learning task on Honeycomb
+
 
 
 
