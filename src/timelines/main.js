@@ -298,6 +298,7 @@ function buildTimeline(jsPsych) {
       </div>`,
   };
 
+
   timeline.push(age_check);
   timeline.push(fullscreen_trial);
   timeline.push(instruction);

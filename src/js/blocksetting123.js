@@ -10,11 +10,10 @@ const jsPsych = initJsPsych();
 import $ from 'jquery';
 import * as Math from 'mathjs';
 
+// js-template but does not wokr
 import Click from '../js/prediction';
 import Blank from '../js/blank';
 import Position from '../js/outcome';
-
-
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
 
 import { images } from '../lib/utils';
@@ -23,7 +22,18 @@ import { images } from '../lib/utils';
 const n_TrialPerBlock = 200;
 const n_TrialPractice = 30;
 const n_SamePosition = 5;
+const n_MaxJitter = 2; // 5-7
+       
 
+//Generate Jitter
+function GenerateJitter(TrialPerBlock,MaxJitter){
+    let jitters = [];
+    jitters.length= TrialPerBlock+1;
+    for (let t=0;t<TrialPerBlock;t++) { 
+        jitters[t] = Math.floor(Math.random()* (MaxJitter+1))
+    }
+    return jitters
+}
 
 
 const colors2 = ["#ff9800","#fff43f"];
@@ -59,7 +69,6 @@ for(let h=0;h<30;h++) {
         colorP = colorP.concat(colorRepeat)
 }
 
-
 //define normal distribution functions
 let spareRandom = null;
 function normalRandom() {
@@ -94,15 +103,12 @@ function normalRandomScaled(mean, stddev)
 }
 // make pseudo random position
 const nums1 = angle_array();
-const nums2 = angle_array();
-const nums3 = angle_array();
-const nums4 = angle_array();
-const nums5 = angle_array();
-const nums6 = angle_array();
-const nums7 = angle_array();
-const nums8 = angle_array();
-const nums9 = angle_array();
-const nums10 = angle_array();
+const nums2_1 = angle_array();
+const nums2_2 = angle_array();
+const nums3_1 = angle_array();
+const nums3_2 = angle_array();
+const nums3_3 = angle_array();
+
 
 function angle_array() {
     let nums=[];
@@ -123,22 +129,69 @@ const score_array=[];
 let score;
 let counter=0;
 function assessPerformance(jsPsych){
-    counter++;
+    counter++; // number of trials
     let outcome_data = jsPsych.data.get().select('outcome').values;
-
     let prediction_data = jsPsych.data.get().select('prediction').values;
-    console.log(outcome_data);
-    console.log(prediction_data);
-    for (let i = 0; i < counter; i++) {
-        i=counter-1;
-        if (outcome_data[i] <= (prediction_data[i] + 20) && outcome_data[i] >= (prediction_data[i] - 20)){
-            score_array.push(i);
-            // score_array.push(1);
-            score= Math.sum(score_array);
-            jsPsych.data.addDataToLastTrial({score})
+    // for (let i = 0; i < counter; i++) {
+        let i;
+        let t;
+        i=counter-1; // index indata
+        //skip lines of practice
+        t = n_TrialPractice + i
+        console.log(counter);
+
+        if (prediction_data[t] + 20 > 360){
+            console.log("more than 360");
+
+            if (outcome_data[t] <= (prediction_data[t] + 20-360) && outcome_data[t] >= 0){
+                // score_array.push(i);
+                console.log(i);
+                score_array.push(1);
+                score= Math.sum(score_array);
+                jsPsych.data.addDataToLastTrial({score})
         }
-    }
-    console.log(score_array);
+
+            if (outcome_data[t] >= (prediction_data[t] - 20) && outcome_data[t] <= 360){
+                // score_array.push(i);
+                console.log(i);
+                score_array.push(1);
+                score= Math.sum(score_array);
+                jsPsych.data.addDataToLastTrial({score})
+        }
+
+        }
+        if (prediction_data[t] - 20 < 0){
+            console.log("less than 0");
+
+            if (outcome_data[t] <= (prediction_data[t] + 20) && outcome_data[t] >= 0 ){
+                // score_array.push(i);
+                console.log(i);
+                score_array.push(1);
+                score= Math.sum(score_array);
+                jsPsych.data.addDataToLastTrial({score})
+        }
+
+            if (outcome_data[t] <= 360 && outcome_data[t] >= prediction_data[t] - 20 + 360){
+                // score_array.push(i);
+                console.log(i);
+                score_array.push(1);
+                score= Math.sum(score_array);
+                jsPsych.data.addDataToLastTrial({score})
+        }
+
+        }
+        
+        if ( prediction_data[t] + 20 <= 360 && prediction_data[t] - 20 >= 0) {
+            if (outcome_data[t] <= (prediction_data[t] + 20) && outcome_data[t] >= (prediction_data[t] - 20)){
+                // score_array.push(i);
+                console.log(i);
+                score_array.push(1);
+                score= Math.sum(score_array);
+                jsPsych.data.addDataToLastTrial({score})
+        }
+    // }
+        }
+    // console.log(score);
 }
 
 const pr_score_array=[];
@@ -268,23 +321,29 @@ function block1(timeline,jsPsych){
     };
     timeline.push(block1_intro);
     let counter1 = 0;
+    let jitters = GenerateJitter(n_TrialPerBlock,n_MaxJitter);
+    let c = 0;
     for (let n = 1; n < n_TrialPerBlock+1; n++) {
-        const colorStyle = "#3edcff";
-        counter1++;
-        var x;
-        if (counter1 < 5) {
-            counter1 = counter1;
-        } else if (counter1 > 5) {
-            counter1 = Math.mod (counter1, 5)
-        }
-        if (counter1 === 1) {
-            x = nums1[n]
-        }
-        if (counter1 !== 1) {
-            x = x
-        }
-        const outcome = Math.mod (normalRandomScaled (x, 20), 360);
-        const mean = x;
+      const colorStyle = '#3edcff';
+      counter1++;
+      var x;
+      if (counter1 <= n_SamePosition+jitters[c]) {
+        counter1 = counter1;
+      } else if (counter1 > n_SamePosition+jitters[c]) {
+        counter1 = Math.mod(counter1, n_SamePosition+jitters[c]);
+        c++;
+      }
+      if (counter1 === 1) {
+        x = nums1[n];
+      }
+      if (counter1 !== 1) {
+        x = x;
+      }
+      const outcome = Math.mod(normalRandomScaled(x, 20), 360);
+      const mean = x;
+
+    //   console.log(mean);
+    //   console.log(jitters[c]);
 
         var prediction = {
             type: Click,
@@ -316,6 +375,8 @@ function block1(timeline,jsPsych){
             type: Position,
             data:{type:['block1']},
             on_load: function () {
+                console.log(outcome);
+
                 $("#shield").toggle(true);
                 const fullTime= jsPsych.data.get().select('prediction').count();
                 const shield_m= jsPsych.data.get().select('prediction').values[fullTime -1];
@@ -328,6 +389,7 @@ function block1(timeline,jsPsych){
             on_finish: function (data) {
                 data.outcome=outcome;
                 data.mean=mean;
+                data.color=colorStyle;
                 assessPerformance (jsPsych);
                 // psiturk.recordTrialData([data]);
                 // psiturk.saveData();
@@ -353,6 +415,10 @@ function block2(timeline, jsPsych) {
     let counter2_1 = 0;
     let counter2_2 = 0;
   //  let counter2_3 = 0;
+    let c1=0;
+    let c2=0;
+    let jitters = GenerateJitter(n_TrialPerBlock,n_MaxJitter);
+
     for (let n = 1; n < n_TrialPerBlock+1; n++) {
         const colorStyle2 = color2[n-1];
         var x1;
@@ -360,39 +426,51 @@ function block2(timeline, jsPsych) {
      //   var x3;
         let outcome;
         let mean;
-        if (colorStyle2 === colors2[0]) {
-            counter2_1++;
-            if (counter2_1 < n_SamePosition) {
+        if (colorStyle2 === colors2[0]) { // #ff9800 orange
+            counter2_1++; 
+            if (counter2_1 <= n_SamePosition+jitters[c1]) {
                 counter2_1 = counter2_1;
             }
-            if (counter2_1 > n_SamePosition) {
-                counter2_1 = Math.mod (counter2_1, 4);
+            if (counter2_1 > n_SamePosition+jitters[c1]) {
+                counter2_1 = Math.mod (counter2_1, n_SamePosition+jitters[c1]);
+                c1++;
+
             }
             if (counter2_1 === 1) {
-                x1 = nums2[n];
+                x1 = nums2_1[n];
             }
             if (counter2_1 !== 1) {
                 x1 = x1
             }
             outcome = Math.mod (normalRandomScaled (x1, 20), 360);
             mean = x1;
+            console.log(colorStyle2);
+            console.log(mean);
+            console.log(c1);
+            console.log(jitters[c1]);
         }
-        if (colorStyle2 ===  colors2[1]) { // orange
+        if (colorStyle2 ===  colors2[1]) { // #fff43f yellow
             counter2_2++;
-            if (counter2_2 < n_SamePosition) {
+            if (counter2_2 < n_SamePosition+jitters[c2]) {
                 counter2_2 = counter2_2;
             }
-            if (counter2_2 > n_SamePosition) {
-                counter2_2 = Math.mod (counter2_2, 5);
-            }
+            if (counter2_2 > n_SamePosition+jitters[c2]) {
+                counter2_2 = Math.mod (counter2_2, n_SamePosition+jitters[c2]);
+                c2++;
+                }
             if (counter2_2 === 1) {
-                x2 = nums3[n]
+                x2 = nums2_2[n]
             }
             if (counter2_2 !== 1) {
                 x2 = x2
             }
             outcome = Math.mod (normalRandomScaled (x2, 20), 360);
             mean = x2;
+
+
+            console.log(colorStyle2);
+            console.log(mean);
+            console.log(jitters[c2]);
         }
       //  if (colorStyle2 === "#fff43f") {
       //      counter2_3++;
@@ -415,6 +493,7 @@ function block2(timeline, jsPsych) {
         var prediction2 = {
             type: Click,
             on_load: function () {
+                
                 $("#counter").text(201 - n);
                 $("#center-circle").css ("background-color",colorStyle2);
                 $ ("#circle").on ("click", function (event) {
@@ -439,7 +518,8 @@ function block2(timeline, jsPsych) {
             type: Position,
             data:{type:['block2']},
             on_load: function() {
-                console.log(outcome);
+                
+                // console.log(outcome);
                 $("#shield").toggle(true);
                 const fullTime= jsPsych.data.get().select('prediction').count();
                 const shield_m= jsPsych.data.get().select('prediction').values[fullTime -1];
@@ -482,6 +562,10 @@ function block3(timeline, jsPsych) {
       //  counter3_4 = 0,
       //  counter3_5 = 0,
       //  counter3_6 = 0;
+      let jitters = GenerateJitter(n_TrialPerBlock,n_MaxJitter);
+      let c1=0;
+      let c2=0;
+      let c3=0;
     for (let n = 1; n < n_TrialPerBlock+1; n++) {
         const colorStyle3 = color3[n-1];
         var y1;
@@ -494,14 +578,15 @@ function block3(timeline, jsPsych) {
         let mean;
         if (colorStyle3 === colors3[0]) {
             counter3_1++;
-            if (counter3_1 < n_SamePosition) {
+            if (counter3_1 <= n_SamePosition+jitters[c1]) {
                 counter3_1 = counter3_1;
             }
-            if (counter3_1 > n_SamePosition) {
-                counter3_1 = Math.mod (counter3_1, 3)
+            if (counter3_1 > n_SamePosition+jitters[c1]) {
+                counter3_1 = Math.mod (counter3_1, n_SamePosition+jitters[c1])
+                c1++;
             }
             if (counter3_1 === 1) {
-                y1 = nums5[n]
+                y1 = nums3_1[n]
             }
             if (counter3_1 !== 1) {
                 y1 = y1
@@ -512,14 +597,15 @@ function block3(timeline, jsPsych) {
 
         if (colorStyle3 === colors3[1]) {
             counter3_2++;
-            if (counter3_2 < n_SamePosition) {
+            if (counter3_2 < n_SamePosition+jitters[c2]) {
                 counter3_2 = counter3_2;
             }
-            if (counter3_2 > n_SamePosition) {
-                counter3_2 = Math.mod (counter3_2, 4)
+            if (counter3_2 > n_SamePosition+jitters[c2]) {
+                counter3_2 = Math.mod (counter3_2, n_SamePosition+jitters[c2]);
+                c2++;
             }
             if (counter3_2 === 1) {
-                y2 = nums6[n]
+                y2 = nums3_2[n];
             }
             if (counter3_2 !== 1) {
                 y2 = y2
@@ -530,14 +616,15 @@ function block3(timeline, jsPsych) {
 
         if (colorStyle3 === colors3[2]) {
             counter3_3++;
-            if (counter3_3 < n_SamePosition) {
+            if (counter3_3 < n_SamePosition+jitters[c3]) {
                 counter3_3 = counter3_3;
             }
-            if (counter3_3 > n_SamePosition) {
-                counter3_3 = Math.mod (counter3_3, 5)
+            if (counter3_3 > n_SamePosition+jitters[c3]) {
+                counter3_3 = Math.mod (counter3_3, n_SamePosition+jitters[c3])
+                c3++;
             }
             if (counter3_3 === 1) {
-                y3 = nums7[n]
+                y3 = nums3_3[n]
             }
             if (counter3_3 !== 1) {
                 y3 = y3
@@ -626,7 +713,7 @@ function block3(timeline, jsPsych) {
             type: Position,
             data:{type:['block3']},
             on_load: function () {
-                console.log(outcome);
+                // console.log(outcome);
                 $("#shield").toggle(true);
                 const fullTime= jsPsych.data.get().select('prediction').count();
                 const shield_m= jsPsych.data.get().select('prediction').values[fullTime -1];
