@@ -15,11 +15,11 @@
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
+    "@jspsych/plugin-fullscreen": "^1.1.1",
     "@jspsych/plugin-html-button-response": "^1.1.1",
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
     "@jspsych/plugin-image-keyboard-response": "^1.1.1",
     "@jspsych/plugin-survey-multi-select": "^1.1.1",
-    "@jspsych/plugin-fullscreen": "^1.1.1",
     "bootstrap": "^5.2.0-beta1",
     "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
@@ -30,22 +30,20 @@
     "jquery": "^3.4.1",
     "jspsych": "^7.2.3",
     "lodash": "^4.17.19",
+    "mathjs": "^3.4.1",
     "popper.js": "^1.16.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
     "react-scripts": "5.0.1",
-    "wait-on": "^7.0.1", 
-
-
-    "mathjs":"^3.4.1"
+    "wait-on": "^7.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@electron-forge/cli": "^6.0.0-beta.64",
     "@electron-forge/maker-deb": "^6.0.0-beta.64",
     "@electron-forge/maker-dmg": "^6.0.0-beta.64",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "@babel/plugin-proposal-private-property-in-object":"^7.21.11",
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^7.6.0",
@@ -54,7 +52,7 @@
     "dotenv-cli": "^7.0.0",
     "electron": "19.0.8",
     "eslint": "^8.38.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^4.2.1",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^11.0.1",
@@ -62,7 +60,6 @@
     "lint-staged": "^13.2.0",
     "require-context.macro": "^1.1.1",
     "wait-on": "^7.0.1"
-
   },
   "scripts": {
     "commit": "git-cz",
