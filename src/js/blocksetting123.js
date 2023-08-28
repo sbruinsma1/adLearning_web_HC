@@ -20,7 +20,7 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 30;
+const n_TrialPractice = 3;
 const n_SamePosition = 5;
 const n_MaxJitter = 2; // 5-7
        
@@ -212,13 +212,13 @@ function assessPractice(jsPsych){
     }
 }
 
-function scoreCheck(){
-    return jsPsych.data.get().select('score').count();
-}
+// function scoreCheck(){
+//     return jsPsych.data.get().select('score').count();
+// }
 
-function pr_scoreCheck(){
-    return jsPsych.data.get().select('pr_score').count();
-}
+// function pr_scoreCheck(){
+//     return jsPsych.data.get().select('pr_score').count();
+// }
 
 
 
@@ -336,9 +336,9 @@ function block1(timeline,jsPsych){
       if (counter1 === 1) {
         x = nums1[n];
       }
-      if (counter1 !== 1) {
-        x = x;
-      }
+    //   if (counter1 !== 1) {
+    //     continue;
+    //   }
       const outcome = Math.mod(normalRandomScaled(x, 20), 360);
       const mean = x;
 
