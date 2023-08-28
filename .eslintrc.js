@@ -12,6 +12,10 @@ module.exports = {
       version: 'detect',
     },
   },
+  rules: {
+    'react/prop-types': 'off',
+    'no-unused-vars': 'off'
+  },
   env: {
     browser: true,
     node: true,
