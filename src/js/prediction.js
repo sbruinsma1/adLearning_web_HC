@@ -67,20 +67,20 @@ class Click {
           y: rect.top + rect.height / 2,
         };
 
-      var transform = function() {
-        ///
+      // var transform = function() {
+      //   ///
 
-        var prefs = ['t', 'WebkitT', 'MozT', 'msT', 'OT'],
-          style = document.documentElement.style,
-          p;
+      //   var prefs = ['t', 'WebkitT', 'MozT', 'msT', 'OT'],
+      //     style = document.documentElement.style,
+      //     p;
 
-        for (var i = 0, len = prefs.length; i < len; i++) {
-          if ((p = prefs[i] + 'ransform') in style) return p; //  + 'ransform' ？？
-        }
-        console.log('p')
+      //   for (var i = 0, len = prefs.length; i < len; i++) {
+      //     if ((p = prefs[i] + 'ransform') in style) return p; //  + 'ransform' ？？
+      //   }
+      //   console.log('p')
 
-        alert('your browser doesnt support css transforms!');
-      };
+      //   alert('your browser doesnt support css transforms!');
+      // };
 
       const rotate = (x, y) => {
         //x,y to deg？
@@ -151,7 +151,7 @@ class Click {
         // console.log(pickerSin)
         // console.log(pickerTan)
         // console.log(pickerAngle)
-        
+
         if (pickerCos < 0 && pickerSin < 0) {
           pickerAngle = pickerAngle + 180;
         } else if (pickerCos < 0 && pickerSin > 0) {
@@ -162,9 +162,10 @@ class Click {
           pickerAngle = 0;
         }
         return pickerAngle;
-      };
+      }
 
-      const mouseup = (event) => {
+      const mouseup = () => {
+        //(event)
         var data = PickerData();
         $('#h').toggle(true);
         $('#v').toggle(true);
@@ -175,7 +176,7 @@ class Click {
         info.delay = startTime;
         info.prediction = data;
 
-        // console.log(data); 
+        // console.log(data);
 
         after_response(info);
       };
@@ -209,7 +210,6 @@ class Click {
         rt: response.rt,
         delay: response.delay,
         prediction: response.prediction,
-        
       };
 
       // clear the display
@@ -234,7 +234,6 @@ class Click {
         }, trial.trial_duration);
       }
     };
-
   }
 }
 Click.info = info;

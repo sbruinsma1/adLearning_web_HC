@@ -77,12 +77,12 @@ class Pass {
         );
       }
     } else {
-      for (var i = 0; i < trial.choices.length; i++) {
+      for (let i = 0; i < trial.choices.length; i++) {
         buttons.push(trial.button_html);
       }
     }
     html += '<div id="jspsych-html-button-response-btngroup"><br>';
-    for (var i = 0; i < trial.choices.length; i++) {
+    for (let i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
       html +=
         '<div class="jspsych-html-button-response-button" style="display: inline-block; margin:' +
@@ -109,7 +109,7 @@ class Pass {
     var start_time = performance.now();
 
     // add event listeners to buttons
-    for (var i = 0; i < trial.choices.length; i++) {
+    for (let i = 0; i < trial.choices.length; i++) {
       display_element
         .querySelector('#jspsych-html-button-response-button-' + i)
         .addEventListener('click', function (e) {
