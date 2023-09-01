@@ -1,12 +1,11 @@
-
-import {initJsPsych} from 'jspsych';
+import { initJsPsych } from 'jspsych';
 const jsPsych = initJsPsych();
 
 import $ from 'jquery'; //
 
 // import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import {  practice_block, block1, block3, block2} from '../js/blocksetting123';
+import { practice_block, block1, block3, block2 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
@@ -298,7 +297,6 @@ function buildTimeline(jsPsych) {
       </div>`,
   };
 
-
   timeline.push(age_check);
   timeline.push(fullscreen_trial);
   timeline.push(instruction);
@@ -311,10 +309,8 @@ function buildTimeline(jsPsych) {
   practice_block(timeline, jsPsych);
 
   function scoreCheck() {
-
     console.log(jsPsych.data.get());
     return jsPsych.data.get().select('score').count();
-    
   }
 
   var real_task_welcome = {
@@ -348,84 +344,86 @@ function buildTimeline(jsPsych) {
     }
   }
 
+  if (block[1] === 1 && block[2] === 2 && block[3] === 0) {
+    block1(timeline, jsPsych);
+    timeline.push(block_end);
+    block2(timeline, jsPsych);
+    timeline.push(block_end);
+    block3(timeline, jsPsych);
+    timeline.push(block_end);
+  }
+  if (block[1] === 1 && block[2] === 0 && block[3] === 2) {
+    block1(timeline, jsPsych);
+    timeline.push(block_end);
+    block3(timeline, jsPsych);
+    timeline.push(block_end);
+    block2(timeline, jsPsych);
+    timeline.push(block_end);
+  }
+  if (block[1] === 2 && block[2] === 1 && block[3] === 0) {
+    block2(timeline, jsPsych);
+    timeline.push(block_end);
+    block1(timeline, jsPsych);
+    timeline.push(block_end);
+    block3(timeline, jsPsych);
+    timeline.push(block_end);
+  }
+  if (block[1] === 2 && block[2] === 0 && block[3] === 1) {
+    block2(timeline, jsPsych);
+    timeline.push(block_end);
+    block3(timeline, jsPsych);
+    timeline.push(block_end);
+    block1(timeline, jsPsych);
+    timeline.push(block_end);
+  }
+  if (block[1] === 0 && block[2] === 1 && block[3] === 2) {
+    block3(timeline, jsPsych);
+    timeline.push(block_end);
+    block1(timeline, jsPsych);
+    timeline.push(block_end);
+    block2(timeline, jsPsych);
+    timeline.push(block_end);
+  }
+  if (block[1] === 0 && block[2] === 2 && block[3] === 1) {
+    block3(timeline, jsPsych);
+    timeline.push(block_end);
+    block2(timeline, jsPsych);
+    timeline.push(block_end);
+    block1(timeline, jsPsych);
+    timeline.push(block_end);
+  }
 
-        if (block[1] === 1 && block[2]=== 2 && block[3]===0){
-            block1(timeline, jsPsych);
-            timeline.push(block_end);
-            block2(timeline, jsPsych);
-            timeline.push(block_end);
-            block3(timeline, jsPsych);
-            timeline.push(block_end);
-        }   if (block[1] === 1 && block[2]=== 0 && block[3]===2){
-            block1(timeline, jsPsych);
-            timeline.push(block_end);
-            block3(timeline, jsPsych);
-            timeline.push(block_end);
-            block2(timeline, jsPsych);
-            timeline.push(block_end);
-        } if (block[1] === 2 && block[2]=== 1 && block[3]===0){
-            block2(timeline, jsPsych);
-            timeline.push(block_end);
-            block1(timeline, jsPsych);
-            timeline.push(block_end);
-            block3(timeline, jsPsych);
-            timeline.push(block_end);
-        }
-        if (block[1] === 2 && block[2]=== 0 && block[3]===1){
-            block2(timeline, jsPsych);
-            timeline.push(block_end);
-            block3(timeline, jsPsych);
-            timeline.push(block_end);
-            block1(timeline, jsPsych);
-            timeline.push(block_end);
-        }
-        if (block[1] === 0 && block[2]=== 1 && block[3]===2){
-            block3(timeline, jsPsych);
-            timeline.push(block_end);
-            block1(timeline, jsPsych);
-            timeline.push(block_end);
-            block2(timeline, jsPsych);
-            timeline.push(block_end);
-        } if (block[1] === 0 && block[2]=== 2 && block[3]===1) {
-            block3(timeline, jsPsych);
-            timeline.push(block_end);
-            block2(timeline, jsPsych);
-            timeline.push(block_end);
-            block1(timeline, jsPsych);
-            timeline.push(block_end);
-        }
+  //exit task
+  var goodbye = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<div><h1>Thank you for taking the task!</h1><p>Press any key to exit.</p></div>',
+  };
 
-    //exit task
-    var goodbye = {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: "<div><h1>Thank you for taking the task!</h1><p>Press any key to exit.</p></div>"
-    };
+  // exit fullscreen:
+  var fullscreen_trial_exit = {
+    type: jsPsychFullscreen,
+    fullscreen_mode: false,
+  };
 
-    // exit fullscreen:
-    var fullscreen_trial_exit = {
-        type: jsPsychFullscreen,
-        fullscreen_mode: false
-    };
+  timeline.push(goodbye);
+  timeline.push(fullscreen_trial_exit);
 
-    timeline.push(goodbye);
-    timeline.push(fullscreen_trial_exit);
+  // jsPsych.init ({
+  //     timeline: timeline,
+  //     // preload_images: ["../static/images/zombie.png"],
+  //     on_finish: function() {
+  //         jsPsych.data.get().filter([{trial_type:'practice'},{trial_type: 'click'},{trial_type:'position'}]).localSave('csv','task.csv')
+  //       /* psiturk.saveData({
+  //             success: function() { psiturk.completeHIT(); }
+  //         });
 
-    // jsPsych.init ({
-    //     timeline: timeline,
-    //     // preload_images: ["../static/images/zombie.png"],
-    //     on_finish: function() {
-    //         jsPsych.data.get().filter([{trial_type:'practice'},{trial_type: 'click'},{trial_type:'position'}]).localSave('csv','task.csv')
-    //       /* psiturk.saveData({
-    //             success: function() { psiturk.completeHIT(); }
-    //         });
-
-    //       */
-    //     },
-    //     on_data_update: function(data) {
-    //         //psiturk.recordTrialData(data);
-    //     },
-    //     show_preload_progress_bar: true,
-    // })
+  //       */
+  //     },
+  //     on_data_update: function(data) {
+  //         //psiturk.recordTrialData(data);
+  //     },
+  //     show_preload_progress_bar: true,
+  // })
 
   return timeline;
 }
