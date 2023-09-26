@@ -11,6 +11,7 @@ import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
 import jsPsychSurveyText from '@jspsych/plugin-survey-text';
 import jsPsychSurveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
+import jsPsychExternalHtml from '@jspsych/plugin-external-html';
 
 import 'jspsych/css/jspsych.css'; //
 import '../css/style.css'; //
@@ -46,6 +47,20 @@ function buildTimeline(jsPsych) {
   // var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
   // create timeline:
   var timeline = [];
+  // welcome message
+  var welcome = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `<t class="size"> <p> Welcome to the experiment.</p>
+    <p> Before we begin, please fill out the consent form on the next page. </p> 
+    <p> Press any key to begin. </p></t>`
+  };
+  // consent form
+  var consent_form = {
+    type: jsPsychExternalHtml,
+    url: "noham_consent_form.html",
+    execute_script: "true",
+    cont_btn: "next_button_hide"
+  };
   // start fullscreen:
   var fullscreen_trial = {
     type: jsPsychFullscreen,
@@ -54,7 +69,7 @@ function buildTimeline(jsPsych) {
         `<h1>Welcome to the Adaptive Learning Task.</h1>` +
         `<p>It may cost you 60 minutes to finish the task.<br>` +
         `Please pay full attention when you do the task.<br>` +
-        `Press 'Enter' to enter fullscreen.</p>`,
+        `Press 'Continue' to enter fullscreen.</p>`,
     ],
     fullscreen_mode: true,
   };
@@ -297,6 +312,8 @@ function buildTimeline(jsPsych) {
       </div>`,
   };
 
+  timeline.push(welcome);
+  timeline.push(consent_form);
   timeline.push(age_check);
   timeline.push(fullscreen_trial);
   timeline.push(instruction);
