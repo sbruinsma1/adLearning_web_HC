@@ -414,6 +414,9 @@ function buildTimeline(jsPsych) {
   var goodbye = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div><h1>Thank you for taking the task!</h1><p>Press any key to exit.</p></div>',
+    on_finish: function(){
+      window.location = "https://app.prolific.co/submissions/complete?cc=CXXS95SE"
+    }
   };
 
   // exit fullscreen:
