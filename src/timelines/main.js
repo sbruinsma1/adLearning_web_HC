@@ -59,7 +59,7 @@ function buildTimeline(jsPsych) {
     type: jsPsychExternalHtml,
     url: 'noham_consent_form.html',
     execute_script: 'true',
-    cont_btn: 'next_button_hide'
+    cont_btn: 'next_button_hide',
   };
   // start fullscreen:
   var fullscreen_trial = {
