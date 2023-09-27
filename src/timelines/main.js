@@ -52,14 +52,14 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<t class="size"> <p> Welcome to the experiment.</p>
     <p> Before we begin, please fill out the consent form on the next page. </p> 
-    <p> Press any key to begin. </p></t>`
+    <p> Press any key to begin. </p></t>`,
   };
   // consent form
   var consent_form = {
     type: jsPsychExternalHtml,
-    url: "noham_consent_form.html",
-    execute_script: "true",
-    cont_btn: "next_button_hide"
+    url: 'noham_consent_form.html',
+    execute_script: 'true',
+    cont_btn: 'next_button_hide'
   };
   // start fullscreen:
   var fullscreen_trial = {
