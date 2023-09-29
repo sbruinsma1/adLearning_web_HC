@@ -34,25 +34,25 @@ function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
       });
   }
 
-// import React, { useState } from 'react';
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
+  // import React, { useState } from 'react';
+  // import Button from 'react-bootstrap/Button';
+  // import Form from 'react-bootstrap/Form';
 
-// function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
-//   // State variables for login screen
-//   const [participantId, setParticipant] = useState(initialParticipantID);
-//   const [studyId, setStudy] = useState(initialStudyID);
-//   const [isError, setIsError] = useState(false);
+  // function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
+  //   // State variables for login screen
+  //   const [participantId, setParticipant] = useState(initialParticipantID);
+  //   const [studyId, setStudy] = useState(initialStudyID);
+  //   const [isError, setIsError] = useState(false);
 
-//   // Function to log in participant
-//   function handleSubmit(e) {
-//     e.preventDefault();
-//     // Logs user in if a valid participant/study id combination is given
-//     validationFunction(participantId, studyId).then((isValid) => {
-//       setIsError(!isValid);
-//       if (isValid) handleLogin(participantId, studyId);
-//     });
-//   }
+  //   // Function to log in participant
+  //   function handleSubmit(e) {
+  //     e.preventDefault();
+  //     // Logs user in if a valid participant/study id combination is given
+  //     validationFunction(participantId, studyId).then((isValid) => {
+  //       setIsError(!isValid);
+  //       if (isValid) handleLogin(participantId, studyId);
+  //     });
+  //   }
 
   return (
     <div className='centered-h-v'>
