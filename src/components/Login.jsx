@@ -61,7 +61,6 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
 export default Login;
 
-
 // // CHANGE TRIED
 // import React, { useState, useEffect } from 'react';
 // import Form from 'react-bootstrap/Form';
