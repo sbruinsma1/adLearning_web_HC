@@ -65,7 +65,7 @@ function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
             block
             size='lg'
             type='submit'
-            disabled={!validateForm()}
+            // disabled={!validateForm()}
           >
             Log In
           </Button>
