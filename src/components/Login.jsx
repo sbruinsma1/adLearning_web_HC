@@ -14,10 +14,10 @@ function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
     setStudy(envStudyId);
   }, [envParticipantId, envStudyId]);
 
-  // Checks if forms are filled in
-  function validateForm() {
-    return participantId.length > 0 && studyId.length > 0;
-  }
+  // // Checks if forms are filled in
+  // function validateForm() {
+  //   return participantId.length > 0 && studyId.length > 0;
+  // }
 
   // Function to log in participant
   function handleSubmit(e) {
