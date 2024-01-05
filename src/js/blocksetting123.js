@@ -20,9 +20,9 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 30;
-const n_SamePosition = 5;
-const n_MaxJitter = 2; // 5-7
+const n_TrialPractice = 3;
+const n_SamePosition = 7;
+const n_MaxJitter = 4; // 7-11, avg of 9
 const all_colors = ['#3edcff', '#ff9800', '#fff43f', '#ffa4f1', '#b0ff64', '#8d5fff'] // doesn't include practice block colors
 
 //Generate Jitter
