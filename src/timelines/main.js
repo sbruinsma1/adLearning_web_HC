@@ -350,6 +350,7 @@ function buildTimeline(jsPsych) {
 
   timeline.push(real_task_welcome);
 
+  //shuffle array of block indices (1-3)
   let block = [];
   block.length = 4;
   for (let i = 1; i < block.length; i++) {
@@ -361,52 +362,19 @@ function buildTimeline(jsPsych) {
     }
   }
 
-  if (block[1] === 1 && block[2] === 2 && block[3] === 0) {
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 1 && block[2] === 0 && block[3] === 2) {
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 2 && block[2] === 1 && block[3] === 0) {
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 2 && block[2] === 0 && block[3] === 1) {
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 0 && block[2] === 1 && block[3] === 2) {
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 0 && block[2] === 2 && block[3] === 1) {
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
+  //now, call blocks in shuffled order
+  for (let blk_i = 1; blk_i < block.length; blk_i++) {
+    switch (block[blk_i]) {
+      case 1:
+        block1(timeline, jsPsych);
+        break;
+      case 2:
+        block2(timeline, jsPsych);
+        break;
+      case 3:
+        block3(timeline, jsPsych);
+        break;
+    }
     timeline.push(block_end);
   }
 
