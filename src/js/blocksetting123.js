@@ -399,7 +399,7 @@ function block1(timeline, jsPsych) {
 /*** 
 //2 colors block n < 201
  ***/
-function block2(timeline, jsPsych) {
+function block2(timeline, jsPsych, sync_cp = true) {
   var block2_intro = {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face two groups of zombies.</p></div>`,
@@ -411,7 +411,11 @@ function block2(timeline, jsPsych) {
   //  let counter2_3 = 0;
   let c1 = 0;
   let c2 = 0;
-  let jitters = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_1 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  if (sync_cp) {
+    jitters_2 = jitters_1;
+  }
 
   for (let n = 1; n < n_TrialPerBlock + 1; n++) {
     const colorStyle2 = color2[n - 1];
@@ -423,11 +427,11 @@ function block2(timeline, jsPsych) {
     if (colorStyle2 === colors2[0]) {
       // #ff9800 orange
       counter2_1++;
-      if (counter2_1 <= n_SamePosition + jitters[c1]) {
+      if (counter2_1 <= n_SamePosition + jitters_1[c1]) {
         // counter2_1 = counter2_1;
       }
-      if (counter2_1 > n_SamePosition + jitters[c1]) {
-        counter2_1 = Math.mod(counter2_1, n_SamePosition + jitters[c1]);
+      if (counter2_1 > n_SamePosition + jitters_1[c1]) {
+        counter2_1 = Math.mod(counter2_1, n_SamePosition + jitters_1[c1]);
         c1++;
       }
       if (counter2_1 === 1) {
@@ -441,16 +445,16 @@ function block2(timeline, jsPsych) {
       console.log(colorStyle2);
       console.log(mean);
       console.log(c1);
-      console.log(jitters[c1]);
+      console.log(jitters_1[c1]);
     }
     if (colorStyle2 === colors2[1]) {
       // #fff43f yellow
       counter2_2++;
-      if (counter2_2 < n_SamePosition + jitters[c2]) {
+      if (counter2_2 < n_SamePosition + jitters_2[c2]) {
         // counter2_2 = counter2_2;
       }
-      if (counter2_2 > n_SamePosition + jitters[c2]) {
-        counter2_2 = Math.mod(counter2_2, n_SamePosition + jitters[c2]);
+      if (counter2_2 > n_SamePosition + jitters_2[c2]) {
+        counter2_2 = Math.mod(counter2_2, n_SamePosition + jitters_2[c2]);
         c2++;
       }
       if (counter2_2 === 1) {
@@ -464,7 +468,7 @@ function block2(timeline, jsPsych) {
 
       console.log(colorStyle2);
       console.log(mean);
-      console.log(jitters[c2]);
+      console.log(jitters_2[c2]);
     }
     //  if (colorStyle2 === "#fff43f") {
     //      counter2_3++;
@@ -542,7 +546,7 @@ function block2(timeline, jsPsych) {
 /****
 3 colors block
  ****/
-function block3(timeline, jsPsych) {
+function block3(timeline, jsPsych, sync_cp = true) {
   var block3_intro = {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face three groups of zombies.</p></div>`,
@@ -556,7 +560,13 @@ function block3(timeline, jsPsych) {
   //  counter3_4 = 0,
   //  counter3_5 = 0,
   //  counter3_6 = 0;
-  let jitters = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_1 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_3 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  if (sync_cp) {
+    jitters_2 = jitters_1;
+    jitters_3 = jitters_1;
+  }
   let c1 = 0;
   let c2 = 0;
   let c3 = 0;
@@ -572,11 +582,11 @@ function block3(timeline, jsPsych) {
     let mean;
     if (colorStyle3 === colors3[0]) {
       counter3_1++;
-      if (counter3_1 <= n_SamePosition + jitters[c1]) {
+      if (counter3_1 <= n_SamePosition + jitters_1[c1]) {
         // counter3_1 = counter3_1;
       }
-      if (counter3_1 > n_SamePosition + jitters[c1]) {
-        counter3_1 = Math.mod(counter3_1, n_SamePosition + jitters[c1]);
+      if (counter3_1 > n_SamePosition + jitters_1[c1]) {
+        counter3_1 = Math.mod(counter3_1, n_SamePosition + jitters_1[c1]);
         c1++;
       }
       if (counter3_1 === 1) {
@@ -591,11 +601,11 @@ function block3(timeline, jsPsych) {
 
     if (colorStyle3 === colors3[1]) {
       counter3_2++;
-      if (counter3_2 < n_SamePosition + jitters[c2]) {
+      if (counter3_2 < n_SamePosition + jitters_2[c2]) {
         // counter3_2 = counter3_2;
       }
-      if (counter3_2 > n_SamePosition + jitters[c2]) {
-        counter3_2 = Math.mod(counter3_2, n_SamePosition + jitters[c2]);
+      if (counter3_2 > n_SamePosition + jitters_2[c2]) {
+        counter3_2 = Math.mod(counter3_2, n_SamePosition + jitters_2[c2]);
         c2++;
       }
       if (counter3_2 === 1) {
@@ -610,11 +620,11 @@ function block3(timeline, jsPsych) {
 
     if (colorStyle3 === colors3[2]) {
       counter3_3++;
-      if (counter3_3 < n_SamePosition + jitters[c3]) {
+      if (counter3_3 < n_SamePosition + jitters_3[c3]) {
         // counter3_3 = counter3_3;
       }
-      if (counter3_3 > n_SamePosition + jitters[c3]) {
-        counter3_3 = Math.mod(counter3_3, n_SamePosition + jitters[c3]);
+      if (counter3_3 > n_SamePosition + jitters_3[c3]) {
+        counter3_3 = Math.mod(counter3_3, n_SamePosition + jitters_3[c3]);
         c3++;
       }
       if (counter3_3 === 1) {
