@@ -364,16 +364,15 @@ function buildTimeline(jsPsych) {
 
   //now, call blocks in shuffled order
   for (let blk_i = 1; blk_i < block.length; blk_i++) {
+    let sync_cp = true;
     switch (block[blk_i]) {
       case 1:
-        block1(timeline, jsPsych);
+        block1(timeline, jsPsych, sync_cp);
         break;
       case 2:
-        sync_cp = true;
         block2(timeline, jsPsych, sync_cp);
         break;
       case 3:
-        sync_cp = true;
         block3(timeline, jsPsych, sync_cp);
         break;
       case 4:
