@@ -354,7 +354,7 @@ function buildTimeline(jsPsych) {
   let block = [];
   block.length = 6;
   for (let i = 1; i < block.length; i++) {
-    block[i] = Math.floor(Math.random() * 3);
+    block[i] = Math.floor(Math.random() * (block.length - 1));
     for (let j = 0; j < i; j++) {
       while (block[i] === block[j]) {
         i--;
