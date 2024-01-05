@@ -23,6 +23,7 @@ const n_TrialPerBlock = 200;
 const n_TrialPractice = 30;
 const n_SamePosition = 5;
 const n_MaxJitter = 2; // 5-7
+const all_colors = ['#3edcff', '#ff9800', '#fff43f', '#ffa4f1', '#b0ff64', '#8d5fff'] // doesn't include practice block colors
 
 //Generate Jitter
 function GenerateJitter(TrialPerBlock, MaxJitter) {
@@ -34,10 +35,18 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
   return jitters;
 }
 
-const colors2 = ['#ff9800', '#fff43f'];
+// shuffle all colors (even across blocks)
+const colors = jsPsych.randomization.shuffle(all_colors);
+
+// colors for block 1
+let color1 = colors[0]; // note: all trials have the same color
+
+// colors for block 2
+const colors2 = colors.slice(1, 4);
 // const colors2 = ["#ffa4f1","#b0ff64"];
-let color2 = jsPsych.randomization.shuffle(colors2);
-for (let h = 0; h < 100; h++) {
+let color2 = colors2;
+let n_trialsPerColor = Math.ceil(n_TrialPerBlock / 2)
+for (let h = 0; h < n_trialsPerColor; h++) {
   //h<100
   let colorRepeat = jsPsych.randomization.shuffle(colors2);
   //     let a = color2.slice(color2.length-2); // a: first color
@@ -48,10 +57,11 @@ for (let h = 0; h < 100; h++) {
   color2 = color2.concat(colorRepeat);
 }
 
-//6 colors version
-const colors3 = ['#ffa4f1', '#b0ff64', '#8d5fff'];
-let color3 = jsPsych.randomization.shuffle(colors3);
-for (let h = 0; h < 67; h++) {
+// colors for block 3
+const colors3 = colors.slice(4, 6)
+n_trialsPerColor = Math.ceil(n_TrialPerBlock / 3)
+let color3 = colors3;
+for (let h = 0; h < n_trialsPerColor; h++) {
   let colorRepeat = jsPsych.randomization.shuffle(colors3);
   let b = color3.slice(color3.length - 3);
   if (colorRepeat.toString() !== b.toString() && colorRepeat[0] !== color3[color3.length - 1]) {
@@ -59,6 +69,7 @@ for (let h = 0; h < 67; h++) {
   } else h--;
 }
 
+//colors for practice block
 const colorsP = ['#ff9800', '#b0ff64'];
 let colorP = colorsP;
 for (let h = 0; h < 30; h++) {
@@ -309,7 +320,7 @@ function block1(timeline, jsPsych) {
   let jitters = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
   let c = 0;
   for (let n = 1; n < n_TrialPerBlock + 1; n++) {
-    const colorStyle = '#3edcff';
+    const colorStyle = color1;
     counter1++;
     var x;
     if (counter1 <= n_SamePosition + jitters[c]) {
