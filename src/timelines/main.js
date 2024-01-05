@@ -350,9 +350,9 @@ function buildTimeline(jsPsych) {
 
   timeline.push(real_task_welcome);
 
-  //shuffle array of block indices (1-3)
+  //shuffle array of block indices (1-5; set sizes 1-3 and non-sync for 2 and 3)
   let block = [];
-  block.length = 4;
+  block.length = 6;
   for (let i = 1; i < block.length; i++) {
     block[i] = Math.floor(Math.random() * 3);
     for (let j = 0; j < i; j++) {
@@ -369,10 +369,20 @@ function buildTimeline(jsPsych) {
         block1(timeline, jsPsych);
         break;
       case 2:
-        block2(timeline, jsPsych);
+        sync_cp = true;
+        block2(timeline, jsPsych, sync_cp);
         break;
       case 3:
-        block3(timeline, jsPsych);
+        sync_cp = true;
+        block3(timeline, jsPsych, sync_cp);
+        break;
+      case 4:
+        sync_cp = false;
+        block2(timeline, jsPsych, sync_cp);
+        break;
+      case 5:
+        sync_cp = false;
+        block3(timeline, jsPsych, sync_cp);
         break;
     }
     timeline.push(block_end);
