@@ -350,10 +350,11 @@ function buildTimeline(jsPsych) {
 
   timeline.push(real_task_welcome);
 
+  //shuffle array of block indices (1-5; set sizes 1-3 and non-sync for 2 and 3)
   let block = [];
-  block.length = 4;
+  block.length = 6;
   for (let i = 1; i < block.length; i++) {
-    block[i] = Math.floor(Math.random() * 3);
+    block[i] = Math.floor(Math.random() * (block.length - 1));
     for (let j = 0; j < i; j++) {
       while (block[i] === block[j]) {
         i--;
@@ -361,52 +362,28 @@ function buildTimeline(jsPsych) {
     }
   }
 
-  if (block[1] === 1 && block[2] === 2 && block[3] === 0) {
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 1 && block[2] === 0 && block[3] === 2) {
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 2 && block[2] === 1 && block[3] === 0) {
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 2 && block[2] === 0 && block[3] === 1) {
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 0 && block[2] === 1 && block[3] === 2) {
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 0 && block[2] === 2 && block[3] === 1) {
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
+  //now, call blocks in shuffled order
+  for (let blk_i = 1; blk_i < block.length; blk_i++) {
+    let sync_cp = true;
+    switch (block[blk_i]) {
+      case 1:
+        block1(timeline, jsPsych, sync_cp);
+        break;
+      case 2:
+        block2(timeline, jsPsych, sync_cp);
+        break;
+      case 3:
+        block3(timeline, jsPsych, sync_cp);
+        break;
+      case 4:
+        sync_cp = false;
+        block2(timeline, jsPsych, sync_cp);
+        break;
+      case 5:
+        sync_cp = false;
+        block3(timeline, jsPsych, sync_cp);
+        break;
+    }
     timeline.push(block_end);
   }
 
