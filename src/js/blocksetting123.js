@@ -318,6 +318,7 @@ function block1(timeline, jsPsych) {
   timeline.push(block1_intro);
   let counter1 = 0;
   let jitters = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let trial_type_label = 'block1';
   let c = 0;
   for (let n = 1; n < n_TrialPerBlock + 1; n++) {
     const colorStyle = color1;
@@ -367,7 +368,7 @@ function block1(timeline, jsPsych) {
 
     var position = {
       type: Position,
-      data: { type: ['block1'] },
+      data: {type: trial_type_label},
       on_load: function () {
         console.log(outcome);
 
@@ -412,9 +413,13 @@ function block2(timeline, jsPsych, sync_cp = true) {
   let c1 = 0;
   let c2 = 0;
   let jitters_1 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
-  let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter); // async changepoints for 2nd color
+
+  // sync changepoints if applicable
+  let trial_type_label = 'block2_async_cp';
   if (sync_cp) {
     jitters_2 = jitters_1;
+    trial_type_label = 'block2_sync_cp';
   }
 
   for (let n = 1; n < n_TrialPerBlock + 1; n++) {
@@ -515,7 +520,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
 
     var position2 = {
       type: Position,
-      data: { type: ['block2'] },
+      data: {type: trial_type_label},
       on_load: function () {
         // console.log(outcome);
         $('#shield').toggle(true);
@@ -561,12 +566,17 @@ function block3(timeline, jsPsych, sync_cp = true) {
   //  counter3_5 = 0,
   //  counter3_6 = 0;
   let jitters_1 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
-  let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
-  let jitters_3 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter); // async changepoints for 2nd color
+  let jitters_3 = GenerateJitter(n_TrialPerBlock, n_MaxJitter); // async changepoints for 3rd color
+
+  // sync changepoints if applicable
+  let trial_type_label = 'block3_async_cp'
   if (sync_cp) {
     jitters_2 = jitters_1;
     jitters_3 = jitters_1;
+    trial_type_label = 'block3_sync_cp'
   }
+  
   let c1 = 0;
   let c2 = 0;
   let c3 = 0;
@@ -716,7 +726,7 @@ function block3(timeline, jsPsych, sync_cp = true) {
 
     var position3 = {
       type: Position,
-      data: { type: ['block3'] },
+      data: {type: trial_type_label},
       on_load: function () {
         // console.log(outcome);
         $('#shield').toggle(true);
