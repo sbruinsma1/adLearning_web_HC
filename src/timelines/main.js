@@ -334,7 +334,7 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
-          <p>There are 3 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
+          <p>There are 5 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
   };
   var block_end = {
     //show scores
@@ -366,23 +366,25 @@ function buildTimeline(jsPsych) {
   for (let blk_i = 1; blk_i < block.length; blk_i++) {
     let sync_cp = true;
     switch (block[blk_i]) {
-      case 1:
+      case 0:
         block1(timeline, jsPsych, sync_cp);
         break;
-      case 2:
+      case 1:
         block2(timeline, jsPsych, sync_cp);
         break;
-      case 3:
+      case 2:
         block3(timeline, jsPsych, sync_cp);
+        break;
+      case 3:
+        sync_cp = false;
+        block2(timeline, jsPsych, sync_cp);
         break;
       case 4:
         sync_cp = false;
-        block2(timeline, jsPsych, sync_cp);
-        break;
-      case 5:
-        sync_cp = false;
         block3(timeline, jsPsych, sync_cp);
         break;
+      default:
+        throw new Error('Called a block index that does not exist!');
     }
     timeline.push(block_end);
   }
