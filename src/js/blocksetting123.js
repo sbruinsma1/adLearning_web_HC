@@ -20,7 +20,7 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 3;
+const n_TrialPractice = 30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const all_colors = ['#3edcff', '#ff9800', '#fff43f', '#ffa4f1', '#b0ff64', '#8d5fff'] // doesn't include practice block colors
@@ -230,28 +230,66 @@ function assessPractice(jsPsych) {
  *practice block n < n_TrialPractice + 1
  */
 function practice_block(timeline, jsPsych) {
-  let counterP = 0;
+  let counterP_1 = 0;
+  let counterP_2 = 0;
+  let c1 = 0;
+  let c2 = 0;
+  let jitters_1 = GenerateJitter(n_TrialPractice, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPractice, n_MaxJitter); // async changepoints for 2nd color
+  let trial_type_label = 'practice';
+
   for (let n = 1; n < n_TrialPractice + 1; n++) {
     const colorStyleP = colorP[n - 1];
+    var x1;
     var x2;
     let outcome;
     let mean;
-
     if (colorStyleP === colorsP[0]) {
-      counterP++;
-      if (counterP < 8) {
-        x2 = 195;
+      counterP_1++;
+      if (counterP_1 <= n_SamePosition + jitters_1[c1]) {
+        // counterP_1 = counterP_1;
       }
-      if (counterP > 7) {
-        x2 = 85;
+      if (counterP_1 > n_SamePosition + jitters_1[c1]) {
+        counterP_1 = Math.mod(counterP_1, n_SamePosition + jitters_1[c1]);
+        c1++;
+      }
+      if (counterP_1 === 1) {
+        x1 = nums2_1[n];
+      }
+      if (counterP_1 !== 1) {
+        // x1 = x1
+      }
+      outcome = Math.mod(normalRandomScaled(x1, 15), 360);
+      mean = x1;
+      console.log(colorStyleP);
+      console.log(mean);
+      console.log(c1);
+      console.log(jitters_1[c1]);
+    }
+    if (colorStyleP === colorsP[1]) {
+      counterP_2++;
+      if (counterP_2 < n_SamePosition + jitters_2[c2]) {
+        // counterP_2 = counterP_2;
+      }
+      if (counterP_2 > n_SamePosition + jitters_2[c2]) {
+        counterP_2 = Math.mod(counterP_2, n_SamePosition + jitters_2[c2]);
+        c2++;
+      }
+      if (counterP_2 === 1) {
+        x2 = nums2_2[n];
+      }
+      if (counterP_2 !== 1) {
+        // x2 = x2
       }
       outcome = Math.mod(normalRandomScaled(x2, 15), 360);
       mean = x2;
+      console.log(colorStyleP);
+      console.log(mean);
+      console.log(c2);
+      console.log(jitters_2[c2]);
     }
-    if (colorStyleP === colorsP[1]) {
-      mean = 325;
-      outcome = Math.mod(normalRandomScaled(325, 15), 360);
-    }
+    console.log(outcome);
+
     var prediction = {
       type: Click,
       on_load: function () {
@@ -264,10 +302,12 @@ function practice_block(timeline, jsPsych) {
         });
       },
       on_finish: function () {
-        //  psiturk.recordTrialData(data);
-        //  psiturk.saveData();
+        //(data)
+        // psiturk.recordTrialData(data);
+        // psiturk.saveData();
       },
     };
+
     var blank = {
       type: Blank,
       on_load: function () {
@@ -277,7 +317,7 @@ function practice_block(timeline, jsPsych) {
 
     var position = {
       type: Position,
-      data: { type: ['practice'] },
+      data: {type: trial_type_label},
       on_load: function () {
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
@@ -293,12 +333,11 @@ function practice_block(timeline, jsPsych) {
         data.mean = mean;
         data.color = colorStyleP;
         assessPractice(jsPsych);
-        jsPsych.data.addDataToLastTrial({ outcome, mean });
+        // jsPsych.data.addDataToLastTrial({ outcome, mean });
         // psiturk.recordTrialData(data);
         // psiturk.saveData();
       },
     };
-
     var practice = {
       timeline: [prediction, blank, position],
     };
@@ -316,6 +355,7 @@ function block1(timeline, jsPsych) {
     choices: ['Start'],
   };
   timeline.push(block1_intro);
+
   let counter1 = 0;
   let jitters = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
   let trial_type_label = 'block1';
@@ -370,8 +410,6 @@ function block1(timeline, jsPsych) {
       type: Position,
       data: {type: trial_type_label},
       on_load: function () {
-        console.log(outcome);
-
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
         const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
@@ -400,16 +438,16 @@ function block1(timeline, jsPsych) {
 /*** 
 //2 colors block n < n_TrialPerBlock + 1
  ***/
-function block2(timeline, jsPsych, sync_cp = true) {
+function block2(timeline, jsPsych, sync_cp=true) {
   var block2_intro = {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face two groups of zombies.</p></div>`,
     choices: ['Start'],
   };
   timeline.push(block2_intro);
+
   let counter2_1 = 0;
   let counter2_2 = 0;
-  //  let counter2_3 = 0;
   let c1 = 0;
   let c2 = 0;
   let jitters_1 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
@@ -426,11 +464,9 @@ function block2(timeline, jsPsych, sync_cp = true) {
     const colorStyle2 = color2[n - 1];
     var x1;
     var x2;
-    //   var x3;
     let outcome;
     let mean;
     if (colorStyle2 === colors2[0]) {
-      // #ff9800 orange
       counter2_1++;
       if (counter2_1 <= n_SamePosition + jitters_1[c1]) {
         // counter2_1 = counter2_1;
@@ -447,13 +483,8 @@ function block2(timeline, jsPsych, sync_cp = true) {
       }
       outcome = Math.mod(normalRandomScaled(x1, 20), 360);
       mean = x1;
-      console.log(colorStyle2);
-      console.log(mean);
-      console.log(c1);
-      console.log(jitters_1[c1]);
     }
     if (colorStyle2 === colors2[1]) {
-      // #fff43f yellow
       counter2_2++;
       if (counter2_2 < n_SamePosition + jitters_2[c2]) {
         // counter2_2 = counter2_2;
@@ -470,28 +501,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
       }
       outcome = Math.mod(normalRandomScaled(x2, 20), 360);
       mean = x2;
-
-      console.log(colorStyle2);
-      console.log(mean);
-      console.log(jitters_2[c2]);
     }
-    //  if (colorStyle2 === "#fff43f") {
-    //      counter2_3++;
-    //      if (counter2_3 < 7) {
-    //          counter2_3 = counter2_3;
-    //      }
-    //      if (counter2_3 > 7) {
-    //          counter2_3 = Math.mod (counter2_3, 7)
-    //      }
-    //      if (counter2_3 === 1) {
-    //          x3 = nums4[n]
-    //      }
-    //      if (counter2_3 !== 1) {
-    //          x3 = x3
-    //      }
-    //      outcome = Math.mod (normalRandomScaled (x3, 20), 360);
-    //      mean = x3;
-    //  }
 
     var prediction2 = {
       type: Click,
@@ -522,7 +532,6 @@ function block2(timeline, jsPsych, sync_cp = true) {
       type: Position,
       data: {type: trial_type_label},
       on_load: function () {
-        // console.log(outcome);
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
         const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
@@ -551,7 +560,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
 /****
 3 colors block
  ****/
-function block3(timeline, jsPsych, sync_cp = true) {
+function block3(timeline, jsPsych, sync_cp=true) {
   var block3_intro = {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face three groups of zombies.</p></div>`,
@@ -559,12 +568,10 @@ function block3(timeline, jsPsych, sync_cp = true) {
     choices: ['Start'],
   };
   timeline.push(block3_intro);
-  let counter3_1 = 0,
-    counter3_2 = 0,
-    counter3_3 = 0;
-  //  counter3_4 = 0,
-  //  counter3_5 = 0,
-  //  counter3_6 = 0;
+
+  let counter3_1 = 0;
+  let counter3_2 = 0;
+  let counter3_3 = 0;
   let jitters_1 = GenerateJitter(n_TrialPerBlock, n_MaxJitter);
   let jitters_2 = GenerateJitter(n_TrialPerBlock, n_MaxJitter); // async changepoints for 2nd color
   let jitters_3 = GenerateJitter(n_TrialPerBlock, n_MaxJitter); // async changepoints for 3rd color
@@ -585,9 +592,6 @@ function block3(timeline, jsPsych, sync_cp = true) {
     var y1;
     var y2;
     var y3;
-    //  var y4;
-    //  var y5;
-    //  var y6;
     let outcome;
     let mean;
     if (colorStyle3 === colors3[0]) {
@@ -647,59 +651,6 @@ function block3(timeline, jsPsych, sync_cp = true) {
       mean = y3;
     }
 
-    //   if (colorStyle3 === "#ffa4f1") {
-    //      counter3_4++;
-    //      if (counter3_4 < 6) {
-    //         counter3_4 = counter3_4;
-    //     }
-    //   if (counter3_4 > 6) {
-    //       counter3_4 = Math.mod (counter3_4, 6)
-    //   }
-    //   if (counter3_4 === 1) {
-    //      y4 = nums8[n]
-    //  }
-    //  if (counter3_4 !== 1) {
-    //      y4 = y4
-    //  }
-    //  outcome = Math.mod (normalRandomScaled (y4, 20), 360);
-    //  mean = y4;
-    //}
-    // if (colorStyle3 === "#b0ff64") {
-    //     counter3_5++;
-    //     if (counter3_5 < 10) {
-    //         counter3_5 = counter3_5;
-    //     }
-    //     if (counter3_5 > 10) {
-    //         counter3_5 = Math.mod (counter3_5, 10)
-    //     }
-    //     if (counter3_5 === 1) {
-    //         y5 = nums9[n]
-    //     }
-    //     if (counter3_5 !== 1) {
-    //         y5 = y5
-    //     }
-    //     outcome = Math.mod (normalRandomScaled (y5, 20), 360);
-    //     mean = y5;
-    // }
-    //
-    // if (colorStyle3 === "#8d5fff") {
-    //     counter3_6++;
-    //     if (counter3_6 < 7) {
-    //         counter3_6 = counter3_6;
-    //     }
-    //     if (counter3_6 > 7) {
-    //         counter3_6 = Math.mod (counter3_6, 7)
-    //     }
-    //     if (counter3_6 === 1) {
-    //         y6 = nums10[n]
-    //     }
-    //     if (counter3_6 !== 1) {
-    //         y6 = y6
-    //     }
-    //     outcome = Math.mod (normalRandomScaled (y6, 20), 360);
-    //     mean = y6
-    // }
-
     var prediction3 = {
       type: Click,
       on_load: function () {
@@ -728,7 +679,6 @@ function block3(timeline, jsPsych, sync_cp = true) {
       type: Position,
       data: {type: trial_type_label},
       on_load: function () {
-        // console.log(outcome);
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
         const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
