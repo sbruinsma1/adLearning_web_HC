@@ -124,7 +124,7 @@ function App() {
 
   // Save the experiment data on the desktop
   const defaultFinishFunction = (data) => {
-    data.localSave('csv', 'neuro-task.csv');
+    data.localSave('json', 'neuro-task.json');
   };
   // Execute the 'end' callback function (see public/electron.js)
   const desktopFinishFunction = () => {
@@ -141,7 +141,7 @@ function App() {
   };
 
   // Update the study/participant data when they log in
-  const handleLogin = useCallback((participantId, studyId) => {
+  const handleLogin = useCallback((studyId, participantId) => {
     setParticipantID(participantId);
     setStudyID(studyId);
     setLoggedIn(true);
