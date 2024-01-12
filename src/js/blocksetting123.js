@@ -136,64 +136,20 @@ function assessPerformance(jsPsych) {
   counter++; // number of trials
   let outcome_data = jsPsych.data.get().select('outcome').values;
   let prediction_data = jsPsych.data.get().select('prediction').values;
-  // for (let i = 0; i < counter; i++) {
-  let i;
-  let t;
-  i = counter - 1; // index indata
+  let i = counter - 1; // index indata
   //skip lines of practice
-  t = n_TrialPractice + i;
+  let t = n_TrialPractice + i;
   console.log(counter);
 
-  if (prediction_data[t] + 20 > 360) {
-    console.log('more than 360');
-
-    if (outcome_data[t] <= prediction_data[t] + 20 - 360 && outcome_data[t] >= 0) {
-      // score_array.push(i);
-      console.log(i);
-      score_array.push(1);
-      score = Math.sum(score_array);
-      jsPsych.data.addDataToLastTrial({ score });
+  if (Math.mod(Math.abs(prediction_data[t] - outcome_data[t]), 360) <= 20) {
+    console.log(true);
+    score_array.push(1);
+    score = Math.sum(score_array);
+    jsPsych.data.addDataToLastTrial({ score });
     }
-
-    if (outcome_data[t] >= prediction_data[t] - 20 && outcome_data[t] <= 360) {
-      // score_array.push(i);
-      console.log(i);
-      score_array.push(1);
-      score = Math.sum(score_array);
-      jsPsych.data.addDataToLastTrial({ score });
-    }
+  else {
+    console.log(false);
   }
-  if (prediction_data[t] - 20 < 0) {
-    console.log('less than 0');
-
-    if (outcome_data[t] <= prediction_data[t] + 20 && outcome_data[t] >= 0) {
-      // score_array.push(i);
-      console.log(i);
-      score_array.push(1);
-      score = Math.sum(score_array);
-      jsPsych.data.addDataToLastTrial({ score });
-    }
-
-    if (outcome_data[t] <= 360 && outcome_data[t] >= prediction_data[t] - 20 + 360) {
-      // score_array.push(i);
-      console.log(i);
-      score_array.push(1);
-      score = Math.sum(score_array);
-      jsPsych.data.addDataToLastTrial({ score });
-    }
-  }
-
-  if (prediction_data[t] + 20 <= 360 && prediction_data[t] - 20 >= 0) {
-    if (outcome_data[t] <= prediction_data[t] + 20 && outcome_data[t] >= prediction_data[t] - 20) {
-      // score_array.push(i);
-      console.log(i);
-      score_array.push(1);
-      score = Math.sum(score_array);
-      jsPsych.data.addDataToLastTrial({ score });
-    }
-    // }
-  }
-  // console.log(score);
 }
 
 const pr_score_array = [];
@@ -203,14 +159,15 @@ function assessPractice(jsPsych) {
   pr_counter++;
   let outcome_pr = jsPsych.data.get().select('outcome').values;
   let prediction_pr = jsPsych.data.get().select('prediction').values;
-  for (let i = 0; i < pr_counter; i++) {
-    i = pr_counter - 1;
-    if (outcome_pr[i] <= prediction_pr[i] + 20 && outcome_pr[i] >= prediction_pr[i] - 20) {
-      pr_score_array.push(1);
-      console.log(pr_score_array);
-      pr_score = Math.sum(pr_score_array);
-      jsPsych.data.addDataToLastTrial({ pr_score });
-    }
+  let i = pr_counter - 1;
+  if (Math.mod(Math.abs(prediction_pr[i] - outcome_pr[i]), 360) <= 20) {
+    console.log(true);
+    pr_score_array.push(1);
+    pr_score = Math.sum(pr_score_array);
+    jsPsych.data.addDataToLastTrial({ pr_score });
+  }
+  else {
+    console.log(false);
   }
 }
 
