@@ -23,7 +23,7 @@ const n_TrialPerBlock = 200;
 const n_TrialPractice = 30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
-const all_colors = ['#3edcff', '#ff9800', '#fff43f', '#ffa4f1', '#b0ff64', '#8d5fff'] // doesn't include practice block colors
+const all_colors = ['#3edcff', '#ff9800', '#fff43f', '#ffa4f1', '#b0ff64', '#8d5fff']; // doesn't include practice block colors
 
 //Generate Jitter
 function GenerateJitter(TrialPerBlock, MaxJitter) {
@@ -45,7 +45,7 @@ let color1 = colors[0]; // note: all trials have the same color
 const colors2 = colors.slice(1, 3);
 // const colors2 = ["#ffa4f1","#b0ff64"];
 let color2 = colors2;
-let n_trialsPerColor = Math.ceil(n_TrialPerBlock / 2)
+let n_trialsPerColor = Math.ceil(n_TrialPerBlock / 2);
 for (let h = 0; h < n_trialsPerColor; h++) {
   //h<100
   let colorRepeat = jsPsych.randomization.shuffle(colors2);
@@ -58,8 +58,8 @@ for (let h = 0; h < n_trialsPerColor; h++) {
 }
 
 // colors for block 3
-const colors3 = colors.slice(3, 6)
-n_trialsPerColor = Math.ceil(n_TrialPerBlock / 3)
+const colors3 = colors.slice(3, 6);
+n_trialsPerColor = Math.ceil(n_TrialPerBlock / 3);
 let color3 = colors3;
 for (let h = 0; h < n_trialsPerColor; h++) {
   let colorRepeat = jsPsych.randomization.shuffle(colors3);
@@ -146,8 +146,7 @@ function assessPerformance(jsPsych) {
     score_array.push(1);
     score = Math.sum(score_array);
     jsPsych.data.addDataToLastTrial({ score });
-    }
-  else {
+  } else {
     console.log(false);
   }
 }
@@ -165,8 +164,7 @@ function assessPractice(jsPsych) {
     pr_score_array.push(1);
     pr_score = Math.sum(pr_score_array);
     jsPsych.data.addDataToLastTrial({ pr_score });
-  }
-  else {
+  } else {
     console.log(false);
   }
 }
@@ -274,7 +272,7 @@ function practice_block(timeline, jsPsych) {
 
     var position = {
       type: Position,
-      data: {type: trial_type_label},
+      data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
@@ -365,7 +363,7 @@ function block1(timeline, jsPsych) {
 
     var position = {
       type: Position,
-      data: {type: trial_type_label},
+      data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
@@ -395,7 +393,7 @@ function block1(timeline, jsPsych) {
 /*** 
 //2 colors block n < n_TrialPerBlock + 1
  ***/
-function block2(timeline, jsPsych, sync_cp=true) {
+function block2(timeline, jsPsych, sync_cp = true) {
   var block2_intro = {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face two groups of zombies.</p></div>`,
@@ -487,7 +485,7 @@ function block2(timeline, jsPsych, sync_cp=true) {
 
     var position2 = {
       type: Position,
-      data: {type: trial_type_label},
+      data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
@@ -517,7 +515,7 @@ function block2(timeline, jsPsych, sync_cp=true) {
 /****
 3 colors block
  ****/
-function block3(timeline, jsPsych, sync_cp=true) {
+function block3(timeline, jsPsych, sync_cp = true) {
   var block3_intro = {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face three groups of zombies.</p></div>`,
@@ -534,13 +532,13 @@ function block3(timeline, jsPsych, sync_cp=true) {
   let jitters_3 = GenerateJitter(n_TrialPerBlock, n_MaxJitter); // async changepoints for 3rd color
 
   // sync changepoints if applicable
-  let trial_type_label = 'block3_async_cp'
+  let trial_type_label = 'block3_async_cp';
   if (sync_cp) {
     jitters_2 = jitters_1;
     jitters_3 = jitters_1;
-    trial_type_label = 'block3_sync_cp'
+    trial_type_label = 'block3_sync_cp';
   }
-  
+
   let c1 = 0;
   let c2 = 0;
   let c3 = 0;
@@ -634,7 +632,7 @@ function block3(timeline, jsPsych, sync_cp=true) {
 
     var position3 = {
       type: Position,
-      data: {type: trial_type_label},
+      data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
         const fullTime = jsPsych.data.get().select('prediction').count();
