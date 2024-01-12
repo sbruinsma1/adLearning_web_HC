@@ -128,54 +128,47 @@ function angle_array() {
   return nums;
 }
 
-//evaluate performance
+// evaluate performance (cumulative across non-practice blocks)
 const score_array = [];
-let score;
-let counter = 0;
+let score = 0;
+let counter = 0; // number of elapsed trials
 function assessPerformance(jsPsych) {
-  counter++; // number of trials
   let outcome_data = jsPsych.data.get().select('outcome').values;
   let prediction_data = jsPsych.data.get().select('prediction').values;
-  let i = counter - 1; // index indata
-  //skip lines of practice
-  let t = n_TrialPractice + i;
-  console.log(counter);
-
-  if (Math.mod(Math.abs(prediction_data[t] - outcome_data[t]), 360) <= 20) {
-    console.log(true);
+  let t_i = n_TrialPractice + counter; // trial index; skip practice trials
+  if (Math.mod(Math.abs(prediction_data[t_i] - outcome_data[t_i]), 360) <= 20) {
+    console.log('hit');
     score_array.push(1);
     score = Math.sum(score_array);
     jsPsych.data.addDataToLastTrial({ score });
   } else {
-    console.log(false);
+    console.log('miss');
   }
+  counter++;
 }
 
+// evaluate performance (practice block)
 const pr_score_array = [];
-let pr_score;
-let pr_counter = 0;
+let pr_score = 0;
+let pr_counter = 0; // number of elapsed practice trials
 function assessPractice(jsPsych) {
-  pr_counter++;
   let outcome_pr = jsPsych.data.get().select('outcome').values;
   let prediction_pr = jsPsych.data.get().select('prediction').values;
-  let i = pr_counter - 1;
-  if (Math.mod(Math.abs(prediction_pr[i] - outcome_pr[i]), 360) <= 20) {
-    console.log(true);
+  let t_i = pr_counter; // trial index
+  if (Math.mod(Math.abs(prediction_pr[t_i] - outcome_pr[t_i]), 360) <= 20) {
+    console.log('hit');
     pr_score_array.push(1);
     pr_score = Math.sum(pr_score_array);
     jsPsych.data.addDataToLastTrial({ pr_score });
   } else {
-    console.log(false);
+    console.log('miss');
   }
+  // log score at the end of block for sanity check
+  if (t_i === n_TrialPractice - 1) {
+    console.log('Practice score: ' + pr_score);
+  }
+  pr_counter++;
 }
-
-// function scoreCheck(){
-//     return jsPsych.data.get().select('score').count();
-// }
-
-// function pr_scoreCheck(){
-//     return jsPsych.data.get().select('pr_score').count();
-// }
 
 /***
  *define blocks
@@ -214,6 +207,7 @@ function practice_block(timeline, jsPsych) {
       if (counterP_1 !== 1) {
         // x1 = x1
       }
+      // make task slightly easier for practicing with lower noise stdev
       outcome = Math.mod(normalRandomScaled(x1, 15), 360);
       mean = x1;
       console.log(colorStyleP);
@@ -236,6 +230,7 @@ function practice_block(timeline, jsPsych) {
       if (counterP_2 !== 1) {
         // x2 = x2
       }
+      // make task slightly easier for practicing with lower noise stdev
       outcome = Math.mod(normalRandomScaled(x2, 15), 360);
       mean = x2;
       console.log(colorStyleP);

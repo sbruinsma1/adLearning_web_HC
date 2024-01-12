@@ -340,10 +340,9 @@ function buildTimeline(jsPsych) {
     //show scores
     type: Pass,
     on_load: function () {
-      var subject_data;
-      subject_data = scoreCheck();
-      console.log(subject_data);
-      $('#jspsych-html-button-response-stimulus').text('You got ' + subject_data + ' points now.');
+      var running_score = scoreCheck();
+      console.log(running_score);
+      $('#jspsych-html-button-response-stimulus').text('You got ' + running_score + ' points now.');
     },
     choices: ['Next Block'],
   };
