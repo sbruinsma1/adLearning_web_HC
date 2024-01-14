@@ -341,7 +341,7 @@ function buildTimeline(jsPsych) {
     type: Pass,
     on_load: function () {
       var running_score = scoreCheck();
-      console.log(running_score);
+      console.log('Real score: ' + running_score);
       $('#jspsych-html-button-response-stimulus').text('You got ' + running_score + ' points now.');
     },
     choices: ['Next Block'],

@@ -136,7 +136,10 @@ function assessPerformance(jsPsych) {
   let outcome_data = jsPsych.data.get().select('outcome').values;
   let prediction_data = jsPsych.data.get().select('prediction').values;
   let t_i = n_TrialPractice + counter; // trial index; skip practice trials
-  if (Math.mod(Math.abs(prediction_data[t_i] - outcome_data[t_i]), 360) <= 20) {
+  let pred_err = prediction_data[t_i] - outcome_data[t_i];
+  // min distance around the circle in degrees
+  let pred_err_min = Math.min(Math.mod(pred_err, 360), Math.mod(-pred_err, 360));
+  if (pred_err_min <= 20) {
     console.log('hit');
     score_array.push(1);
     score = Math.sum(score_array);
@@ -155,7 +158,10 @@ function assessPractice(jsPsych) {
   let outcome_pr = jsPsych.data.get().select('outcome').values;
   let prediction_pr = jsPsych.data.get().select('prediction').values;
   let t_i = pr_counter; // trial index
-  if (Math.mod(Math.abs(prediction_pr[t_i] - outcome_pr[t_i]), 360) <= 20) {
+  let pred_err = prediction_pr[t_i] - outcome_pr[t_i];
+  // min distance around the circle in degrees
+  let pred_err_min = Math.min(Math.mod(pred_err, 360), Math.mod(-pred_err, 360));
+  if (pred_err_min <= 20) {
     console.log('hit');
     pr_score_array.push(1);
     pr_score = Math.sum(pr_score_array);
