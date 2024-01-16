@@ -410,6 +410,12 @@ function buildTimeline(jsPsych) {
     timeline.push(block_end);
   }
 
+  // exit fullscreen:
+  var fullscreen_trial_exit = {
+    type: jsPsychFullscreen,
+    fullscreen_mode: false,
+  };
+
   //exit task
   var goodbye = {
     type: jsPsychHtmlKeyboardResponse,
@@ -417,12 +423,6 @@ function buildTimeline(jsPsych) {
     on_finish: function () {
       window.location = 'https://app.prolific.com/submissions/complete?cc=CXXS95SE';
     },
-  };
-
-  // exit fullscreen:
-  var fullscreen_trial_exit = {
-    type: jsPsychFullscreen,
-    fullscreen_mode: false,
   };
 
   timeline.push(goodbye);
