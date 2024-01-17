@@ -425,8 +425,8 @@ function buildTimeline(jsPsych) {
     },
   };
 
-  timeline.push(goodbye);
   timeline.push(fullscreen_trial_exit);
+  timeline.push(goodbye);
 
   // jsPsych.init ({
   //     timeline: timeline,
