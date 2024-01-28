@@ -23,7 +23,8 @@ const n_TrialPerBlock = 200;
 const n_TrialPractice = 30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
-const all_colors = ['#3edcff', '#ff9800', '#fff43f', '#ffa4f1', '#b0ff64', '#8d5fff']; // doesn't include practice block colors
+// colorblind-friendly colors from Seaborn: ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#cc78bc', '#ca9161', '#fbafe4', '#949494', '#ece133', '#56b4e9']
+const all_colors = ['#0173b2', '#de8f05', '#029e73', '#cc78bc', '#ca9161', '#ece133']; // doesn't include practice block colors
 
 //Generate Jitter
 function GenerateJitter(TrialPerBlock, MaxJitter) {
@@ -70,7 +71,7 @@ for (let h = 0; h < n_trialsPerColor; h++) {
 }
 
 //colors for practice block
-const colorsP = ['#ff9800', '#b0ff64'];
+const colorsP = ['#0173b2', '#de8f05'];
 let colorP = colorsP;
 for (let h = 0; h < n_TrialPractice; h++) {
   let colorRepeat = jsPsych.randomization.shuffle(colorsP);
