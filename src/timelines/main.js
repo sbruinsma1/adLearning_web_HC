@@ -83,7 +83,7 @@ function buildTimeline(jsPsych) {
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
       '<br><b>The bomb blast area is represented by red.</b> A after you set the bomb, you will see where the zombies are attacking. If they are in the blast range (red arc) they will be killed.' +
       '<br><b> The zombies tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
-      '<br> Every time you kill a zombie, you will earn one medal, which will translate into bonus payment at the end of the game.</p></div>',
+      '<br> Every time you kill a zombie, you will earn one point, which will translate into bonus payment at the end of the game.</p></div>',
     choices: ['Next'],
   };
   var age_check = {
@@ -311,6 +311,24 @@ function buildTimeline(jsPsych) {
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Let's practice for a while!</h1> 
       </div>`,
   };
+  var practice_end = {
+    // print scores and end block
+    type: Pass,
+    on_load: function () {
+      // tally up block score
+      let scores = jsPsych.data.get().select('score').values();
+      let n_trials = scores.length;
+      let block_score = Math.sum(scores.slice(block_start_trial, n_trials));
+      let possible_block_score = n_trials - (block_start_trial + 1);
+      // print score in console and to the participant's screen
+      console.log('Block score: ' + block_score + '/' + possible_block_score);
+      $('#jspsych-html-button-response-stimulus').text('You got ' +
+        block_score + ' / ' + possible_block_score + ' possible points in this block.');
+      // update starting index for the next block
+      block_start_trial = n_trials - 1;
+    },
+    choices: ['End Practice'],
+  };
 
   timeline.push(welcome);
   timeline.push(consent_form);
@@ -323,12 +341,9 @@ function buildTimeline(jsPsych) {
   timeline.push(check3_trial);
   timeline.push(practice_instruction);
 
+  let block_start_trial = 0;
   practice_block(timeline, jsPsych);
-
-  function scoreCheck() {
-    console.log(jsPsych.data.get());
-    return jsPsych.data.get().select('score').count();
-  }
+  timeline.push(practice_end);
 
   var real_task_welcome = {
     type: jsPsychHtmlbuttonResponse,
@@ -337,12 +352,20 @@ function buildTimeline(jsPsych) {
           <p>There are 5 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
   };
   var block_end = {
-    //show scores
+    // print scores and end block
     type: Pass,
     on_load: function () {
-      var running_score = scoreCheck();
-      console.log('Real score: ' + running_score);
-      $('#jspsych-html-button-response-stimulus').text('You got ' + running_score + ' points now.');
+      // tally up block score
+      let scores = jsPsych.data.get().select('score').values();
+      let n_trials = scores.length;
+      let block_score = Math.sum(scores.slice(block_start_trial, n_trials));
+      let possible_block_score = n_trials - (block_start_trial + 1);
+      // print score in console and to the participant's screen
+      console.log('Block score: ' + block_score + '/' + possible_block_score);
+      $('#jspsych-html-button-response-stimulus').text('You got ' +
+        block_score + ' / ' + possible_block_score + ' possible points in this block.');
+      // update starting index for the next block
+      block_start_trial = n_trials - 1;
     },
     choices: ['Next Block'],
   };

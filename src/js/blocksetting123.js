@@ -19,7 +19,7 @@ import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
 import { images } from '../lib/utils';
 
 // design
-const n_TrialPerBlock = 200;
+const n_TrialPerBlock = 30;
 const n_TrialPractice = 30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
@@ -130,51 +130,19 @@ function angle_array() {
 }
 
 // evaluate performance (cumulative across non-practice blocks)
-const score_array = [];
-let score = 0;
-let counter = 0; // number of elapsed trials
-function assessPerformance(jsPsych) {
-  let outcome_data = jsPsych.data.get().select('outcome').values;
-  let prediction_data = jsPsych.data.get().select('prediction').values;
-  let t_i = n_TrialPractice + counter; // trial index; skip practice trials
-  let pred_err = prediction_data[t_i] - outcome_data[t_i];
+function assessPerformance(prediction, outcome) {
+  let pred_err = prediction - outcome;
   // min distance around the circle in degrees
   let pred_err_min = Math.min(Math.mod(pred_err, 360), Math.mod(-pred_err, 360));
+  let hit = 0;
   if (pred_err_min <= 20) {
     console.log('hit');
-    score_array.push(1);
-    score = Math.sum(score_array);
-    jsPsych.data.addDataToLastTrial({ score });
+    hit = 1;
+    //jsPsych.data.addDataToLastTrial({ score });
   } else {
     console.log('miss');
   }
-  counter++;
-}
-
-// evaluate performance (practice block)
-const pr_score_array = [];
-let pr_score = 0;
-let pr_counter = 0; // number of elapsed practice trials
-function assessPractice(jsPsych) {
-  let outcome_pr = jsPsych.data.get().select('outcome').values;
-  let prediction_pr = jsPsych.data.get().select('prediction').values;
-  let t_i = pr_counter; // trial index
-  let pred_err = prediction_pr[t_i] - outcome_pr[t_i];
-  // min distance around the circle in degrees
-  let pred_err_min = Math.min(Math.mod(pred_err, 360), Math.mod(-pred_err, 360));
-  if (pred_err_min <= 20) {
-    console.log('hit');
-    pr_score_array.push(1);
-    pr_score = Math.sum(pr_score_array);
-    jsPsych.data.addDataToLastTrial({ pr_score });
-  } else {
-    console.log('miss');
-  }
-  // log score at the end of block for sanity check
-  if (t_i === n_TrialPractice - 1) {
-    console.log('Practice score: ' + pr_score);
-  }
-  pr_counter++;
+  return hit;
 }
 
 /***
@@ -289,8 +257,10 @@ function practice_block(timeline, jsPsych) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyleP;
-        assessPractice(jsPsych);
-        // jsPsych.data.addDataToLastTrial({ outcome, mean });
+        // get most recent prediction and use it to assess performance
+        const last_trial = jsPsych.data.get().select('prediction').count();
+        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
+        data.score = assessPerformance(prediction, outcome);
         // psiturk.recordTrialData(data);
         // psiturk.saveData();
       },
@@ -380,7 +350,10 @@ function block1(timeline, jsPsych) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyle;
-        assessPerformance(jsPsych);
+        // get most recent prediction and use it to assess performance
+        const last_trial = jsPsych.data.get().select('prediction').count();
+        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
+        data.score = assessPerformance(prediction, outcome);
         // psiturk.recordTrialData([data]);
         // psiturk.saveData();
       },
@@ -502,7 +475,10 @@ function block2(timeline, jsPsych, sync_cp = true) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyle2;
-        assessPerformance(jsPsych);
+        // get most recent prediction and use it to assess performance
+        const last_trial = jsPsych.data.get().select('prediction').count();
+        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
+        data.score = assessPerformance(prediction, outcome);
         // psiturk.recordTrialData([data]);
         // psiturk.saveData();
       },
@@ -649,7 +625,10 @@ function block3(timeline, jsPsych, sync_cp = true) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyle3;
-        assessPerformance(jsPsych);
+        // get most recent prediction and use it to assess performance
+        const last_trial = jsPsych.data.get().select('prediction').count();
+        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
+        data.score = assessPerformance(prediction, outcome);
         // psiturk.recordTrialData([data]);
         // psiturk.saveData();
       },
