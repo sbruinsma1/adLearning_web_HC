@@ -45,8 +45,23 @@ const jsPsychOptions = {
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 function buildTimeline(jsPsych) {
   // var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
-  // create timeline:
+  // create timeline
   var timeline = [];
+  // at the end of each block, this will get updated in order to retrieve score
+  let block_start_trial = 0;
+  // set random sequence of constituent blocks
+  // shuffle array of block indices (1-5; set sizes 1-3 and non-sync for 2 and 3)
+  let block = [];
+  block.length = 6;
+  for (let i = 1; i < block.length; i++) {
+    block[i] = Math.floor(Math.random() * (block.length - 1));
+    for (let j = 0; j < i; j++) {
+      while (block[i] === block[j]) {
+        i--;
+      }
+    }
+  }
+
   // welcome message
   var welcome = {
     type: jsPsychHtmlKeyboardResponse,
@@ -311,6 +326,7 @@ function buildTimeline(jsPsych) {
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Let's practice for a while!</h1> 
       </div>`,
   };
+
   var practice_end = {
     // print scores and end block
     type: Pass,
@@ -320,32 +336,17 @@ function buildTimeline(jsPsych) {
       let n_trials = scores.length;
       let block_scores = scores.slice(block_start_trial, n_trials);
       const block_score = block_scores.reduce((sum, score) => sum + score, 0);
-      let possible_block_score = n_trials - (block_start_trial + 1);
+      let possible_block_score = n_trials - block_start_trial;
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
       $('#jspsych-html-button-response-stimulus').text(
         'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
       );
       // update starting index for the next block
-      block_start_trial = n_trials - 1;
+      block_start_trial = n_trials;
     },
     choices: ['End Practice'],
   };
-
-  timeline.push(welcome);
-  timeline.push(consent_form);
-  timeline.push(age_check);
-  timeline.push(fullscreen_trial);
-  timeline.push(instruction);
-
-  timeline.push(check1_trial);
-  timeline.push(check2_trial);
-  timeline.push(check3_trial);
-  timeline.push(practice_instruction);
-
-  let block_start_trial = 0;
-  practice_block(timeline, jsPsych);
-  timeline.push(practice_end);
 
   var real_task_welcome = {
     type: jsPsychHtmlbuttonResponse,
@@ -353,6 +354,7 @@ function buildTimeline(jsPsych) {
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
           <p>There are 5 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
   };
+
   var block_end = {
     // print scores and end block
     type: Pass,
@@ -362,33 +364,39 @@ function buildTimeline(jsPsych) {
       let n_trials = scores.length;
       let block_scores = scores.slice(block_start_trial, n_trials);
       const block_score = block_scores.reduce((sum, score) => sum + score, 0);
-      let possible_block_score = n_trials - (block_start_trial + 1);
+      let possible_block_score = n_trials - block_start_trial;
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
       $('#jspsych-html-button-response-stimulus').text(
         'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
       );
       // update starting index for the next block
-      block_start_trial = n_trials - 1;
+      block_start_trial = n_trials;
     },
     choices: ['Next Block'],
   };
 
+  // run task!!!
+  // welcome + consent
+  timeline.push(welcome);
+  timeline.push(consent_form);
+  timeline.push(age_check);
+  timeline.push(fullscreen_trial);
+
+  // instructions + test questions
+  timeline.push(instruction);
+  timeline.push(check1_trial);
+  timeline.push(check2_trial);
+  timeline.push(check3_trial);
+
+  // practice block
+  timeline.push(practice_instruction);
+  practice_block(timeline, jsPsych);
+  timeline.push(practice_end);
+
+  // real blocks
   timeline.push(real_task_welcome);
-
-  //shuffle array of block indices (1-5; set sizes 1-3 and non-sync for 2 and 3)
-  let block = [];
-  block.length = 6;
-  for (let i = 1; i < block.length; i++) {
-    block[i] = Math.floor(Math.random() * (block.length - 1));
-    for (let j = 0; j < i; j++) {
-      while (block[i] === block[j]) {
-        i--;
-      }
-    }
-  }
-
-  //now, call blocks in shuffled order
+  // call blocks in shuffled order
   for (let blk_i = 1; blk_i < block.length; blk_i++) {
     let sync_cp = true;
     switch (block[blk_i]) {
