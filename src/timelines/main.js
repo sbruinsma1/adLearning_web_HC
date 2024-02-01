@@ -92,7 +92,7 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus:
       '<div><h1>Protect Your City From Zombies</h1>' +
-      "<p style='width: 960px;line-height:2;text-align:left;word-wrap: break-word;word-break: break-all'><b>Imagine that we are in the world of Resident Evil.</b>Your city is the only place which was not infected by the virus.<br>" +
+      "<p style='width: 960px;line-height:2;text-align:left'><b>Imagine that we are in the world of Resident Evil.</b>Your city is the only place which was not infected by the virus.<br>" +
       'There are <b>different groups of zombies(or just one group)</b> attacking your city from <b>different directions</b>. <br><b>Set bombs to kill them and defend your city.</b>' +
       '<br><b>The large circle represents your city. You must set bombs on the perimeter to destroy the attacking zombies.</b>' +
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
@@ -320,6 +320,20 @@ function buildTimeline(jsPsych) {
     },
   };
 
+  function get_n_elapsed_trials() {
+    // return number of elapsed trials stored in jsPsych data object
+    const n_trials = jsPsych.data.get().select('score').count();
+    return n_trials;
+  }
+
+  function get_block_score(start_idx, end_idx) {
+    // tally up score across a given range of trials and return total
+    let all_scores = jsPsych.data.get().select('score').values;
+    let block_scores = all_scores.slice(start_idx, end_idx);
+    const block_score = block_scores.reduce((sum, score) => sum + score, 0);
+    return block_score;
+  }
+
   var practice_instruction = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
@@ -332,10 +346,8 @@ function buildTimeline(jsPsych) {
     type: Pass,
     on_load: function () {
       // tally up block score
-      let scores = jsPsych.data.get().select('score').values;
-      let n_trials = scores.length;
-      let block_scores = scores.slice(block_start_trial, n_trials);
-      const block_score = block_scores.reduce((sum, score) => sum + score, 0);
+      let n_trials = get_n_elapsed_trials();
+      const block_score = get_block_score(block_start_trial, n_trials);
       let possible_block_score = n_trials - block_start_trial;
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
@@ -360,10 +372,8 @@ function buildTimeline(jsPsych) {
     type: Pass,
     on_load: function () {
       // tally up block score
-      let scores = jsPsych.data.get().select('score').values;
-      let n_trials = scores.length;
-      let block_scores = scores.slice(block_start_trial, n_trials);
-      const block_score = block_scores.reduce((sum, score) => sum + score, 0);
+      let n_trials = get_n_elapsed_trials();
+      const block_score = get_block_score(block_start_trial, n_trials);
       let possible_block_score = n_trials - block_start_trial;
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
