@@ -316,14 +316,16 @@ function buildTimeline(jsPsych) {
     type: Pass,
     on_load: function () {
       // tally up block score
-      let scores = jsPsych.data.get().select('score').values();
+      let scores = jsPsych.data.get().select('score').values;
       let n_trials = scores.length;
-      let block_score = Math.sum(scores.slice(block_start_trial, n_trials));
+      let block_scores = scores.slice(block_start_trial, n_trials);
+      const block_score = block_scores.reduce((sum, score) => sum + score, 0);
       let possible_block_score = n_trials - (block_start_trial + 1);
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
-      $('#jspsych-html-button-response-stimulus').text('You got ' +
-        block_score + ' / ' + possible_block_score + ' possible points in this block.');
+      $('#jspsych-html-button-response-stimulus').text(
+        'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
+      );
       // update starting index for the next block
       block_start_trial = n_trials - 1;
     },
@@ -356,14 +358,16 @@ function buildTimeline(jsPsych) {
     type: Pass,
     on_load: function () {
       // tally up block score
-      let scores = jsPsych.data.get().select('score').values();
+      let scores = jsPsych.data.get().select('score').values;
       let n_trials = scores.length;
-      let block_score = Math.sum(scores.slice(block_start_trial, n_trials));
+      let block_scores = scores.slice(block_start_trial, n_trials);
+      const block_score = block_scores.reduce((sum, score) => sum + score, 0);
       let possible_block_score = n_trials - (block_start_trial + 1);
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
-      $('#jspsych-html-button-response-stimulus').text('You got ' +
-        block_score + ' / ' + possible_block_score + ' possible points in this block.');
+      $('#jspsych-html-button-response-stimulus').text(
+        'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
+      );
       // update starting index for the next block
       block_start_trial = n_trials - 1;
     },
