@@ -45,8 +45,23 @@ const jsPsychOptions = {
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 function buildTimeline(jsPsych) {
   // var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
-  // create timeline:
+  // create timeline
   var timeline = [];
+  // at the end of each block, this will get updated in order to retrieve score
+  let block_start_trial = 0;
+  // set random sequence of constituent blocks
+  // shuffle array of block indices (1-5; set sizes 1-3 and non-sync for 2 and 3)
+  let block = [];
+  block.length = 6;
+  for (let i = 1; i < block.length; i++) {
+    block[i] = Math.floor(Math.random() * (block.length - 1));
+    for (let j = 0; j < i; j++) {
+      while (block[i] === block[j]) {
+        i--;
+      }
+    }
+  }
+
   // welcome message
   var welcome = {
     type: jsPsychHtmlKeyboardResponse,
@@ -77,13 +92,13 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus:
       '<div><h1>Protect Your City From Zombies</h1>' +
-      "<p style='width: 960px;line-height:2;text-align:left;word-wrap: break-word;word-break: break-all'><b>Imagine that we are in the world of Resident Evil.</b>Your city is the only place which was not infected by the virus.<br>" +
+      "<p style='width: 960px;line-height:2;text-align:left'><b>Imagine that we are in the world of Resident Evil.</b>Your city is the only place which was not infected by the virus.<br>" +
       'There are <b>different groups of zombies(or just one group)</b> attacking your city from <b>different directions</b>. <br><b>Set bombs to kill them and defend your city.</b>' +
       '<br><b>The large circle represents your city. You must set bombs on the perimeter to destroy the attacking zombies.</b>' +
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
       '<br><b>The bomb blast area is represented by red.</b> A after you set the bomb, you will see where the zombies are attacking. If they are in the blast range (red arc) they will be killed.' +
       '<br><b> The zombies tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
-      '<br> Every time you kill a zombie, you will earn one medal, which will translate into bonus payment at the end of the game.</p></div>',
+      '<br> Every time you kill a zombie, you will earn one point, which will translate into bonus payment at the end of the game.</p></div>',
     choices: ['Next'],
   };
   var age_check = {
@@ -305,6 +320,20 @@ function buildTimeline(jsPsych) {
     },
   };
 
+  function get_n_elapsed_trials() {
+    // return number of elapsed trials stored in jsPsych data object
+    const n_trials = jsPsych.data.get().select('score').count();
+    return n_trials;
+  }
+
+  function get_block_score(start_idx, end_idx) {
+    // tally up score across a given range of trials and return total
+    let all_scores = jsPsych.data.get().select('score').values;
+    let block_scores = all_scores.slice(start_idx, end_idx);
+    const block_score = block_scores.reduce((sum, score) => sum + score, 0);
+    return block_score;
+  }
+
   var practice_instruction = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
@@ -312,101 +341,95 @@ function buildTimeline(jsPsych) {
       </div>`,
   };
 
-  timeline.push(welcome);
-  timeline.push(consent_form);
-  timeline.push(age_check);
-  timeline.push(fullscreen_trial);
-  timeline.push(instruction);
-
-  timeline.push(check1_trial);
-  timeline.push(check2_trial);
-  timeline.push(check3_trial);
-  timeline.push(practice_instruction);
-
-  practice_block(timeline, jsPsych);
-
-  function scoreCheck() {
-    console.log(jsPsych.data.get());
-    return jsPsych.data.get().select('score').count();
-  }
+  var practice_end = {
+    // print scores and end block
+    type: Pass,
+    on_load: function () {
+      // tally up block score
+      let n_trials = get_n_elapsed_trials();
+      const block_score = get_block_score(block_start_trial, n_trials);
+      let possible_block_score = n_trials - block_start_trial;
+      // print score in console and to the participant's screen
+      console.log('Block score: ' + block_score + '/' + possible_block_score);
+      $('#jspsych-html-button-response-stimulus').text(
+        'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
+      );
+      // update starting index for the next block
+      block_start_trial = n_trials;
+    },
+    choices: ['End Practice'],
+  };
 
   var real_task_welcome = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
-          <p>There are 3 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
+          <p>There are 5 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
   };
+
   var block_end = {
-    //show scores
+    // print scores and end block
     type: Pass,
     on_load: function () {
-      var subject_data;
-      subject_data = scoreCheck();
-      console.log(subject_data);
-      $('#jspsych-html-button-response-stimulus').text('You got ' + subject_data + ' points now.');
+      // tally up block score
+      let n_trials = get_n_elapsed_trials();
+      const block_score = get_block_score(block_start_trial, n_trials);
+      let possible_block_score = n_trials - block_start_trial;
+      // print score in console and to the participant's screen
+      console.log('Block score: ' + block_score + '/' + possible_block_score);
+      $('#jspsych-html-button-response-stimulus').text(
+        'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
+      );
+      // update starting index for the next block
+      block_start_trial = n_trials;
     },
     choices: ['Next Block'],
   };
 
+  // run task!!!
+  // welcome + consent
+  timeline.push(welcome);
+  timeline.push(consent_form);
+  timeline.push(age_check);
+  timeline.push(fullscreen_trial);
+
+  // instructions + test questions
+  timeline.push(instruction);
+  timeline.push(check1_trial);
+  timeline.push(check2_trial);
+  timeline.push(check3_trial);
+
+  // practice block
+  timeline.push(practice_instruction);
+  practice_block(timeline, jsPsych);
+  timeline.push(practice_end);
+
+  // real blocks
   timeline.push(real_task_welcome);
-
-  let block = [];
-  block.length = 4;
-  for (let i = 1; i < block.length; i++) {
-    block[i] = Math.floor(Math.random() * 3);
-    for (let j = 0; j < i; j++) {
-      while (block[i] === block[j]) {
-        i--;
-      }
+  // call blocks in shuffled order
+  for (let blk_i = 1; blk_i < block.length; blk_i++) {
+    let sync_cp = true;
+    switch (block[blk_i]) {
+      case 0:
+        block1(timeline, jsPsych, sync_cp);
+        break;
+      case 1:
+        block2(timeline, jsPsych, sync_cp);
+        break;
+      case 2:
+        block3(timeline, jsPsych, sync_cp);
+        break;
+      case 3:
+        sync_cp = false;
+        block2(timeline, jsPsych, sync_cp);
+        break;
+      case 4:
+        sync_cp = false;
+        block3(timeline, jsPsych, sync_cp);
+        break;
+      default:
+        throw new Error('Called a block index that does not exist!');
     }
-  }
-
-  if (block[1] === 1 && block[2] === 2 && block[3] === 0) {
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 1 && block[2] === 0 && block[3] === 2) {
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 2 && block[2] === 1 && block[3] === 0) {
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 2 && block[2] === 0 && block[3] === 1) {
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 0 && block[2] === 1 && block[3] === 2) {
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-  }
-  if (block[1] === 0 && block[2] === 2 && block[3] === 1) {
-    block3(timeline, jsPsych);
-    timeline.push(block_end);
-    block2(timeline, jsPsych);
-    timeline.push(block_end);
-    block1(timeline, jsPsych);
     timeline.push(block_end);
   }
 
