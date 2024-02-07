@@ -22,7 +22,7 @@ const info = {
 };
 
 /**
- * **blank in Jspsych7**
+ * **blank in Jspsych7** //
  *
  * SHORT PLUGIN DESCRIPTION
  *
@@ -34,6 +34,10 @@ class Blank {
   }
   trial(display_element, trial) {
     const show_circle = () => {
+      // check if make prediction (determines what feedback receive)
+      var predicExist = this.jsPsych.data.get().select('prediction').values.slice(-1)[0];
+      console.log('prev predic',predicExist)
+
       var new_html =
         '<div id="circle">' +
         '<div id="shield"></div>' +
@@ -45,10 +49,12 @@ class Blank {
         '<div id="counter"></div>';
       display_element.innerHTML = new_html;
 
-      document.querySelector('#picker').style.display = 'block';
-      document.querySelector('#h').style.display = 'block';
-      document.querySelector('#v').style.display = 'block';
-      document.querySelector('#shield').style.display = 'block';
+      if (predicExist !== null){
+        document.querySelector('#picker').style.display = 'block';
+        document.querySelector('#h').style.display = 'block';
+        document.querySelector('#v').style.display = 'block';
+        document.querySelector('#shield').style.display = 'block';
+      }
 
       const fullTime = this.jsPsych.data.get().select('prediction').count();
       const shield_m = this.jsPsych.data.get().select('prediction').values[fullTime - 1];

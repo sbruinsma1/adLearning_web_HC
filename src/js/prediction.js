@@ -41,6 +41,30 @@ class Click {
   }
   trial(display_element, trial) {
     var startTime = performance.now();
+    var rtDeadline = 5000;
+
+    // store response
+    var response = {
+      rt: null,
+      delay: null,
+      prediction: null,
+    };
+
+    // check if go over deadline in real time
+    const checkDeadline = () => {
+      var elapsedTime = performance.now() - startTime;
+      if (elapsedTime >= rtDeadline) {
+        info.rt = null;
+        info.delay = null;
+        info.prediction = null;
+        after_response(info);
+      } else {
+        requestAnimationFrame(checkDeadline);
+      }
+    };
+
+    checkDeadline();
+
 
     const show_circle = () => {
       // circle , shield, picker, picker-prediction
@@ -192,13 +216,6 @@ class Click {
       });
     };
 
-    // store response
-    var response = {
-      rt: null,
-      delay: null,
-      prediction: null,
-    };
-
     show_circle();
 
     const end_trial = () => {
@@ -212,6 +229,8 @@ class Click {
         prediction: response.prediction,
       };
 
+      // console.log('predic',trial_data.prediction)
+
       // clear the display
       display_element.innerHTML = '';
 
@@ -221,11 +240,8 @@ class Click {
     };
 
     // function to handle responses by the subject
-    const after_response = (info) => {
-      // only record the first response
-      if (response.rt == null) {
-        response = info;
-      }
+    const after_response = (info) => { 
+        response = info; 
 
       if (trial.response_ends_trial) {
         this.jsPsych.pluginAPI.setTimeout(function () {

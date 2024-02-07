@@ -19,8 +19,8 @@ import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
 import { images } from '../lib/utils';
 
 // design
-const n_TrialPerBlock = 200;
-const n_TrialPractice = 30;
+const n_TrialPerBlock = 10//200; 
+const n_TrialPractice = 10//30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 // colorblind-friendly colors from Seaborn: ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#cc78bc', '#ca9161', '#fbafe4', '#949494', '#ece133', '#56b4e9']
@@ -265,8 +265,8 @@ function practice_block(timeline, jsPsych) {
         // psiturk.saveData();
       },
     };
-    var practice = {
-      timeline: [prediction, blank, position],
+    var practice = { 
+      timeline: [prediction, blank, position], 
     };
     timeline.push(practice);
   }
