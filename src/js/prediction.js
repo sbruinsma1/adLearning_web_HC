@@ -125,10 +125,10 @@ class Click {
         $('#v').toggle(true);
         $('#shield').toggle(true);
         shield.style.transform =
-          'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(-50deg)';
-        // picker.style[transform] = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
-        // console.log('rotate(' + rotate(event.pageX, event.pageY) + 'deg)');
-        picker.style.transform = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
+          'rotate(' + shieldRotate(event.clientX, event.clientY) + 'deg) skewX(-50deg)';
+        // picker.style[transform] = 'rotate(' + rotate(event.clientX, event.clientY) + 'deg)';
+        // console.log('rotate(' + rotate(event.clientX, event.clientY) + 'deg)');
+        picker.style.transform = 'rotate(' + rotate(event.clientX, event.clientY) + 'deg)';
 
         var getClickTime = performance.now();
         clickTime.push(getClickTime);
