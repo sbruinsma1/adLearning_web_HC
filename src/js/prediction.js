@@ -60,7 +60,7 @@ class Click {
       var circle = document.getElementById('circle'), //
         picker = document.getElementById('picker'),
         shield = document.getElementById('shield'),
-        pickerCircle = picker.firstElementChild, //picker position
+        // pickerCircle = picker.firstElementChild, //picker position
         rect = circle.getBoundingClientRect(),
         center = {
           x: rect.left + rect.width / 2,
@@ -110,33 +110,7 @@ class Click {
         return rotate(x, y) + 20;
       };
 
-      var clickTime = [];
-      // DRAGSTART
-      const mousedown = (event) => {
-        //event.preventDefault()
-        mousemove(event);
-        document.addEventListener('mousemove.drag', mousemove);
-        document.addEventListener('mouseup', mouseup);
-      };
-      // DRAG
-      const mousemove = (event) => {
-        $('#picker').toggle(true); //删掉picker
-        $('#h').toggle(true);
-        $('#v').toggle(true);
-        $('#shield').toggle(true);
-        shield.style.transform =
-          'rotate(' + shieldRotate(event.clientX, event.clientY) + 'deg) skewX(-50deg)';
-        // picker.style[transform] = 'rotate(' + rotate(event.clientX, event.clientY) + 'deg)';
-        // console.log('rotate(' + rotate(event.clientX, event.clientY) + 'deg)');
-        picker.style.transform = 'rotate(' + rotate(event.clientX, event.clientY) + 'deg)';
-
-        var getClickTime = performance.now();
-        clickTime.push(getClickTime);
-      };
-
-      // DRAGEND
-
-      function PickerData() {
+      function getPickerData() {
         var rotate = $('#picker').css('transform');
         var a = rotate.indexOf('(');
         var b = rotate.indexOf(',');
@@ -164,15 +138,31 @@ class Click {
         return pickerAngle;
       }
 
-      const mouseup = () => {
-        //(event)
-        var data = PickerData();
+      // start click
+      const mousedown = () => {
+        circle.addEventListener('mouseup', mouseup);
+      };
+
+      // end click
+      const mouseup = (event) => {
+        circle.removeEventListener('mouseup', mouseup);
+        circle.removeEventListener('mousedown', mousedown);
+
+        // update shield and picker positions
+        $('#picker').toggle(true);
         $('#h').toggle(true);
         $('#v').toggle(true);
-        document.removeEventListener('mouseup', mouseup);
-        document.removeEventListener('mousemove.drag', mousemove);
+        $('#shield').toggle(true);
+        shield.style.transform =
+          'rotate(' + shieldRotate(event.clientX, event.clientY) + 'deg) skewX(-50deg)';
+        // picker.style[transform] = 'rotate(' + rotate(event.clientX, event.clientY) + 'deg)';
+        // console.log('rotate(' + rotate(event.clientX, event.clientY) + 'deg)');
+        picker.style.transform = 'rotate(' + rotate(event.clientX, event.clientY) + 'deg)';
+
+        // get picker data and initiate end of response
+        var data = getPickerData();
         var info = {};
-        info.rt = clickTime - startTime;
+        info.rt = performance.now() - startTime;
         info.delay = startTime;
         info.prediction = data;
 
@@ -181,12 +171,7 @@ class Click {
         after_response(info);
       };
 
-      // DRAG START
-      pickerCircle.addEventListener('mousedown', mousedown);
-      pickerCircle.addEventListener('mousemove.drag', mousemove);
-      document.addEventListener('mousemove.drag', mousemove);
-
-      // ENABLE STARTING THE DRAG IN THE BLACK CIRCLE
+      // ENABLE STARTING THE CLICK IN THE BLACK CIRCLE
       circle.addEventListener('mousedown', function (event) {
         if (event.target == this) mousedown(event);
       });
