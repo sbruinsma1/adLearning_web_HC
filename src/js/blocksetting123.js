@@ -142,6 +142,7 @@ function assessPerformance(prediction, outcome) {
   } else {
     console.log('miss');
   }
+  console.log(prediction, outcome);
   return hit;
 }
 
@@ -165,6 +166,7 @@ function practice_block(timeline, jsPsych) {
     const colorStyleP = colorP[n - 1];
     var x1;
     var x2;
+    let usr_pred;
     let outcome;
     let mean;
     if (colorStyleP === colorsP[0]) {
@@ -227,6 +229,8 @@ function practice_block(timeline, jsPsych) {
         });
       },
       on_finish: function () {
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        usr_pred = jsPsych.data.get().select('prediction').values[pred_idx - 1];
         //(data)
         // psiturk.recordTrialData(data);
         // psiturk.saveData();
@@ -245,10 +249,8 @@ function practice_block(timeline, jsPsych) {
       data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
-        const fullTime = jsPsych.data.get().select('prediction').count();
-        const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
-        $('#picker').css('transform', 'rotate(' + shield_m + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (shield_m + 20) + 'deg) skewX(-50deg)');
+        $('#picker').css('transform', 'rotate(' + usr_pred + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (usr_pred + 20) + 'deg) skewX(-50deg)');
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#picker-circle').css('background-color', colorStyleP);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
@@ -257,10 +259,7 @@ function practice_block(timeline, jsPsych) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyleP;
-        // get most recent prediction and use it to assess performance
-        const last_trial = jsPsych.data.get().select('prediction').count();
-        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
-        data.score = assessPerformance(prediction, outcome);
+        data.score = assessPerformance(usr_pred, outcome);
         // psiturk.recordTrialData(data);
         // psiturk.saveData();
       },
