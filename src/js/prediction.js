@@ -54,141 +54,49 @@ class Click {
       new_html += '</div>';
       new_html += '<div id="counter"></div>';
 
-      //new_html += '<div "class=circle-in"></div>';
       display_element.innerHTML = new_html;
 
       var circle = document.getElementById('circle'), //
         picker = document.getElementById('picker'),
         shield = document.getElementById('shield'),
-        pickerCircle = picker.firstElementChild, //picker position
         rect = circle.getBoundingClientRect(),
         center = {
           x: rect.left + rect.width / 2,
           y: rect.top + rect.height / 2,
         };
 
-      // var transform = function() {
-      //   ///
+      const click_callback = (event) => {
+        // clear listener
+        circle.removeEventListener('click', click_callback);
 
-      //   var prefs = ['t', 'WebkitT', 'MozT', 'msT', 'OT'],
-      //     style = document.documentElement.style,
-      //     p;
+        // get prediction position angle
+        let x = event.clientX - center.x;
+        let y = event.clientY - center.y;
+        // NB: y increases going downward in the client window, so a positive
+        // angle reflects a clockwise deviation relative to the positive x-axis
+        let angle = Math.atan2(y, x) * (180 / Math.PI);
+        // convert domain from [-180, 180]->[0, 360]
+        angle = Math.mod(angle, 360)
 
-      //   for (var i = 0, len = prefs.length; i < len; i++) {
-      //     if ((p = prefs[i] + 'ransform') in style) return p; //  + 'ransform' ？？
-      //   }
-      //   console.log('p')
-
-      //   alert('your browser doesnt support css transforms!');
-      // };
-
-      const rotate = (x, y) => {
-        //x,y to deg？
-        var deltaX = x - center.x,
-          deltaY = y - center.y,
-          // The atan2 method returns a numeric value between -pi and pi representing the angle theta of an (x,y) point.
-          // This is the counterclockwise angle, measured in radians, between the positive X axis, and the point (x,y).
-          // Note that the arguments to this function pass the y-coordinate first and the x-coordinate second.
-          // atan2 is passed separate x and y arguments, and atan is passed the ratio of those two arguments.
-          // * from Mozilla's MDN
-
-          // Basically you give it an [y, x] difference of two points and it give you back an angle
-          // The 0 point of the angle is left (the initial position of the picker is also left)
-
-          angle = (Math.atan2(deltaY, deltaX) * 180) / Math.PI;
-
-        // Math.atan2(deltaY, deltaX) => [-PI +PI]
-        // We must convert it to deg so...
-        // / Math.PI => [-1 +1]
-        // * 180 => [-180 +180]
-
-        return angle;
-      };
-
-      const shieldRotate = (x, y) => {
-        // 红色阴影的度数？？为什么不是上下两个呢
-        return rotate(x, y) + 20;
-      };
-
-      var clickTime = [];
-      // DRAGSTART
-      const mousedown = (event) => {
-        //event.preventDefault()
-        mousemove(event);
-        document.addEventListener('mousemove.drag', mousemove);
-        document.addEventListener('mouseup', mouseup);
-      };
-      // DRAG
-      const mousemove = (event) => {
-        $('#picker').toggle(true); //删掉picker
+        // update shield and picker positions
+        $('#picker').toggle(true);
         $('#h').toggle(true);
         $('#v').toggle(true);
         $('#shield').toggle(true);
-        shield.style.transform =
-          'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(-50deg)';
-        // picker.style[transform] = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
-        // console.log('rotate(' + rotate(event.pageX, event.pageY) + 'deg)');
-        picker.style.transform = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
+        shield.style.transform = 'rotate(' + (angle + 20) + 'deg) skewX(-50deg)';
+        picker.style.transform = 'rotate(' + angle + 'deg)';
 
-        var getClickTime = performance.now();
-        clickTime.push(getClickTime);
-      };
-
-      // DRAGEND
-
-      function PickerData() {
-        var rotate = $('#picker').css('transform');
-        var a = rotate.indexOf('(');
-        var b = rotate.indexOf(',');
-        var c = rotate.indexOf(',', 20);
-        var pickerCos = rotate.slice(a + 1, b);
-        var pickerSin = rotate.slice(b + 1, c);
-        var pickerTan = pickerSin / pickerCos;
-        var pickerAngle = (Math.atan(pickerTan) / Math.PI) * 180;
-
-        // console.log(a + 1, b)
-        // console.log(pickerCos)
-        // console.log(pickerSin)
-        // console.log(pickerTan)
-        // console.log(pickerAngle)
-
-        if (pickerCos < 0 && pickerSin < 0) {
-          pickerAngle = pickerAngle + 180;
-        } else if (pickerCos < 0 && pickerSin > 0) {
-          pickerAngle = pickerAngle + 180;
-        } else if (pickerCos > 0 && pickerSin < 0) {
-          pickerAngle = pickerAngle + 360;
-        } else if (pickerCos === 1 && pickerSin === 0) {
-          pickerAngle = 0;
-        }
-        return pickerAngle;
-      }
-
-      const mouseup = () => {
-        //(event)
-        var data = PickerData();
-        $('#h').toggle(true);
-        $('#v').toggle(true);
-        document.removeEventListener('mouseup', mouseup);
-        document.removeEventListener('mousemove.drag', mousemove);
+        // get picker data and initiate end of response
         var info = {};
-        info.rt = clickTime - startTime;
+        info.rt = performance.now() - startTime;
         info.delay = startTime;
-        info.prediction = data;
-
-        // console.log(data);
-
+        info.prediction = angle;
         after_response(info);
       };
 
-      // DRAG START
-      pickerCircle.addEventListener('mousedown', mousedown);
-      pickerCircle.addEventListener('mousemove.drag', mousemove);
-      document.addEventListener('mousemove.drag', mousemove);
-
-      // ENABLE STARTING THE DRAG IN THE BLACK CIRCLE
-      circle.addEventListener('mousedown', function (event) {
-        if (event.target == this) mousedown(event);
+      // ENABLE STARTING THE CLICK IN THE BLACK CIRCLE
+      circle.addEventListener('click', function (event) {
+        if (event.target == this) click_callback(event);
       });
     };
 
