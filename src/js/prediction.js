@@ -54,13 +54,11 @@ class Click {
       new_html += '</div>';
       new_html += '<div id="counter"></div>';
 
-      //new_html += '<div "class=circle-in"></div>';
       display_element.innerHTML = new_html;
 
       var circle = document.getElementById('circle'), //
         picker = document.getElementById('picker'),
         shield = document.getElementById('shield'),
-        // pickerCircle = picker.firstElementChild, //picker position
         rect = circle.getBoundingClientRect(),
         center = {
           x: rect.left + rect.width / 2,
