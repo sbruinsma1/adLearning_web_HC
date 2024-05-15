@@ -76,7 +76,7 @@ class Click {
         // angle reflects a clockwise deviation relative to the positive x-axis
         let angle = Math.atan2(y, x) * (180 / Math.PI);
         // convert domain from [-180, 180]->[0, 360]
-        angle = Math.mod(angle, 360)
+        angle = Math.mod(angle, 360);
 
         // update shield and picker positions
         $('#picker').toggle(true);
