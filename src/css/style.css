@@ -66,7 +66,7 @@
 	-ms-transform-origin: center left;
 	-o-transform-origin: center left;
 	transform-origin: center left;
-	transform: rotate(325deg) ;
+	transform: rotate(0deg) ;
 	display: none;
 }
 

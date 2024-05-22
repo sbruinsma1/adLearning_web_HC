@@ -143,6 +143,7 @@ function assessPerformance(prediction, outcome) {
   } else {
     console.log('miss');
   }
+  console.log(prediction, outcome);
   return hit;
 }
 
@@ -166,6 +167,7 @@ function practice_block(timeline, jsPsych) {
     const colorStyleP = colorP[n - 1];
     var x1;
     var x2;
+    let prediction;
     let outcome;
     let mean;
     if (colorStyleP === colorsP[0]) {
@@ -216,7 +218,7 @@ function practice_block(timeline, jsPsych) {
     }
     console.log(outcome);
 
-    var prediction = {
+    var make_prediction = {
       type: Click,
       on_load: function () {
         $('#counter').text(n_TrialPractice + 1 - n);
@@ -228,9 +230,8 @@ function practice_block(timeline, jsPsych) {
         });
       },
       on_finish: function () {
-        //(data)
-        // psiturk.recordTrialData(data);
-        // psiturk.saveData();
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
       },
     };
 
@@ -241,15 +242,13 @@ function practice_block(timeline, jsPsych) {
       },
     };
 
-    var position = {
+    var observe_outcome = {
       type: Position,
       data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
-        const fullTime = jsPsych.data.get().select('prediction').count();
-        const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
-        $('#picker').css('transform', 'rotate(' + shield_m + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (shield_m + 20) + 'deg) skewX(-50deg)');
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#picker-circle').css('background-color', colorStyleP);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
@@ -258,16 +257,11 @@ function practice_block(timeline, jsPsych) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyleP;
-        // get most recent prediction and use it to assess performance
-        const last_trial = jsPsych.data.get().select('prediction').count();
-        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
         data.score = assessPerformance(prediction, outcome);
-        // psiturk.recordTrialData(data);
-        // psiturk.saveData();
       },
     };
-    var practice = { 
-      timeline: [prediction, blank, position], 
+    var practice = {
+      timeline: [make_prediction, blank, observe_outcome],
     };
     timeline.push(practice);
   }
@@ -292,6 +286,7 @@ function block1(timeline, jsPsych) {
     const colorStyle = color1;
     counter1++;
     var x;
+    let prediction;
     if (counter1 <= n_SamePosition + jitters[c]) {
       // counter1 = counter1;
     } else if (counter1 > n_SamePosition + jitters[c]) {
@@ -310,7 +305,7 @@ function block1(timeline, jsPsych) {
     //   console.log(mean);
     //   console.log(jitters[c]);
 
-    var prediction = {
+    var make_prediction = {
       type: Click,
       on_load: function () {
         $('#counter').text(n_TrialPerBlock + 1 - n);
@@ -322,8 +317,8 @@ function block1(timeline, jsPsych) {
         });
       },
       on_finish: function () {
-        // psiturk.recordTrialData([data]);
-        // psiturk.saveData();
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
       },
     };
 
@@ -334,15 +329,13 @@ function block1(timeline, jsPsych) {
       },
     };
 
-    var position = {
+    var observe_outcome = {
       type: Position,
       data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
-        const fullTime = jsPsych.data.get().select('prediction').count();
-        const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
-        $('#picker').css('transform', 'rotate(' + shield_m + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (shield_m + 20) + 'deg) skewX(-50deg)');
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
         $('#counter').text(n_TrialPerBlock + 1 - n);
         $('#picker-circle').css('background-color', colorStyle);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
@@ -351,16 +344,11 @@ function block1(timeline, jsPsych) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyle;
-        // get most recent prediction and use it to assess performance
-        const last_trial = jsPsych.data.get().select('prediction').count();
-        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
         data.score = assessPerformance(prediction, outcome);
-        // psiturk.recordTrialData([data]);
-        // psiturk.saveData();
       },
     };
     var block1 = {
-      timeline: [prediction, blank, position],
+      timeline: [make_prediction, blank, observe_outcome],
     };
     timeline.push(block1);
   }
@@ -395,6 +383,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
     const colorStyle2 = color2[n - 1];
     var x1;
     var x2;
+    let prediction;
     let outcome;
     let mean;
     if (colorStyle2 === colors2[0]) {
@@ -434,7 +423,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
       mean = x2;
     }
 
-    var prediction2 = {
+    var make_prediction = {
       type: Click,
       on_load: function () {
         $('#counter').text(n_TrialPerBlock + 1 - n);
@@ -446,9 +435,8 @@ function block2(timeline, jsPsych, sync_cp = true) {
         });
       },
       on_finish: function () {
-        //(data)
-        // psiturk.recordTrialData([data]);
-        // psiturk.saveData();
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
       },
     };
 
@@ -459,15 +447,13 @@ function block2(timeline, jsPsych, sync_cp = true) {
       },
     };
 
-    var position2 = {
+    var observe_outcome = {
       type: Position,
       data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
-        const fullTime = jsPsych.data.get().select('prediction').count();
-        const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
-        $('#picker').css('transform', 'rotate(' + shield_m + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (shield_m + 20) + 'deg) skewX(-50deg)');
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
         $('#counter').text(n_TrialPerBlock + 1 - n);
         $('#picker-circle').css('background-color', colorStyle2);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
@@ -476,16 +462,11 @@ function block2(timeline, jsPsych, sync_cp = true) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyle2;
-        // get most recent prediction and use it to assess performance
-        const last_trial = jsPsych.data.get().select('prediction').count();
-        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
         data.score = assessPerformance(prediction, outcome);
-        // psiturk.recordTrialData([data]);
-        // psiturk.saveData();
       },
     };
     var block2 = {
-      timeline: [prediction2, blank2, position2],
+      timeline: [make_prediction, blank2, observe_outcome],
     };
     timeline.push(block2);
   }
@@ -526,6 +507,7 @@ function block3(timeline, jsPsych, sync_cp = true) {
     var y1;
     var y2;
     var y3;
+    let prediction;
     let outcome;
     let mean;
     if (colorStyle3 === colors3[0]) {
@@ -585,7 +567,7 @@ function block3(timeline, jsPsych, sync_cp = true) {
       mean = y3;
     }
 
-    var prediction3 = {
+    var make_prediction = {
       type: Click,
       on_load: function () {
         $('#counter').text(n_TrialPerBlock + 1 - n);
@@ -597,8 +579,8 @@ function block3(timeline, jsPsych, sync_cp = true) {
         });
       },
       on_finish: function () {
-        // psiturk.recordTrialData([data]);
-        // psiturk.saveData();
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
       },
     };
 
@@ -609,15 +591,13 @@ function block3(timeline, jsPsych, sync_cp = true) {
       },
     };
 
-    var position3 = {
+    var observe_outcome = {
       type: Position,
       data: { type: trial_type_label },
       on_load: function () {
         $('#shield').toggle(true);
-        const fullTime = jsPsych.data.get().select('prediction').count();
-        const shield_m = jsPsych.data.get().select('prediction').values[fullTime - 1];
-        $('#picker').css('transform', 'rotate(' + shield_m + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (shield_m + 20) + 'deg) skewX(-50deg)');
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
         $('#counter').text(n_TrialPerBlock + 1 - n);
         $('#picker-circle').css('background-color', colorStyle3);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
@@ -626,16 +606,11 @@ function block3(timeline, jsPsych, sync_cp = true) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyle3;
-        // get most recent prediction and use it to assess performance
-        const last_trial = jsPsych.data.get().select('prediction').count();
-        const prediction = jsPsych.data.get().select('prediction').values[last_trial - 1];
         data.score = assessPerformance(prediction, outcome);
-        // psiturk.recordTrialData([data]);
-        // psiturk.saveData();
       },
     };
     var block3 = {
-      timeline: [prediction3, blank3, position3],
+      timeline: [make_prediction, blank3, observe_outcome],
     };
     timeline.push(block3);
   }
