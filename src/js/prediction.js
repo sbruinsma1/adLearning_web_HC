@@ -10,6 +10,7 @@ import $ from 'jquery';
 //
 import * as Math from 'mathjs';
 import { ParameterType } from 'jspsych';
+import { rtDeadline } from './blocksetting123';
 // var Click = (function (jspsych) {
 // "use strict";
 
@@ -41,7 +42,6 @@ class Click {
   }
   trial(display_element, trial) {
     var startTime = performance.now();
-    var rtDeadline = 5000;
 
     // store response
     var response = {
@@ -51,19 +51,26 @@ class Click {
     };
 
     // check if go over deadline in real time
-    const checkDeadline = () => {
-      var elapsedTime = performance.now() - startTime;
-      if (elapsedTime >= rtDeadline) {
-        info.rt = null;
-        info.delay = null;
-        info.prediction = null;
-        after_response(info);
-      } else {
-        requestAnimationFrame(checkDeadline);
-      }
-    };
+    // const checkDeadline = () => {
+      this.jsPsych.pluginAPI.setTimeout(()=>{
+      console.log('timeout complete')
+      info.rt = null;
+      info.delay = null;
+      info.prediction = null;
+      after_response(info);
+      },rtDeadline)
+    //   var elapsedTime = performance.now() - startTime;
+    //   if (elapsedTime >= rtDeadline) {
+    //     info.rt = null;
+    //     info.delay = null;
+    //     info.prediction = null;
+    //     after_response(info);
+    //   } //else {
+    //     // requestAnimationFrame(checkDeadline);
+    //   // }
+    // };
 
-    checkDeadline();
+    // checkDeadline();
 
 
     const show_circle = () => {
@@ -136,12 +143,12 @@ class Click {
 
       var clickTime = [];
       // DRAGSTART
-      const mousedown = (event) => {
-        //event.preventDefault()
-        mousemove(event);
-        document.addEventListener('mousemove.drag', mousemove);
-        document.addEventListener('mouseup', mouseup);
-      };
+      // const mousedown = (event) => {
+      //   //event.preventDefault()
+      //   mousemove(event);
+      //   document.addEventListener('mousemove.drag', mousemove);
+      //   document.addEventListener('mouseup', mouseup);
+      // };
       // DRAG
       const mousemove = (event) => {
         $('#picker').toggle(true); //删掉picker
@@ -206,9 +213,9 @@ class Click {
       };
 
       // DRAG START
-      pickerCircle.addEventListener('mousedown', mousedown);
-      pickerCircle.addEventListener('mousemove.drag', mousemove);
-      document.addEventListener('mousemove.drag', mousemove);
+      // pickerCircle.addEventListener('mousedown', mousedown);
+      // pickerCircle.addEventListener('mousemove.drag', mousemove);
+      // document.addEventListener('mousemove.drag', mousemove);
 
       // ENABLE STARTING THE DRAG IN THE BLACK CIRCLE
       circle.addEventListener('mousedown', function (event) {
