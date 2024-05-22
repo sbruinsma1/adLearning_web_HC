@@ -51,7 +51,6 @@ class Click {
     };
 
     // check if go over deadline in real time
-    // const checkDeadline = () => {
       this.jsPsych.pluginAPI.setTimeout(()=>{
       console.log('timeout complete')
       info.rt = null;
@@ -59,18 +58,6 @@ class Click {
       info.prediction = null;
       after_response(info);
       },rtDeadline)
-    //   var elapsedTime = performance.now() - startTime;
-    //   if (elapsedTime >= rtDeadline) {
-    //     info.rt = null;
-    //     info.delay = null;
-    //     info.prediction = null;
-    //     after_response(info);
-    //   } //else {
-    //     // requestAnimationFrame(checkDeadline);
-    //   // }
-    // };
-
-    // checkDeadline();
 
 
     const show_circle = () => {
