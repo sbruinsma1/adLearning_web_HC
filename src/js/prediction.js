@@ -235,7 +235,9 @@
   
       // function to handle responses by the subject
       const after_response = (info) => { 
-          response = info; 
+        if (response.rt == null) {
+          response = info;
+        }
   
         if (trial.response_ends_trial) {
           this.jsPsych.pluginAPI.setTimeout(function () {
