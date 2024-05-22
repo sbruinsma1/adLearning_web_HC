@@ -51,28 +51,15 @@
       };
   
       // check if go over deadline in real time
-      // const checkDeadline = () => {
-        this.jsPsych.pluginAPI.setTimeout(()=>{
+      this.jsPsych.pluginAPI.setTimeout(()=>{
         console.log('timeout complete')
         info.rt = null;
         info.delay = null;
         info.prediction = null;
         after_response(info);
-        },rtDeadline)
-      //   var elapsedTime = performance.now() - startTime;
-      //   if (elapsedTime >= rtDeadline) {
-      //     info.rt = null;
-      //     info.delay = null;
-      //     info.prediction = null;
-      //     after_response(info);
-      //   } //else {
-      //     // requestAnimationFrame(checkDeadline);
-      //   // }
-      // };
-  
-      // checkDeadline();
-  
-  
+      },rtDeadline)
+
+
       const show_circle = () => {
         // circle , shield, picker, picker-prediction
         var new_html = '<div id="circle">';
