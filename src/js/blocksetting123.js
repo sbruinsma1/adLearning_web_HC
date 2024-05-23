@@ -133,6 +133,10 @@ function angle_array() {
 // evaluate performance (cumulative across non-practice blocks)
 function assessPerformance(prediction, outcome) {
   let pred_err = prediction - outcome;
+  // convert to NaN to prevent unexpected math operations
+  if (prediction == null) {
+    pred_err = NaN;
+  }
   // min distance around the circle in degrees
   let pred_err_min = Math.min(Math.mod(pred_err, 360), Math.mod(-pred_err, 360));
   let hit = 0;
