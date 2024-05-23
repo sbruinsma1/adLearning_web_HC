@@ -36,7 +36,6 @@ class Blank {
     const show_circle = () => {
       // check if make prediction (determines what feedback receive)
       var predicExist = this.jsPsych.data.get().select('prediction').values.slice(-1)[0];
-      // console.log('prev predic', predicExist);
 
       var new_html =
         '<div id="circle">' +
