@@ -130,8 +130,6 @@ class Click {
         prediction: response.prediction,
       };
 
-      // console.log('predic',trial_data.prediction)
-
       // clear the display
       display_element.innerHTML = '';
 
