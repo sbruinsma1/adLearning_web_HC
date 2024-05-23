@@ -1,7 +1,7 @@
 import { initJsPsych } from 'jspsych';
 const jsPsych = initJsPsych();
 
-import $ from 'jquery'; 
+import $ from 'jquery';
 
 // import * as Math from '../js/math.min';
 import Pass from '../js/pass';
