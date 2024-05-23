@@ -1,7 +1,7 @@
 import { initJsPsych } from 'jspsych';
 const jsPsych = initJsPsych();
 
-import $ from 'jquery'; //
+import $ from 'jquery';
 
 // import * as Math from '../js/math.min';
 import Pass from '../js/pass';
@@ -98,7 +98,9 @@ function buildTimeline(jsPsych) {
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
       '<br><b>The bomb blast area is represented by red.</b> A after you set the bomb, you will see where the zombies are attacking. If they are in the blast range (red arc) they will be killed.' +
       '<br><b> The zombies tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
-      '<br> Every time you kill a zombie, you will earn one point, which will translate into bonus payment at the end of the game.</p></div>',
+      '<br> Every time you kill a zombie, you will earn one point, which will translate into bonus payment at the end of the game.' +
+      '<br> Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.' +
+      '<br> If you do not set a bomb in that time, you will not receive a point for that trial.</p></div>',
     choices: ['Next'],
   };
   var age_check = {
@@ -173,13 +175,6 @@ function buildTimeline(jsPsych) {
       '<p class="jspsych-slider-check-msg">' +
         '<b>INCORRECT!</b>' +
         '<br>' +
-        '</p>' +
-        'The correct answer is: ' +
-        '<br>' +
-        '<b>' +
-        check1_opts[1] +
-        '</b>' +
-        '<br>' +
         'Press any key to re-answer the previous question.',
     ],
     trial_duration: null,
@@ -191,13 +186,6 @@ function buildTimeline(jsPsych) {
       '<p class="jspsych-slider-check-msg">' +
         '<b>INCORRECT!</b>' +
         '<br>' +
-        '</p>' +
-        'The correct answer is: ' +
-        '<br>' +
-        '<b>' +
-        check2_opts[1] +
-        '</b>' +
-        '<br>' +
         'Press any key to re-answer the previous question.',
     ],
     trial_duration: null,
@@ -208,13 +196,6 @@ function buildTimeline(jsPsych) {
     stimulus: [
       '<p class="jspsych-slider-check-msg">' +
         '<b>INCORRECT!</b>' +
-        '<br>' +
-        '</p>' +
-        'The correct answer is: ' +
-        '<br>' +
-        '<b>' +
-        check3_opts[3] +
-        '</b>' +
         '<br>' +
         'Press any key to re-answer the previous question.',
     ],

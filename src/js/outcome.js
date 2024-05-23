@@ -39,8 +39,13 @@ class Position {
   }
   trial(display_element, trial) {
     const show_circle = () => {
+      // check if make prediction (determines what feedback receive)
+      var predicExist = this.jsPsych.data.get().select('prediction').values.slice(-1)[0];
+
       var new_html = '<div id="circle">';
-      new_html += '<div id="shield"></div>';
+      if (predicExist !== null) {
+        new_html += '<div id="shield"></div>';
+      }
       new_html += '<div id="circle-in"></div>';
       new_html +=
         '<div id="picker"><div id="picker-prediction"><div id="h"></div><div id="v"></div></div></div>';
@@ -48,7 +53,10 @@ class Position {
       new_html += '<div id="picker-circle"></div></div></div>';
       new_html += '<div id="counter"></div>';
       display_element.innerHTML = new_html;
-      $('#picker').toggle(true);
+
+      if (predicExist !== null) {
+        $('#picker').toggle(true);
+      }
       $('#h').toggle(true);
       $('#v').toggle(true);
 

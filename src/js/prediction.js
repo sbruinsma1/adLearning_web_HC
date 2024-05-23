@@ -10,6 +10,7 @@ import $ from 'jquery';
 //
 import * as Math from 'mathjs';
 import { ParameterType } from 'jspsych';
+import { rtDeadline } from './blocksetting123';
 // var Click = (function (jspsych) {
 // "use strict";
 
@@ -41,6 +42,22 @@ class Click {
   }
   trial(display_element, trial) {
     var startTime = performance.now();
+
+    // store response
+    var response = {
+      rt: null,
+      delay: null,
+      prediction: null,
+    };
+
+    // check if go over deadline in real time
+    this.jsPsych.pluginAPI.setTimeout(() => {
+      // console.log('timeout complete');
+      info.rt = null;
+      info.delay = null;
+      info.prediction = null;
+      after_response(info);
+    }, rtDeadline);
 
     const show_circle = () => {
       // circle , shield, picker, picker-prediction
@@ -100,13 +117,6 @@ class Click {
       });
     };
 
-    // store response
-    var response = {
-      rt: null,
-      delay: null,
-      prediction: null,
-    };
-
     show_circle();
 
     const end_trial = () => {
@@ -130,7 +140,6 @@ class Click {
 
     // function to handle responses by the subject
     const after_response = (info) => {
-      // only record the first response
       if (response.rt == null) {
         response = info;
       }

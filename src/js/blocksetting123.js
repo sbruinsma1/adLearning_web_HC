@@ -23,6 +23,7 @@ const n_TrialPerBlock = 200;
 const n_TrialPractice = 30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
+const rtDeadline = 15000;
 // colorblind-friendly colors from Seaborn: ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#cc78bc', '#ca9161', '#fbafe4', '#949494', '#ece133', '#56b4e9']
 const all_colors = ['#0173b2', '#de8f05', '#029e73', '#cc78bc', '#000000', '#ece133']; // doesn't include practice block colors
 
@@ -132,6 +133,10 @@ function angle_array() {
 // evaluate performance (cumulative across non-practice blocks)
 function assessPerformance(prediction, outcome) {
   let pred_err = prediction - outcome;
+  // convert to NaN to prevent unexpected math operations
+  if (prediction == null) {
+    pred_err = NaN;
+  }
   // min distance around the circle in degrees
   let pred_err_min = Math.min(Math.mod(pred_err, 360), Math.mod(-pred_err, 360));
   let hit = 0;
@@ -615,4 +620,4 @@ function block3(timeline, jsPsych, sync_cp = true) {
   }
 }
 
-export { practice_block, block1, block2, block3 };
+export { practice_block, block1, block2, block3, rtDeadline };
