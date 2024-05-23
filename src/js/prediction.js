@@ -117,13 +117,6 @@ class Click {
       });
     };
 
-//       // store response
-//       var response = {
-//         rt: null,
-//         delay: null,
-//         prediction: null,
-//       };
-
     show_circle();
 
     const end_trial = () => {
