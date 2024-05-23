@@ -41,8 +41,6 @@ class Position {
     const show_circle = () => {
       // check if make prediction (determines what feedback receive)
       var predicExist = this.jsPsych.data.get().select('prediction').values.slice(-1)[0];
-      // console.log('prev predic',predicExist);
-      // console.log('prev predic',this.jsPsych.data.get().select('prediction').values)
 
       var new_html = '<div id="circle">';
       if (predicExist !== null) {
