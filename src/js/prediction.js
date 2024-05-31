@@ -83,9 +83,6 @@ class Click {
         };
 
       const click_callback = (event) => {
-        // clear listener
-        circle.removeEventListener('click', click_callback);
-
         // get prediction position angle
         let x = event.clientX - center.x;
         let y = event.clientY - center.y;
@@ -103,7 +100,10 @@ class Click {
         shield.style.transform = 'rotate(' + (angle + 20) + 'deg) skewX(-50deg)';
         picker.style.transform = 'rotate(' + angle + 'deg)';
 
-        // get picker data and initiate end of response
+        // clear listener
+        circle.removeEventListener('click', click_callback);
+
+        // set data fields and initiate end of response
         var info = {};
         info.rt = performance.now() - startTime;
         info.delay = startTime;
