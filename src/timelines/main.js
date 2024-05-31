@@ -92,12 +92,12 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus:
       '<div><h1>Protect Your City From Zombies</h1>' +
-      "<p style='width: 960px;line-height:2;text-align:left'><b>Imagine that we are in the world of Resident Evil.</b>Your city is the only place which was not infected by the virus.<br>" +
-      'There are <b>different groups of zombies(or just one group)</b> attacking your city from <b>different directions</b>. <br><b>Set bombs to kill them and defend your city.</b>' +
-      '<br><b>The large circle represents your city. You must set bombs on the perimeter to destroy the attacking zombies.</b>' +
+      "<p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus.<br>" +
+      'There are <b>different groups of zombies (or just one group)</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>' +
+      '<br>The large circle represents your city. You must <b>set bombs on the perimeter</b> to destroy the attacking zombies.' +
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
-      '<br><b>The bomb blast area is represented by red.</b> A after you set the bomb, you will see where the zombies are attacking. If they are in the blast range (red arc) they will be killed.' +
-      '<br><b> The zombies tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
+      '<br>After you set the bomb, the bomb blast area will be displayed in red. You will then see where the zombies are attacking, as indicated by the small circle. <b>If they are in the blast range (red arc), they will be killed.</b>' +
+      '<br>The zombies <b>tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
       '<br> Every time you kill a zombie, you will earn one point, which will translate into bonus payment at the end of the game.' +
       '<br> Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.' +
       '<br> If you do not set a bomb in that time, you will not receive a point for that trial.</p></div>',
