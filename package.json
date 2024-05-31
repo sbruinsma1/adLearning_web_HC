@@ -30,6 +30,7 @@
     "firebase": "^9.8.4",
     "fs-extra": "^8.1.0",
     "jquery": "^3.4.1",
+    "json2csv": "^6.0.0-alpha.2",
     "jspsych": "^7.2.3",
     "lodash": "^4.17.19",
     "mathjs": "^3.4.1",

@@ -2,6 +2,7 @@ import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import fsExtra from "fs-extra";
+import { parse } from 'json2csv';
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -69,20 +70,25 @@ async function downloadDataFirebase() {
     const trialsRef = experimentRef.collection(TRIALS_COL);
     const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
     const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
+    // console.log(trialsRef.exists())
 
     // Add the trials' data to the experiment's data as "results" array
-    experimentData["results"] = trialsData;
+    // experimentData["results"] = trialsData;
 
     // Get the path of the file to be saved
-    const outputFile =
+    const outputFileJSON =
       `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
       `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
+    const outputFileCSV =
+      `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
+      `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.csv`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
+
 
     // Determine if the file should be saved
     let shouldDownload;
-    if (fsExtra.existsSync(outputFile)) {
+    if (fsExtra.existsSync(outputFileJSON)) {
       // File exists, check if user wants to overwrite
-      const answer = await confirmOverwritePrompt(outputFile, overwriteAll);
+      const answer = await confirmOverwritePrompt(outputFileJSON, overwriteAll);
       switch (answer) {
         case "all":
           overwriteAll = true;
@@ -103,10 +109,23 @@ async function downloadDataFirebase() {
     if (overwriteAll || shouldDownload) {
       // Save the session to a unique JSON file.
       try {
-        fsExtra.outputJSONSync(outputFile, experimentData, { spaces: 2 });
-        console.log(`Data saved successfully: ${outputFile}`);
+        // save data as json
+        fsExtra.outputJSONSync(outputFileJSON, experimentData, { spaces: 2 });
+        // save data as csv
+        const results = experimentData.results;
+        const header = {
+            start_time: experimentData.start_time,
+            app_platform: experimentData.app_platform,
+            app_version: experimentData.app_version
+        }
+        // Include top-level browser info with the results, as extra columns.
+        results.push(header);
+        const csv = parse(results);
+        const writeCsv = fsExtra.outputFileSync(outputFileCSV, csv);
+        console.log(`Data saved successfully: ${outputFileJSON}`);
       } catch (error) {
-        console.error(`There was an error saving ${outputFile}`);
+        console.error(`There was an error saving ${outputFileJSON}`);
+        console.error(error);
       }
     } else console.log("Skipping download");
   }
@@ -273,7 +292,7 @@ async function confirmDeletionPrompt() {
 
 /**
  * Prompts the user to confirm continuation of the CLI, including future conflicts
- * @param {string} outputFile
+ * @param {string} outputFileJSON
  * @param {boolean} overwriteAll Whether or not all was already selected
  * @returns
  */
