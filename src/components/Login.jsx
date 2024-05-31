@@ -14,7 +14,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     // Logs user in if a valid participant/study id combination is given
     validationFunction(participantId, studyId).then((isValid) => {
       setIsError(!isValid);
-      if (isValid) handleLogin(participantId, studyId);
+      if (isValid) handleLogin(studyId,participantId);
     });
   }
 

@@ -36,6 +36,7 @@ function JsPsychExperiment({
 
     // Write the initial record to Firestore
     if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate);
+    // if (config.USE_FIREBASE) initParticipant(studyId, participantId, startDate);
 
     const jsPsych = initJsPsych(combinedOptions);
     // Add experiment properties into jsPsych directly
