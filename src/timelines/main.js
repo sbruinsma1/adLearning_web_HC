@@ -92,8 +92,8 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus:
       '<div><h1>Protect Your City From Zombies</h1>' +
-      "<p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus.<br>" +
-      'There are <b>different groups of zombies (or just one group)</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>' +
+      "<p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus." +
+      '<br>There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>' +
       '<br>The large circle represents your city. You must <b>set bombs on the perimeter</b> to destroy the attacking zombies.' +
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
       '<br>After you set the bomb, the bomb blast area will be displayed in red. You will then see where the zombies are attacking, as indicated by the small circle. <b>If they are in the blast range (red arc), they will be killed.</b>' +
