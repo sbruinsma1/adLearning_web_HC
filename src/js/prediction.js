@@ -73,7 +73,7 @@ class Click {
 
       display_element.innerHTML = new_html;
 
-      var circle = document.getElementById('circle'), 
+      var circle = document.getElementById('circle'),
         picker = document.getElementById('picker'),
         shield = document.getElementById('shield'),
         rect = circle.getBoundingClientRect(),
