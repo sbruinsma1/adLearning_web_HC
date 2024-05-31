@@ -72,7 +72,6 @@ function App() {
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId();
-        console.log('using prolific', pID)
         if (config.USE_FIREBASE && pID) {
           setMethod('firebase');
           // TODO 145: Function signature
@@ -88,8 +87,7 @@ function App() {
         const studyId = query.get('studyID');
         if (participantId) setParticipantID(participantId);
         if (studyId) setStudyID(studyId);
-
-        console.log('using firebase', participantId, studyId)
+        // console.log('using firebase', participantId, studyId);
 
         setMethod('firebase');
       } else {
@@ -145,7 +143,7 @@ function App() {
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((studyId, participantId) => {
-    console.log('ids', studyId, participantId)
+    // console.log('ids', studyId, participantId)
     setParticipantID(participantId);
     setStudyID(studyId);
     setLoggedIn(true);
