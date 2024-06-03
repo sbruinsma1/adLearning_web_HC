@@ -227,11 +227,11 @@ function practice_block(timeline, jsPsych) {
       on_load: function () {
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#center-circle').css('background-color', colorStyleP);
-        $('#circle').on('click', function (event) {
-          if (event.target == this) {
-            $('#center-circle').css('background-color', '#A9A9A9');
-          }
-        });
+        // $('#circle').on('click', function (event) {
+        //   if (event.target == this) {
+        //     $('#center-circle').css('background-color', '#A9A9A9');
+        //   }
+        // });
       },
       on_finish: function () {
         let pred_idx = jsPsych.data.get().select('prediction').count();
