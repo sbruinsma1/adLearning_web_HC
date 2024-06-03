@@ -87,6 +87,7 @@ function App() {
         const studyId = query.get('studyID');
         if (participantId) setParticipantID(participantId);
         if (studyId) setStudyID(studyId);
+        // console.log('using firebase', participantId, studyId);
 
         setMethod('firebase');
       } else {
@@ -142,6 +143,7 @@ function App() {
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((studyId, participantId) => {
+    // console.log('ids', studyId, participantId)
     setParticipantID(participantId);
     setStudyID(studyId);
     setLoggedIn(true);

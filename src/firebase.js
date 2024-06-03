@@ -37,6 +37,7 @@ const getExperimentRef = (studyID, participantID, startDate) =>
  */
 // TODO 174: Reverse participantID and studyID order
 async function validateParticipant(participantID, studyID) {
+  // console.log('validate participant', participantID, studyID);
   try {
     // .get() will fail on an invalid path
     await getParticipantRef(studyID, participantID).get();
@@ -57,6 +58,7 @@ async function validateParticipant(participantID, studyID) {
  */
 // TODO 174: Reverse participantID and studyID order
 async function initParticipant(participantID, studyID, startDate) {
+  // console.log('init participant', participantID, studyID, startDate);
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
@@ -86,7 +88,8 @@ async function addToFirebase(data) {
 
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.collection('trials').add(data);
+    // await experiment.collection('trials').add(data);
+    await experiment.update('results', firebase.firestore.FieldValue.arrayUnion(data));
   } catch (error) {
     console.error('Unable to add trial:\n', error);
   }
