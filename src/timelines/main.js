@@ -98,9 +98,9 @@ function buildTimeline(jsPsych) {
       '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
       '<br>After you set the bomb, the bomb blast area will be displayed in red. You will then see where the zombies are attacking, as indicated by the small circle. <b>If they are in the blast range (red arc), they will be killed.</b>' +
       '<br>The zombies <b>tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
-      '<br> Every time you kill a zombie, you will earn one point, which will translate into bonus payment at the end of the game.' +
+      '<br> Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will receive no points for that trial' +
       '<br> Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.' +
-      '<br> If you do not set a bomb in that time, you will not receive a point for that trial.</p></div>',
+      '<br> If you do not set a bomb in that time, you will not receive no points for that trial.</p></div>',
     choices: ['Next'],
   };
   var age_check = {
