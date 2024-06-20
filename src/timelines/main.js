@@ -52,7 +52,7 @@ function buildTimeline(jsPsych) {
   // set random sequence of constituent blocks
   // shuffle array of block indices (1-5; set sizes 1-3 and non-sync for 2 and 3)
   let block = [];
-  block.length = 4;//6;
+  block.length = 4; //6;
   for (let i = 1; i < block.length; i++) {
     block[i] = Math.floor(Math.random() * (block.length - 1));
     for (let j = 0; j < i; j++) {
@@ -407,7 +407,7 @@ function buildTimeline(jsPsych) {
       // case 4:
       //   sync_cp = false;
       //   block3(timeline, jsPsych, sync_cp);
-        // break;
+      // break;
       default:
         throw new Error('Called a block index that does not exist!');
     }
