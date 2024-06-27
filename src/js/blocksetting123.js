@@ -227,11 +227,11 @@ function practice_block(timeline, jsPsych) {
       on_load: function () {
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#center-circle').css('background-color', colorStyleP);
-        // $('#circle').on('click', function (event) {
-        //   if (event.target == this) {
-        //     $('#center-circle').css('background-color', '#A9A9A9');
-        //   }
-        // });
+        $('#bomb').on('mousedown', function (event) {
+          if (event.currentTarget == this) {
+            $('#center-circle').css('background-color', '#A9A9A9');
+          }
+        });
       },
       on_finish: function () {
         let pred_idx = jsPsych.data.get().select('prediction').count();
@@ -314,8 +314,8 @@ function block1(timeline, jsPsych) {
       on_load: function () {
         $('#counter').text(n_TrialPerBlock + 1 - n);
         $('#center-circle').css('background-color', colorStyle);
-        $('#circle').on('click', function (event) {
-          if (event.target == this) {
+        $('#bomb').on('mousedown', function (event) {
+          if (event.currentTarget == this) {
             $('#center-circle').css('background-color', '#A9A9A9');
           }
         });
@@ -432,8 +432,8 @@ function block2(timeline, jsPsych, sync_cp = true) {
       on_load: function () {
         $('#counter').text(n_TrialPerBlock + 1 - n);
         $('#center-circle').css('background-color', colorStyle2);
-        $('#circle').on('click', function (event) {
-          if (event.target == this) {
+        $('#bomb').on('mousedown', function (event) {
+          if (event.currentTarget == this) {
             $('#center-circle').css('background-color', '#A9A9A9');
           }
         });
@@ -576,8 +576,8 @@ function block3(timeline, jsPsych, sync_cp = true) {
       on_load: function () {
         $('#counter').text(n_TrialPerBlock + 1 - n);
         $('#center-circle').css('background-color', colorStyle3);
-        $('#circle').on('click', function (event) {
-          if (event.target == this) {
+        $('#bomb').on('mousedown', function (event) {
+          if (event.currentTarget == this) {
             $('#center-circle').css('background-color', '#A9A9A9');
           }
         });
