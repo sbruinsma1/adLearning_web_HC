@@ -63,8 +63,8 @@ class Click {
     const show_circle = () => {
       // define html for bomb image that gets placed within the circle
       let bomb_div = '<div id="bomb"><img src=' + images['bomb_4.png'];
-      bomb_div += ' style="position: absolute; top: 50%; left: 50%; ';
-      bomb_div += 'height: 50px; width: 50px; transform: translate(-65%, -62%)"></div>';
+      bomb_div += ' id="bomb_img" style="position: absolute; top: 50%; left: 50%; ';
+      bomb_div += 'height: 40px; width: 40px; transform: translate(-65%, -62%)"></div>';
 
       // circle, shield, bomb, picker, picker-prediction
       var new_html = '<div id="circle">';
@@ -92,22 +92,39 @@ class Click {
         bomb_rect = bomb.getBoundingClientRect(),
         bomb_x = bomb_rect.left + bomb_rect.width / 2,
         bomb_y = bomb_rect.top + bomb_rect.height / 2;
-      console.log(bomb_x, bomb_y);
 
       function center_bomb_on_mouse(event) {
-        let dx = event.clientX - bomb_x;
-        let dy = event.clientY - bomb_y;
+        // default
+        let pointer_x = event.clientX;
+        let pointer_y = event.clientY;
+        let dx = pointer_x - bomb_x;
+        let dy = pointer_y - bomb_y;
+        // if outside the circle, move to edge of circle
+        let max_dist = 132;
+        let x = pointer_x - center.x;
+        let y = pointer_y - center.y;
+        let dist_from_center = (x ** 2 + y ** 2) ** 0.5;
+        if (dist_from_center > max_dist) {
+          // rescale pointer coordinates to edge of circle
+          dx = (max_dist / dist_from_center) * x + center.x - bomb_x;
+          dy = (max_dist / dist_from_center) * y + center.y - bomb_y;
+        }
+
         bomb.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
       }
 
       function mousedown_callback(event) {
-        $('#bomb').toggle(true);
         center_bomb_on_mouse(event);
-        circle.addEventListener('mousemove', drag_callback);
-        circle.addEventListener('mouseup', mouseup_callback);
+        // must be added to the document to prevent weird behavior if/when
+        // the drag operation goes out of bounds
+        document.addEventListener('mousemove', drag_callback);
+        document.addEventListener('mouseup', mouseup_callback);
+        bomb.removeEventListener('mousedown', mousedown_callback);
       }
 
       function drag_callback(event) {
+        event.preventDefault();
+        $('#bomb').toggle(true);
         center_bomb_on_mouse(event);
       }
 
@@ -130,9 +147,8 @@ class Click {
         picker.style.transform = 'rotate(' + angle + 'deg)';
 
         // clear listeners
-        circle.removeEventListener('mousedown', mousedown_callback);
-        circle.removeEventListener('mousemove', drag_callback);
-        circle.removeEventListener('mouseup', mouseup_callback);
+        document.removeEventListener('mousemove', drag_callback);
+        document.removeEventListener('mouseup', mouseup_callback);
 
         // set data fields and initiate end of response
         var info = {};
@@ -143,9 +159,7 @@ class Click {
       }
 
       // ENABLE STARTING THE CLICK IN THE BLACK CIRCLE
-      circle.addEventListener('mousedown', function (event) {
-        if (event.target == this) mousedown_callback(event);
-      });
+      bomb.addEventListener('mousedown', mousedown_callback);
     };
 
     show_circle();
