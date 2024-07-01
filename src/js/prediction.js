@@ -62,7 +62,7 @@ class Click {
 
     const show_circle = () => {
       // define html for bomb image that gets placed within the circle
-      let bomb_div = '<div id="bomb"><img src=' + images['bomb_4.png'];
+      let bomb_div = '<div id="bomb" style="absolute"><img src=' + images['bomb_4.png'];
       bomb_div += ' id="bomb_img" style="position: absolute; top: 50%; left: 50%; ';
       bomb_div += 'height: 40px; width: 40px; transform: translate(-65%, -62%)"></div>';
 
@@ -71,12 +71,12 @@ class Click {
       new_html += '<div id="shield"></div>';
       new_html += '<div id="circle-in"></div>';
       new_html += '<div id="center-circle"></div>';
-      new_html += bomb_div;
       new_html += '<div id="picker">';
       new_html += '<div id="picker-prediction">';
       new_html += '<div id="h"></div><div id="v"></div></div></div>';
       new_html += '</div>';
       new_html += '<div id="counter"></div>';
+      new_html += bomb_div;
 
       display_element.innerHTML = new_html;
 
@@ -90,26 +90,29 @@ class Click {
           y: circle_rect.top + circle_rect.height / 2,
         },
         bomb_rect = bomb.getBoundingClientRect(),
-        bomb_x = bomb_rect.left + bomb_rect.width / 2,
-        bomb_y = bomb_rect.top + bomb_rect.height / 2;
+        bomb_origin = {
+          x: bomb_rect.left + bomb_rect.width / 2,
+          y: bomb_rect.top + bomb_rect.height / 2,
+        },
+        bomb_dist_from_center = 0;
+      const bomb_pos_radius = 132;
+      const bomb_min_dist_from_center = 100;
 
       function center_bomb_on_mouse(event) {
         // default
         let pointer_x = event.clientX;
         let pointer_y = event.clientY;
-        let dx = pointer_x - bomb_x;
-        let dy = pointer_y - bomb_y;
+        let dx = pointer_x - bomb_origin.x;
+        let dy = pointer_y - bomb_origin.y;
         // if outside the circle, move to edge of circle
-        let max_dist = 132;
         let x = pointer_x - center.x;
         let y = pointer_y - center.y;
-        let dist_from_center = (x ** 2 + y ** 2) ** 0.5;
-        if (dist_from_center > max_dist) {
+        bomb_dist_from_center = (x ** 2 + y ** 2) ** 0.5;
+        if (bomb_dist_from_center > bomb_pos_radius) {
           // rescale pointer coordinates to edge of circle
-          dx = (max_dist / dist_from_center) * x + center.x - bomb_x;
-          dy = (max_dist / dist_from_center) * y + center.y - bomb_y;
+          dx = (bomb_pos_radius / bomb_dist_from_center) * x + center.x - bomb_origin.x;
+          dy = (bomb_pos_radius / bomb_dist_from_center) * y + center.y - bomb_origin.y;
         }
-
         bomb.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
       }
 
@@ -128,10 +131,8 @@ class Click {
         center_bomb_on_mouse(event);
       }
 
-      function mouseup_callback(event) {
+      function finalize_bomb_position(x, y) {
         // get prediction position angle
-        let x = event.clientX - center.x;
-        let y = event.clientY - center.y;
         // NB: y increases going downward in the client window, so a positive
         // angle reflects a clockwise deviation relative to the positive x-axis
         let angle = Math.atan2(y, x) * (180 / Math.PI);
@@ -156,6 +157,29 @@ class Click {
         info.delay = startTime;
         info.prediction = angle;
         after_response(info);
+      }
+
+      function mouseup_callback(event) {
+        let dx = 0;
+        let dy = 0;
+        let x = event.clientX - center.x;
+        let y = event.clientY - center.y;
+        // if close enough to the circle where zombies arrive, snap to the edge
+        // of circle and get final position, otherwise, snap to center and
+        // start over
+        if (bomb_dist_from_center > bomb_min_dist_from_center) {
+          // rescale pointer coordinates to edge of circle
+          dx = (bomb_pos_radius / bomb_dist_from_center) * x + center.x - bomb_origin.x;
+          dy = (bomb_pos_radius / bomb_dist_from_center) * y + center.y - bomb_origin.y;
+          bomb.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+          finalize_bomb_position(x, y);
+        } else {
+          // return to origin
+          bomb.style.transform = 'translate(0, 0)';
+          document.removeEventListener('mousemove', drag_callback);
+          document.removeEventListener('mouseup', mouseup_callback);
+          bomb.addEventListener('mousedown', mousedown_callback);
+        }
       }
 
       // ENABLE STARTING THE CLICK IN THE BLACK CIRCLE
