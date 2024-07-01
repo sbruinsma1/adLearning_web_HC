@@ -100,19 +100,6 @@ function buildTimeline(jsPsych) {
     fullscreen_mode: true,
   };
 
-  var instructions = {
-    type: jsPsychInstructions,
-    pages: [
-      `<img src=${images["taskImg1.png"]}></img>`,
-      `<img src=${images["taskImg2.png"]}></img>`
-    ],
-    show_clickable_nav: 'true',
-    data: {
-      task_type: "instructions"
-    }
-  }
-
-
   // Start instructions
   // note: change at 7 if get rid of more explicit instructions (prob divide up here too if add examples) 
   var instructions = {
