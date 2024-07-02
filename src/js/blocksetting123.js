@@ -20,7 +20,8 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 30;
+const n_TrialPractice1 = 10;
+const n_TrialPractice2 = 20;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
@@ -71,12 +72,15 @@ for (let h = 0; h < n_trialsPerColor; h++) {
   } else h--;
 }
 
-//colors for practice block
-const colorsP = ['#0173b2', '#de8f05'];
-let colorP = colorsP;
-for (let h = 0; h < n_TrialPractice; h++) {
-  let colorRepeat = jsPsych.randomization.shuffle(colorsP);
-  colorP = colorP.concat(colorRepeat);
+//colors for practice block (set size 1)
+let colorP1 = '#cc78bc';
+
+//colors for practice block (set size 2)
+const colorsP2 = ['#0173b2', '#de8f05'];
+let colorP2 = colorsP2;
+for (let h = 0; h < n_TrialPractice2; h++) {
+  let colorRepeat = jsPsych.randomization.shuffle(colorsP2);
+  colorP2 = colorP2.concat(colorRepeat);
 }
 
 //define normal distribution functions
@@ -156,18 +160,18 @@ function assessPerformance(prediction, outcome) {
  ***/
 
 /***
- *practice block n < n_TrialPractice + 1
+ *practice block n < n_TrialPractice1 + 1
  */
-function practice_block(timeline, jsPsych) {
+ function practice_block1(timeline, jsPsych) {
   let counterP_1 = 0;
   let counterP_2 = 0;
   let c1 = 0;
   let c2 = 0;
-  let jitters_1 = GenerateJitter(n_TrialPractice, n_MaxJitter);
-  let jitters_2 = GenerateJitter(n_TrialPractice, n_MaxJitter); // async changepoints for 2nd color
+  let jitters_1 = GenerateJitter(n_TrialPractice1, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPractice1, n_MaxJitter); // async changepoints for 2nd color
   let trial_type_label = 'practice';
 
-  for (let n = 1; n < n_TrialPractice + 1; n++) {
+  for (let n = 1; n < n_TrialPractice1 + 1; n++) {
     const colorStyleP = colorP[n - 1];
     var x1;
     var x2;
@@ -225,7 +229,7 @@ function practice_block(timeline, jsPsych) {
     var make_prediction = {
       type: Click,
       on_load: function () {
-        $('#counter').text(n_TrialPractice + 1 - n);
+        $('#counter').text(n_TrialPractice1 + 1 - n);
         $('#center-circle').css('background-color', colorStyleP);
         $('#circle').on('click', function (event) {
           if (event.target == this) {
@@ -242,7 +246,7 @@ function practice_block(timeline, jsPsych) {
     var blank = {
       type: Blank,
       on_load: function () {
-        $('#counter').text(n_TrialPractice + 1 - n);
+        $('#counter').text(n_TrialPractice1 + 1 - n);
       },
     };
 
@@ -253,7 +257,123 @@ function practice_block(timeline, jsPsych) {
         $('#shield').toggle(true);
         $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
         $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
-        $('#counter').text(n_TrialPractice + 1 - n);
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+        $('#picker-circle').css('background-color', colorStyleP);
+        $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
+      },
+      on_finish: function (data) {
+        data.outcome = outcome;
+        data.mean = mean;
+        data.color = colorStyleP;
+        data.score = assessPerformance(prediction, outcome);
+      },
+    };
+    var practice = {
+      timeline: [make_prediction, blank, observe_outcome],
+    };
+    timeline.push(practice);
+  }
+}
+
+/***
+ *practice block n < n_TrialPractice2 + 1
+ */
+function practice_block2(timeline, jsPsych) {
+  let counterP_1 = 0;
+  let counterP_2 = 0;
+  let c1 = 0;
+  let c2 = 0;
+  let jitters_1 = GenerateJitter(n_TrialPractice2, n_MaxJitter);
+  let jitters_2 = GenerateJitter(n_TrialPractice2, n_MaxJitter); // async changepoints for 2nd color
+  let trial_type_label = 'practice';
+
+  for (let n = 1; n < n_TrialPractice2 + 1; n++) {
+    const colorStyleP = colorP[n - 1];
+    var x1;
+    var x2;
+    let prediction;
+    let outcome;
+    let mean;
+    if (colorStyleP === colorsP[0]) {
+      counterP_1++;
+      if (counterP_1 <= n_SamePosition + jitters_1[c1]) {
+        // counterP_1 = counterP_1;
+      }
+      if (counterP_1 > n_SamePosition + jitters_1[c1]) {
+        counterP_1 = Math.mod(counterP_1, n_SamePosition + jitters_1[c1]);
+        c1++;
+      }
+      if (counterP_1 === 1) {
+        x1 = nums2_1[n];
+      }
+      if (counterP_1 !== 1) {
+        // x1 = x1
+      }
+      // make task slightly easier for practicing with lower noise stdev
+      outcome = Math.mod(normalRandomScaled(x1, 15), 360);
+      mean = x1;
+      console.log(colorStyleP);
+      console.log(mean);
+      console.log(c1);
+      console.log(jitters_1[c1]);
+    }
+    if (colorStyleP === colorsP[1]) {
+      counterP_2++;
+      if (counterP_2 < n_SamePosition + jitters_2[c2]) {
+        // counterP_2 = counterP_2;
+      }
+      if (counterP_2 > n_SamePosition + jitters_2[c2]) {
+        counterP_2 = Math.mod(counterP_2, n_SamePosition + jitters_2[c2]);
+        c2++;
+      }
+      if (counterP_2 === 1) {
+        x2 = nums2_2[n];
+      }
+      if (counterP_2 !== 1) {
+        // x2 = x2
+      }
+      // make task slightly easier for practicing with lower noise stdev
+      outcome = Math.mod(normalRandomScaled(x2, 15), 360);
+      mean = x2;
+      console.log(colorStyleP);
+      console.log(mean);
+      console.log(c2);
+      console.log(jitters_2[c2]);
+    }
+    console.log(outcome);
+
+    var make_prediction = {
+      type: Click,
+      on_load: function () {
+        $('#counter').text(n_TrialPractice2 + 1 - n);
+        $('#center-circle').css('background-color', colorStyleP);
+        $('#circle').on('click', function (event) {
+          if (event.target == this) {
+            $('#center-circle').css('background-color', '#A9A9A9');
+          }
+        });
+      },
+      on_finish: function () {
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
+      },
+    };
+
+    var blank = {
+      type: Blank,
+      on_load: function () {
+        $('#counter').text(n_TrialPractice2 + 1 - n);
+      },
+    };
+
+    var observe_outcome = {
+      type: Position,
+      data: { type: trial_type_label },
+      on_load: function () {
+        $('#shield').toggle(true);
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
+        $('#counter').text(n_TrialPractice2 + 1 - n);
         $('#picker-circle').css('background-color', colorStyleP);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
       },
