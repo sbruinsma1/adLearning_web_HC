@@ -117,6 +117,7 @@ class Click {
       }
 
       function mousedown_callback(event) {
+        event.preventDefault();
         center_bomb_on_mouse(event);
         // must be added to the document to prevent weird behavior if/when
         // the drag operation goes out of bounds
@@ -160,6 +161,7 @@ class Click {
       }
 
       function mouseup_callback(event) {
+        event.preventDefault();
         let dx = 0;
         let dy = 0;
         let x = event.clientX - center.x;
