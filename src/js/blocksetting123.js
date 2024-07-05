@@ -20,7 +20,7 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 5; //30
+const n_TrialPractice = 30; 
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
@@ -41,8 +41,8 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
 const colors = jsPsych.randomization.shuffle(all_colors);
 
 //colors for practice block
-let colorP1 = '#029e73'; // change color choosing so not same as in main blocks?
-const colorsP2 = ['#0173b2', '#de8f05'];
+let colorP1 = '#ca9161'; // change color choosing so not same as in main blocks?
+const colorsP2 = ['#fbafe4','#56b4e9'];
 let colorP2 = colorsP2;
 for (let h = 0; h < n_TrialPractice; h++) {
   let colorRepeat = jsPsych.randomization.shuffle(colorsP2);
