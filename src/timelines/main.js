@@ -88,6 +88,7 @@ function buildTimeline(jsPsych) {
     ],
     fullscreen_mode: true,
   };
+  
   var instruction = {
     type: jsPsychHtmlbuttonResponse,
     stimulus:
@@ -322,6 +323,13 @@ function buildTimeline(jsPsych) {
       </div>`,
   };
 
+  var practice_intermed = {
+    type: jsPsychHtmlbuttonResponse,
+    choices: ['Start'],
+    stimulus: `<div><h1>Great job! Now, instead of just 1 group of zombies attacking your planet, there will be two groups represented by two different colors.
+      <br>Let's try some practice trials!</h1></div>`,
+  };
+
   var practice_end = {
     // print scores and end block
     type: Pass,
@@ -344,8 +352,9 @@ function buildTimeline(jsPsych) {
   var real_task_welcome = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
-    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
-          <p>There are 5 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
+    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!
+          <p>There are 3 blocks in the following task. Each block has 200 trials.</p>
+          <p>There are also different groups of zombies in each block and there will either be 1, 2, or 3 groups present at once (which you will be told at the start of each block). </p></h1></div>`,
   };
 
   var block_end = {
@@ -383,6 +392,7 @@ function buildTimeline(jsPsych) {
   // practice block
   timeline.push(practice_instruction);
   practice_block1(timeline, jsPsych);
+  timeline.push(practice_intermed);
   practice_block2(timeline, jsPsych);
   timeline.push(practice_end);
 
