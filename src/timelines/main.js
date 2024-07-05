@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 // import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import { practice_block, block1, block3, block2 } from '../js/blocksetting123';
+import { practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
@@ -382,7 +382,8 @@ function buildTimeline(jsPsych) {
 
   // practice block
   timeline.push(practice_instruction);
-  practice_block(timeline, jsPsych);
+  practice_block1(timeline, jsPsych);
+  practice_block2(timeline, jsPsych);
   timeline.push(practice_end);
 
   // real blocks
@@ -392,7 +393,7 @@ function buildTimeline(jsPsych) {
     let sync_cp = true;
     switch (block[blk_i]) {
       case 0:
-        block1(timeline, jsPsych, sync_cp);
+        block1(timeline, jsPsych);
         break;
       case 1:
         block2(timeline, jsPsych, sync_cp);
