@@ -92,17 +92,15 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus:
       '<div><h1>Protect Your City From Zombies</h1>' +
-      "<p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place not infected by the virus. " +
-      'There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <b>Your goal is to set bombs to kill them and defend your city.</b></p>' +
-      "<p style='width: 960px;line-height:2;text-align:left'>The large circle represents your city. Before each attack, " +
-      'a colored square in the middle of your city reveals which group of zombies you will face next. ' +
-      '<b>Drag-and-drop a bomb</b> from the center of your city to the perimeter to destroy the attacking zombies. ' +
-      'Once a bomb is set, the bomb blast area will be displayed in red. You will then see where the zombies are attacking, as indicated by the small circle. ' +
-      '<b>If they are in the blast range (red arc), they will be killed.</b> ' +
-      'Each group of <b>zombies tends to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b> ' +
-      'Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will receive no points for that trial. ' +
-      'Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so. ' +
-      'If you do not set a bomb in that time, you will not receive no points for that trial.</p></div>',
+      "<p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus." +
+      '<br>There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>' +
+      '<br>The large circle represents your city. You must <b>set bombs on the perimeter</b> to destroy the attacking zombies.' +
+      '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
+      '<br>After you set the bomb, the bomb blast area will be displayed in red. You will then see where the zombies are attacking, as indicated by the small circle. <b>If they are in the blast range (red arc), they will be killed.</b>' +
+      '<br>The zombies <b>tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
+      '<br> Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will receive no points for that trial' +
+      '<br> Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.' +
+      '<br> If you do not set a bomb in that time, you will not receive no points for that trial.</p></div>',
     choices: ['Next'],
   };
   var age_check = {
