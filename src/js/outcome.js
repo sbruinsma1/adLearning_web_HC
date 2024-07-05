@@ -47,8 +47,10 @@ class Position {
         new_html += '<div id="shield"></div>';
       }
       new_html += '<div id="circle-in"></div>';
-      new_html +=
-        '<div id="picker"><div id="picker-prediction"><div id="h"></div><div id="v"></div></div></div>';
+      if (predicExist !== null) {
+        new_html +=
+          '<div id="picker"><div id="picker-prediction"><div id="h"></div><div id="v"></div></div></div>';
+      }
       new_html += '<div id="pickerOutcome">';
       new_html += '<div id="picker-circle"></div></div></div>';
       new_html += '<div id="counter"></div>';
