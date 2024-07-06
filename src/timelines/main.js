@@ -57,7 +57,6 @@ function buildTimeline(jsPsych) {
   };
   timeline.push(preload);
 
-
   // at the end of each block, this will get updated in order to retrieve score
   let block_start_trial = 0;
   // set random sequence of constituent blocks
@@ -110,27 +109,27 @@ function buildTimeline(jsPsych) {
       <p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus.
       <br>There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>`,
       // pg 2
-      `<div><img src=${images["taskImg1.png"]} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg1.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>The large circle represents your city. You must <b>set bombs on the perimeter</b> (i.e. on the white) to destroy the attacking zombies.
       <br>You must drag the bomb from the center of your city to the spot on the perimeter where you anticipate the zombie to attack and release your mouse once you have set your position.
       <br><b>The colored square in the middle of your city indicates which group of zombies will attack on this trial.</b>
       </div>`,
       // pg 3
-      `<div><img src=${images["taskImg2.png"]} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg2.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>After you set the bomb, the bomb blast area will be displayed in red.
       <br>Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.
       <br>If you do not set a bomb in that time, you will not receive no points for that trial.
       </div>`,
       // pg 4
-      `<div><img src=${images["taskImg3.png"]} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg3.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>You will then see a small circle (in the same color as the indicator square at the beginning) depicting where the zombies actually attacked.
       <br>If your red bomb blast region is overlapping with the small circle, you have successfully killed the zombie.
       <br>Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will receive no points for that trial
       </div>`,
       // pg 5
-      `<div><img src=${images["taskImg4.png"]} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg4.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's important to note that the zombies will tend to attack in the same general location (based on their color), but <b>they won't always hit the exact same spot.</b>
       <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but as you can see, they're a bit inconsistent with their attacks.
@@ -138,7 +137,7 @@ function buildTimeline(jsPsych) {
       <br><b>Tip:</b> try to find the usual location where they attack (here it would be where the darkest arrow is pointing) and use this for your prediction!
       </div>`,
       // pg 6
-      `<div><img src=${images["taskImg5.png"]} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's also important to note that the zombies will also <b>occasionally redirect their attacks to a completely new location.</b>
       </div>`,
@@ -150,7 +149,7 @@ function buildTimeline(jsPsych) {
     ],
     show_clickable_nav: 'true',
     data: {
-      task_type: "instructions"
+      task_type: 'instructions'
     }
   }
 
