@@ -150,7 +150,7 @@ function buildTimeline(jsPsych) {
     show_clickable_nav: 'true',
     data: {
       task_type: 'instructions',
-    }
+    },
   };
 
   var age_check = {
