@@ -20,7 +20,7 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 30; 
+const n_TrialPractice = 30;
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
@@ -42,7 +42,7 @@ const colors = jsPsych.randomization.shuffle(all_colors);
 
 //colors for practice block
 let colorP1 = '#ca9161'; // change color choosing so not same as in main blocks?
-const colorsP2 = ['#fbafe4','#56b4e9'];
+const colorsP2 = ['#fbafe4', '#56b4e9'];
 let colorP2 = colorsP2;
 for (let h = 0; h < n_TrialPractice; h++) {
   let colorRepeat = jsPsych.randomization.shuffle(colorsP2);
@@ -171,28 +171,28 @@ function practice_block1(timeline, jsPsych) {
     let prediction;
     let outcome;
     let mean;
-      counterP_1++;
-      if (counterP_1 <= n_SamePosition + jitters_1[c1]) {
-        // counterP_1 = counterP_1;
-      }
-      if (counterP_1 > n_SamePosition + jitters_1[c1]) {
-        counterP_1 = Math.mod(counterP_1, n_SamePosition + jitters_1[c1]);
-        c1++;
-      }
-      if (counterP_1 === 1) {
-        x1 = nums2_1[n];
-      }
-      if (counterP_1 !== 1) {
-        // x1 = x1
-      }
-      // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
-      outcome = Math.mod(normalRandomScaled(x1, 20), 360);
-      mean = x1;
-      console.log(colorStyleP);
-      console.log(mean);
-      console.log(c1);
-      console.log(jitters_1[c1]);
-      console.log(outcome);
+    counterP_1++;
+    if (counterP_1 <= n_SamePosition + jitters_1[c1]) {
+      // counterP_1 = counterP_1;
+    }
+    if (counterP_1 > n_SamePosition + jitters_1[c1]) {
+      counterP_1 = Math.mod(counterP_1, n_SamePosition + jitters_1[c1]);
+      c1++;
+    }
+    if (counterP_1 === 1) {
+      x1 = nums2_1[n];
+    }
+    if (counterP_1 !== 1) {
+      // x1 = x1
+    }
+    // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
+    outcome = Math.mod(normalRandomScaled(x1, 20), 360);
+    mean = x1;
+    console.log(colorStyleP);
+    console.log(mean);
+    console.log(c1);
+    console.log(jitters_1[c1]);
+    console.log(outcome);
 
     var make_prediction = {
       type: Click,
