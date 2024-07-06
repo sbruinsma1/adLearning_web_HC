@@ -100,7 +100,7 @@ function buildTimeline(jsPsych) {
   };
 
   // Start instructions
-  // note: change at 7 if get rid of more explicit instructions (prob divide up here too if add examples) 
+  // note: change at 7 if get rid of more explicit instructions (prob divide up here too if add examples)
   var instructions = {
     type: jsPsychInstructions,
     pages: [
@@ -145,13 +145,13 @@ function buildTimeline(jsPsych) {
       `<div><p style='width: 960px;line-height:2;text-align:left'><br>
       <br>Before doing some practice trials, you will be asked some attention check questions about these instructions on the next few pages.
       <br>If you would like to clarify any of the instructions, <b>please click 'Previous' to review them now. You will NOT be able to revisit the instructions later.</b>
-      </div>`
+      </div>`,
     ],
     show_clickable_nav: 'true',
     data: {
-      task_type: 'instructions'
+      task_type: 'instructions',
     }
-  }
+  };
 
   var age_check = {
     type: jsPsychSurveyText,
@@ -377,8 +377,7 @@ function buildTimeline(jsPsych) {
   var practice_intermed = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
-    stimulus: 
-      `<div><p style='width: 960px;line-height:2;text-align:left'>
+    stimulus: `<div><p style='width: 960px;line-height:2;text-align:left'>
       <br>Great job! Now, instead of just 1 group of zombies attacking your planet, there will be <b>two groups</b> represented by two different colors.
       <br>Let's try some practice trials!
       </div>`,
@@ -395,7 +394,7 @@ function buildTimeline(jsPsych) {
       // print score in console and to the participant's screen
       console.log('Block score: ' + block_score + '/' + possible_block_score);
       $('#jspsych-html-button-response-stimulus').text(
-        'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.' 
+        'You got ' + block_score + ' / ' + possible_block_score + ' possible points in this block.'
       );
       // update starting index for the next block
       block_start_trial = n_trials;
