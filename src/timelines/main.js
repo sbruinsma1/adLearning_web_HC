@@ -5,10 +5,12 @@ import $ from 'jquery';
 
 // import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import { practice_block, block1, block3, block2 } from '../js/blocksetting123';
+import { practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
+import jsPsychPreload from '@jspsych/plugin-preload';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
+import jsPsychInstructions from '@jspsych/plugin-instructions';
 import jsPsychSurveyText from '@jspsych/plugin-survey-text';
 import jsPsychSurveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 import jsPsychExternalHtml from '@jspsych/plugin-external-html';
@@ -47,6 +49,14 @@ function buildTimeline(jsPsych) {
   // var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
   // create timeline
   var timeline = [];
+
+  // preload images
+  var preload = {
+    type: jsPsychPreload,
+    auto_preload: true,
+  };
+  timeline.push(preload);
+
   // at the end of each block, this will get updated in order to retrieve score
   let block_start_trial = 0;
   // set random sequence of constituent blocks
@@ -88,21 +98,61 @@ function buildTimeline(jsPsych) {
     ],
     fullscreen_mode: true,
   };
-  var instruction = {
-    type: jsPsychHtmlbuttonResponse,
-    stimulus:
-      '<div><h1>Protect Your City From Zombies</h1>' +
-      "<p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus." +
-      '<br>There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>' +
-      '<br>The large circle represents your city. You must <b>set bombs on the perimeter</b> to destroy the attacking zombies.' +
-      '<br><b>A colored square in the middle of your city reveals which group of zombies will attack next.</b>' +
-      '<br>After you set the bomb, the bomb blast area will be displayed in red. You will then see where the zombies are attacking, as indicated by the small circle. <b>If they are in the blast range (red arc), they will be killed.</b>' +
-      '<br>The zombies <b>tend to attack the same general location repeatedly, though they occasionally redirect their attacks to a completely new location.</b>' +
-      '<br> Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will receive no points for that trial' +
-      '<br> Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.' +
-      '<br> If you do not set a bomb in that time, you will not receive no points for that trial.</p></div>',
-    choices: ['Next'],
+
+  // Start instructions
+  // note: change at 7 if get rid of more explicit instructions (prob divide up here too if add examples)
+  var instructions = {
+    type: jsPsychInstructions,
+    pages: [
+      // pg 1
+      `<div><h1>Protect Your City From Zombies</h1>
+      <p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place which was not infected by the virus.
+      <br>There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>`,
+      // pg 2
+      `<div><img src=${images['taskImg1.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      <p style='width: 960px;line-height:2;text-align:left'><br>The large circle represents your city. You must <b>set bombs on the perimeter</b> (i.e. on the white) to destroy the attacking zombies.
+      <br>You must drag the bomb from the center of your city to the spot on the perimeter where you anticipate the zombie to attack and release your mouse once you have set your position.
+      <br><b>The colored square in the middle of your city indicates which group of zombies will attack on this trial.</b>
+      </div>`,
+      // pg 3
+      `<div><img src=${images['taskImg2.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      <p style='width: 960px;line-height:2;text-align:left'><br>
+      <br>After you set the bomb, the bomb blast area will be displayed in red.
+      <br>Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.
+      <br>If you do not set a bomb in that time, you will not receive no points for that trial.
+      </div>`,
+      // pg 4
+      `<div><img src=${images['taskImg3.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      <p style='width: 960px;line-height:2;text-align:left'><br>
+      <br>You will then see a small circle (in the same color as the indicator square at the beginning) depicting where the zombies actually attacked.
+      <br>If your red bomb blast region is overlapping with the small circle, you have successfully killed the zombie.
+      <br>Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will receive no points for that trial
+      </div>`,
+      // pg 5
+      `<div><img src=${images['taskImg4.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      <p style='width: 960px;line-height:2;text-align:left'><br>
+      <br>It's important to note that the zombies will tend to attack in the same general location (based on their color), but <b>they won't always hit the exact same spot.</b>
+      <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but as you can see, they're a bit inconsistent with their attacks.
+      <br>The arrows from the dot represent how far off their attacks can be from their targeted spot, where lighter lines indicate less likelihood of the zombies attacking there.
+      <br><b>Tip:</b> try to find the usual location where they attack (here it would be where the darkest arrow is pointing) and use this for your prediction!
+      </div>`,
+      // pg 6
+      `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      <p style='width: 960px;line-height:2;text-align:left'><br>
+      <br>It's also important to note that the zombies will also <b>occasionally redirect their attacks to a completely new location.</b>
+      </div>`,
+      // pg 7
+      `<div><p style='width: 960px;line-height:2;text-align:left'><br>
+      <br>Before doing some practice trials, you will be asked some attention check questions about these instructions on the next few pages.
+      <br>If you would like to clarify any of the instructions, <b>please click 'Previous' to review them now. You will NOT be able to revisit the instructions later.</b>
+      </div>`,
+    ],
+    show_clickable_nav: 'true',
+    data: {
+      task_type: 'instructions',
+    },
   };
+
   var age_check = {
     type: jsPsychSurveyText,
     questions: [{ prompt: '<b>What is your age? Answer 12 no matter what.</b>' }],
@@ -140,6 +190,8 @@ function buildTimeline(jsPsych) {
     'They will stagger slowly around circle in clockwise direction',
     'Both option 1 & 2',
   ];
+
+  // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
 
   var check1_question = {
     type: jsPsychSurveyMultiChoice,
@@ -322,6 +374,15 @@ function buildTimeline(jsPsych) {
       </div>`,
   };
 
+  var practice_intermed = {
+    type: jsPsychHtmlbuttonResponse,
+    choices: ['Start'],
+    stimulus: `<div><p style='width: 960px;line-height:2;text-align:left'>
+      <br>Great job! Now, instead of just 1 group of zombies attacking your planet, there will be <b>two groups</b> represented by two different colors.
+      <br>Let's try some practice trials!
+      </div>`,
+  };
+
   var practice_end = {
     // print scores and end block
     type: Pass,
@@ -345,7 +406,11 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
-          <p>There are 5 blocks in the following task. Each block has 200 trials.<br>And there are different groups of zombies in each block.</p></div>`,
+          <p style='width: 960px;line-height:2;text-align:left'>
+          <br>In the actual task, there will be 3 blocks with 200 trials each.
+          <br>During each of these blocks, there will be <b>either 1, 2, or 3 groups of zombies</b> attacking your planet at once (you will be told how many at the start of each block).
+          <br>Click 'Start' when you are ready to begin!
+          </div>`,
   };
 
   var block_end = {
@@ -375,14 +440,23 @@ function buildTimeline(jsPsych) {
   timeline.push(fullscreen_trial);
 
   // instructions + test questions
-  timeline.push(instruction);
+  timeline.push(instructions);
+  // timeline.push(instruction1);
+  // timeline.push(instruction2);
+  // timeline.push(instruction3);
+  // timeline.push(instruction4);
+  // timeline.push(instruction5);
+  // timeline.push(instruction6);
+
   timeline.push(check1_trial);
   timeline.push(check2_trial);
   timeline.push(check3_trial);
 
   // practice block
   timeline.push(practice_instruction);
-  practice_block(timeline, jsPsych);
+  practice_block1(timeline, jsPsych);
+  timeline.push(practice_intermed);
+  practice_block2(timeline, jsPsych);
   timeline.push(practice_end);
 
   // real blocks
@@ -392,7 +466,7 @@ function buildTimeline(jsPsych) {
     let sync_cp = true;
     switch (block[blk_i]) {
       case 0:
-        block1(timeline, jsPsych, sync_cp);
+        block1(timeline, jsPsych);
         break;
       case 1:
         block2(timeline, jsPsych, sync_cp);
