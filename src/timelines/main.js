@@ -142,9 +142,9 @@ function buildTimeline(jsPsych) {
       <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location.</b>
       </div>`,
       // pg 7
-      `<div><p style='width: 960px;line-height:2;text-align:left'><br>
-      <br>Before doing some practice trials, you will be asked some attention check questions about these instructions on the next few pages.
-      <br>If you would like to clarify any of the instructions, <b>please review them now. You will NOT be able to revisit the instructions later.</b>
+      `<div><p style='width: 960px;line-height:2;text-align:left'>
+      Before doing some practice trials, you will be asked a few quiz questions about the instructions.
+      Please review all instructions now to make sure you understand the task.</p>
       </div>`,
     ],
     show_clickable_nav: 'true',
@@ -378,7 +378,7 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><p style='width: 960px;line-height:2;text-align:left'>
-      <br>Great job! Now, instead of just 1 group of zombies attacking your planet, there will be <b>two groups</b> represented by two different colors.
+      <br>Great job! Now, instead of just 1 group of zombies attacking your city, there will be <b>two groups</b> represented by two different colors.
       <br>Let's try some practice trials!
       </div>`,
   };
@@ -408,7 +408,7 @@ function buildTimeline(jsPsych) {
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
           <p style='width: 960px;line-height:2;text-align:left'>
           <br>In the actual task, there will be 3 blocks with 200 trials each.
-          <br>During each of these blocks, there will be <b>either 1, 2, or 3 groups of zombies</b> attacking your planet at once.
+          <br>During each of these blocks, there will be <b>either 1, 2, or 3 groups of zombies</b> attacking your city at once.
           <br>Click 'Start' when you are ready to begin!
           </div>`,
   };
