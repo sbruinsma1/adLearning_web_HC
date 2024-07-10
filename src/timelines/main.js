@@ -144,7 +144,7 @@ function buildTimeline(jsPsych) {
       // pg 7
       `<div><p style='width: 960px;line-height:2;text-align:left'>
       Before doing some practice trials, you will be asked a few quiz questions about the instructions.
-      Please review all instructions now to make sure you understand the task.</p>
+      Please review all instructions now to make sure you understand the task. You will <b>not</b> be able to revisit them later.</p>
       </div>`,
     ],
     show_clickable_nav: 'true',
