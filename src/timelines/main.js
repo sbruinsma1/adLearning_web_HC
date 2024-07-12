@@ -463,7 +463,7 @@ function buildTimeline(jsPsych) {
   timeline.push(real_task_welcome);
   // call blocks in shuffled order
   for (let blk_i = 1; blk_i < block.length; blk_i++) {
-    let sync_cp = true;
+    let sync_cp = false;
     switch (block[blk_i]) {
       case 0:
         block1(timeline, jsPsych);
