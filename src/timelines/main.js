@@ -373,11 +373,11 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><img src=${images['taskImg6.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-    <p style='width: 960px;line-height:2;text-align:center'><br>
+    <p style='width: 960px;line-height:2;text-align:center;font-size:40px'><br>
       <br>Let's practice!
       <p style='width: 960px;line-height:2;text-align:left'>
       <b>Here's a hint:</b> the zombies will attack around 12 o'clock on average (shown in image above).
-      <br>In order to kill as many zombies as possible, you should try to place your bomb here everytime!
+      In order to kill as many zombies as possible, you should try to place your bomb here everytime!
       </div>`,
   };//In order to kill as many zombies as possible, you should place your bomb here everytime!
 
@@ -386,7 +386,7 @@ function buildTimeline(jsPsych) {
     stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
     <p style='width: 960px;line-height:2;text-align:center'><br>
       <br>Now try to practice on your own!
-      <br><b>Tip:</b> Remember to look for the average attack point!
+      <br><b>Reminder: </b>The zombies will occasionally change their average attack point. Make sure to readjust your aim.
       </div>`,
     choices: ['Start'],
   };
