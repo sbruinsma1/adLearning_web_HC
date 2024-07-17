@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 // import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import { practice_block0, practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
+import { practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
@@ -367,31 +367,14 @@ function buildTimeline(jsPsych) {
     return block_score;
   }
 
-    
- 
   var practice_instruction = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
-    stimulus: `<div><img src=${images['taskImg6.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-    <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>Let's practice!
-      <p style='width: 960px;line-height:2;text-align:left'>
-      <b>Here's a hint:</b> the zombies will attack around 12 o'clock on average (shown in image above).
-      <br>In order to kill as many zombies as possible, you should try to place your bomb here everytime!
+    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Let's practice for a while!</h1> 
       </div>`,
-  };//In order to kill as many zombies as possible, you should place your bomb here everytime!
-
-  var practice_intermed1 = {
-    type: jsPsychHtmlbuttonResponse,
-    stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-    <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>Now try to practice on your own!
-      <br><b>Tip:</b> Remember to look for the average attack point!
-      </div>`,
-    choices: ['Start'],
   };
 
-  var practice_intermed2 = {
+  var practice_intermed = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><p style='width: 960px;line-height:2;text-align:left'>
@@ -471,10 +454,8 @@ function buildTimeline(jsPsych) {
 
   // practice block
   timeline.push(practice_instruction);
-  practice_block0(timeline, jsPsych);
-  timeline.push(practice_intermed1);
   practice_block1(timeline, jsPsych);
-  timeline.push(practice_intermed2);
+  timeline.push(practice_intermed);
   practice_block2(timeline, jsPsych);
   timeline.push(practice_end);
 
