@@ -41,6 +41,7 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
 const colors = jsPsych.randomization.shuffle(all_colors);
 
 //colors for practice block
+let colorP0 = '#56b4e9';
 let colorP1 = '#ca9161'; // change color choosing so not same as in main blocks?
 const colorsP2 = ['#fbafe4', '#56b4e9'];
 let colorP2 = colorsP2;
@@ -168,7 +169,7 @@ function assessPerformance(prediction, outcome) {
   let trial_type_label = 'practice';
 
   for (let n = 1; n < n_TrialPractice1 + 1; n++) {
-    const colorStyleP = colorP1;
+    const colorStyleP = colorP0;
     var x1;
     let prediction;
     let outcome;

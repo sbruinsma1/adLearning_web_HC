@@ -376,7 +376,7 @@ function buildTimeline(jsPsych) {
     <p style='width: 960px;line-height:2;text-align:center;font-size:40px'><br>
       <br>Let's practice!
       <p style='width: 960px;line-height:2;text-align:left'>
-      <b>Here's a hint:</b> the zombies will attack around 12 o'clock on average (shown in image above).
+      <b>Here's a hint:</b> The zombies will attack <u>around 12 o'clock on average</u> (shown in image above).
       In order to kill as many zombies as possible, you should try to place your bomb here everytime!
       </div>`,
   };//In order to kill as many zombies as possible, you should place your bomb here everytime!
