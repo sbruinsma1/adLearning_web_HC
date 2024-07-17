@@ -30,6 +30,9 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
   }
   return jitters;
 }
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // shuffle all colors (even across blocks)
 const colors = jsPsych.randomization.shuffle(all_colors);
@@ -160,6 +163,7 @@ function practice_block1(timeline, jsPsych) {
   let trial_type_label = 'practice';
 
   for (let n = 1; n < n_TrialPractice + 1; n++) {
+    //let n = 1;
     const colorStyleP = colorP1;
     var x1;
     let prediction;
@@ -174,13 +178,13 @@ function practice_block1(timeline, jsPsych) {
       c1++;
     }
     if (counterP_1 === 1) {
-      x1 = nums2_1[n];
+      x1 = nums2_1[n]; // this generates the random number 1 -359
     }
     if (counterP_1 !== 1) {
       // x1 = x1
     }
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
-    outcome = Math.mod(normalRandomScaled(x1, 20), 360);
+    outcome = Math.mod(normalRandomScaled(x1, 25), 360); //x1 = mean, 20 = stdev; 360 = 
     mean = x1;
     console.log(colorStyleP);
     console.log(mean);
@@ -190,7 +194,7 @@ function practice_block1(timeline, jsPsych) {
 
     var make_prediction = {
       type: Click,
-      on_load: function () {
+      on_load: async function () {
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#center-circle').css('background-color', colorStyleP);
         $('#circle').on('click', function (event) {
@@ -198,10 +202,13 @@ function practice_block1(timeline, jsPsych) {
             $('#center-circle').css('background-color', '#A9A9A9');
           }
         });
+        //await delay(500000);
       },
       on_finish: function () {
         let pred_idx = jsPsych.data.get().select('prediction').count();
         prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
+       // jsPsych.pauseExperiment();
+        //setTimeout(jsPsych.resumeExperiment, 30000);
       },
     };
 
@@ -218,12 +225,14 @@ function practice_block1(timeline, jsPsych) {
       on_load: function () {
         $('#shield').toggle(true);
         $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 30) + 'deg) skewX(331deg)');
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#picker-circle').css('background-color', colorStyleP);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
+        
       },
-      on_finish: function (data) {
+      on_finish: async function (data) {
+        await delay(500000);
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyleP;
@@ -381,7 +390,7 @@ function block1(timeline, jsPsych) {
     //   if (counter1 !== 1) {
     //     continue;
     //   }
-    const outcome = Math.mod(normalRandomScaled(x, 20), 360);
+    const outcome = Math.mod(normalRandomScaled(x, 25), 360);
     const mean = x;
 
     //   console.log(mean);

@@ -123,7 +123,7 @@ var Click = (function (jspsych) {
           $('#v').toggle(true);
           $('#shield').toggle(true);
           shield.style[transform] =
-            'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(-50deg)';
+            'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(331deg)';
           console.log(event.pageX);
           console.log(event.pageY);
           picker.style[transform] = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
