@@ -385,7 +385,7 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
     <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>Now try to practice on your own!
+      <br>Great! Now try to practice on your own!
       <br><b>Reminder: </b>The zombies will occasionally change their average attack point. Make sure to readjust your aim.
       </div>`,
     choices: ['Start'],

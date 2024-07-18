@@ -41,7 +41,7 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
 const colors = jsPsych.randomization.shuffle(all_colors);
 
 //colors for practice block
-let colorP0 = '#56b4e9';
+let colorP0 = '#0173b2';
 let colorP1 = '#ca9161'; // change color choosing so not same as in main blocks?
 const colorsP2 = ['#fbafe4', '#56b4e9'];
 let colorP2 = colorsP2;
