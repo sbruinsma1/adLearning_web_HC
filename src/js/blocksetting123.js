@@ -182,7 +182,7 @@ function practice_block1(timeline, jsPsych) {
       // x1 = x1
     }
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
-    outcome = Math.mod(normalRandomScaled(x1, 25), 360); //x1 = mean, 20 = stdev; 360 = 
+    outcome = Math.mod(normalRandomScaled(x1, 20), 360); //x1 = mean, 20 = stdev; 360 = 
     mean = x1;
     console.log(colorStyleP);
     console.log(mean);
@@ -383,7 +383,7 @@ function block1(timeline, jsPsych) {
     //   if (counter1 !== 1) {
     //     continue;
     //   }
-    const outcome = Math.mod(normalRandomScaled(x, 25), 360);
+    const outcome = Math.mod(normalRandomScaled(x, 20), 360);
     const mean = x;
 
     //   console.log(mean);
