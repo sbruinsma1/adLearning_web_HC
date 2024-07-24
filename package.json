@@ -36,6 +36,7 @@
     "jspsych": "^7.2.3",
     "lodash": "^4.17.19",
     "mathjs": "^3.4.1",
+    "pandas": "^0.0.3",
     "popper.js": "^1.16.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.6.1",

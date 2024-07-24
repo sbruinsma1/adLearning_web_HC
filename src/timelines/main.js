@@ -376,8 +376,8 @@ function buildTimeline(jsPsych) {
     <p style='width: 960px;line-height:2;text-align:center;font-size:40px'><br>
       <br>Let's practice!
       <p style='width: 960px;line-height:2;text-align:left'>
-      <b>Here's a hint:</b> In this round, the zombies will attack <u>around 12 o'clock on average</u> (shown in image above).
-      Although you may not hit every one, you should try to place your bomb here everytime to kill as many zombies as possible! 
+      <b>Here's a hint:</b> In this round, the zombies will tend to attack <u>around 12 o'clock</u> (shown in image above).
+      Although you may not hit every one, you should place your bomb here everytime to kill as many zombies as possible! 
       </div>`,
   };//In order to kill as many zombies as possible, you should place your bomb here everytime!
 
@@ -385,9 +385,11 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
     <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
-      <br><b>Reminder: </b>The zombies will occasionally change their average attack point. Make sure to readjust your aim.
+      <br>This round, we will not show you the zombies attack location, but you will have to find it on your own. This will be true for the rest of the task.
+      <br><b>Reminder: </b>The zombies will occasionally redirect their general attack location to a completely new location. Make sure to readjust your aim.
       </div>`,
+      // Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
+      //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
     choices: ['Start'],
   };
 
