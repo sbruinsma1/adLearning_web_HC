@@ -62,7 +62,7 @@ class Blank {
 
       document.querySelector('#picker').style.transform = 'rotate(' + shield_m + 'deg)';
       document.querySelector('#shield').style.transform =
-        'rotate(' + (shield_m + 30) + 'deg) skewX(331deg)';
+        'rotate(' + (shield_m + 25) + 'deg) skewX(-40deg)';
 
       this.jsPsych.pluginAPI.setTimeout(function () {
         after_response();
