@@ -132,11 +132,11 @@ function buildTimeline(jsPsych) {
       `<div><img src=${images['taskImg4.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's important to note that zombies of the same color will tend to attack the same general location, but <b>they won't always hit the exact same spot.</b>
-      <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but as you can see, they're a bit inconsistent with their attacks.
+      <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but, as you can see, they're inconsistent and may land in the area around it.
       <br>The arrows from the dot represent how far off their attacks can be from their targeted spot, where lighter lines indicate less likelihood of the zombies attacking there.
       <br><b>Tip:</b> try to find the usual location where they attack (here it would be where the darkest arrow is pointing) and use this for your prediction!
       </div>`,
-      // pg 6
+      // pg 6 
       `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location.</b>
@@ -376,8 +376,8 @@ function buildTimeline(jsPsych) {
     <p style='width: 960px;line-height:2;text-align:center;font-size:40px'><br>
       <br>Let's practice!
       <p style='width: 960px;line-height:2;text-align:left'>
-      <b>Here's a hint:</b> In this round, the zombies will tend to attack <u>around 12 o'clock</u> (shown in image above).
-      Although you may not hit every one, you should place your bomb here everytime to kill as many zombies as possible! 
+      <b>Here's a hint:</b> In this round, the zombies will attack <u>around 12 o'clock</u> (shown in image above).
+      You should place your bomb here everytime to kill as many zombies as possible! 
       </div>`,
   };//In order to kill as many zombies as possible, you should place your bomb here everytime!
 
@@ -385,12 +385,12 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
     <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>This round, we will not show you the zombies attack location, but you will have to find it on your own. This will be true for the rest of the task.
-      <br><b>Reminder: </b>The zombies will occasionally redirect their general attack location to a completely new location. Make sure to readjust your aim.
+      <br>This round, we will not show where the zombies will attack, but you will have to find their general attack location on your own. This will be true for the rest of the task.
+      <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location. Make sure to readjust your aim.
       </div>`,
       // Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
       //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
-    choices: ['Start'],
+    choices: ['Start Practice'],
   };
 
   var practice_intermed2 = {
