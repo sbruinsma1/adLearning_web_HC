@@ -6,12 +6,12 @@ import $ from 'jquery';
 import * as Math from '../js/math.min';
 import Pass from '../js/pass';
 import { 
-  practice_block0, 
-  practice_block1, 
-  practice_block2, 
-  block1, 
-  block3, 
-  block2
+  practice_block0,
+  practice_block1,
+  practice_block2,
+  block1,
+  block3,
+  block2,
 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychPreload from '@jspsych/plugin-preload';
