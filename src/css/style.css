@@ -37,7 +37,7 @@
     width: 50%;
     height: 50%;
     transform-origin:0% 100%;
-    transform: rotate(345deg) skewX(-50deg);
+    transform: rotate(345deg) skewX(-40deg);
     background-color: #ff5e48;
 	display: none;
 }
