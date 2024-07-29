@@ -167,9 +167,9 @@ function practice_block0(timeline, jsPsych) {
     let outcome;
     let mean;
     let outcomes;
-    outcomes = [273.21, 281, 215.91, 269.05, 293.57, 260.22, 256.24, 301.25, 260.03, 288.53];
+    outcomes = [273.21, 281, 220.91, 269.05, 256.24, 293.57, 260.22, 301.25, 288.53, 250.93];
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
-    outcome = outcomes[n-1];
+    outcome = outcomes[n - 1];
     //ENSURE THERE ARE examples of highly noisy outcomes
     //even though they are aiming in the right place, will not catch every zombie
     mean = 270;
