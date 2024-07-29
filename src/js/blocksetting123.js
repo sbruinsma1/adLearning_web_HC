@@ -187,6 +187,13 @@ function assessPerformance(prediction, outcome) {
     }
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
     outcome = Math.mod(normalRandomScaled(x1, 20), 360);
+    //ENSURE THERE ARE examples of highly noisy outcomes 
+    if (n == 3){
+      outcome = 215;
+    }
+    if(n == 5){
+      outcome = 320; 
+    }
     mean = x1;
     console.log(colorStyleP);
     console.log(mean);
