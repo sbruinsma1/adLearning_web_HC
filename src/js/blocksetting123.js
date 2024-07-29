@@ -287,7 +287,7 @@ function practice_block1(timeline, jsPsych) {
 
     var make_prediction = {
       type: Click,
-      on_load: async function () {
+      on_load: function () {
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#center-circle').css('background-color', colorStyleP);
         $('#circle').on('click', function (event) {
