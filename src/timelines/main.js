@@ -5,7 +5,14 @@ import $ from 'jquery';
 
 import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import { practice_block0, practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
+import { 
+  practice_block0, 
+  practice_block1, 
+  practice_block2, 
+  block1, 
+  block3, 
+  block2
+} from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
@@ -366,7 +373,6 @@ function buildTimeline(jsPsych) {
     return block_score;
   }
 
- 
   var practice_instruction = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
@@ -386,8 +392,8 @@ function buildTimeline(jsPsych) {
       <br>This round, we will not show where the zombies will attack, but you will have to find their general attack location on your own. This will be true for the rest of the task.
       <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location. Make sure to readjust your aim.
       </div>`,
-      //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
-      //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
+    //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
+    //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
     choices: ['Start Practice'],
   };
 

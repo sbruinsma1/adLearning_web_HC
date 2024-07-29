@@ -156,7 +156,7 @@ function assessPerformance(prediction, outcome) {
 /***
  *practice block n < n_TrialPractice + 1
  */
- function practice_block0(timeline, jsPsych){
+function practice_block0(timeline, jsPsych){
   let n_TrialPractice1 = 10;
   let counterP_1 = 0;
   let c1 = 0;
