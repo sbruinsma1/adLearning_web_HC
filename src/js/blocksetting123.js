@@ -35,9 +35,8 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
 const colors = jsPsych.randomization.shuffle(all_colors);
 
 //colors for practice block
-
-let colorP0 = '#0173b2';
-let colorP1 = '#ca9161'; // change color choosing so not same as in main blocks?
+let colorP0 = '#0173b2'; // same color as shown in instructions
+let colorP1 = '#ca9161'; // color chosen so not as same as main blocks
 
 const colorsP2 = ['#fbafe4', '#56b4e9'];
 let colorP2 = colorsP2;
@@ -158,47 +157,21 @@ function assessPerformance(prediction, outcome) {
  */
 function practice_block0(timeline, jsPsych) {
   let n_TrialPractice1 = 10;
-  let counterP_1 = 0;
-  let c1 = 0;
-  let jitters_1 = GenerateJitter(n_TrialPractice1, n_MaxJitter);
-  //let jitters_1 = 3; //ensure there are no changepoints in the practice
   let trial_type_label = 'practice';
-
   for (let n = 1; n < n_TrialPractice1 + 1; n++) {
     const colorStyleP = colorP0;
-    var x1;
     let prediction;
     let outcome;
     let mean;
-    counterP_1++;
-    if (counterP_1 <= n_SamePosition + jitters_1[c1]) {
-      // counterP_1 = counterP_1;
-    }
-    if (counterP_1 > n_SamePosition + jitters_1[c1]) {
-      counterP_1 = Math.mod(counterP_1, n_SamePosition + jitters_1[c1]);
-      c1++;
-    }
-    if (counterP_1 === 1) {
-      x1 = 270; //nums2_1[n];
-    }
-    if (counterP_1 !== 1) {
-      // x1 = x1
-    }
+    let outcomes;
+    outcomes = [273.21, 281, 215.91, 269.05, 293.57, 260.22, 256.24, 301.25, 260.03, 288.53];
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
-    outcome = Math.mod(normalRandomScaled(x1, 20), 360);
+    outcome = outcomes[n-1];
     //ENSURE THERE ARE examples of highly noisy outcomes
     //even though they are aiming in the right place, will not catch every zombie
-    if (n == 3) {
-      outcome = 215;
-    }
-    if (n == 5) {
-      outcome = 320;
-    }
-    mean = x1;
+    mean = 270;
     console.log(colorStyleP);
     console.log(mean);
-    console.log(c1);
-    console.log(jitters_1[c1]);
     console.log(outcome);
 
     var make_prediction = {
@@ -287,7 +260,7 @@ function practice_block1(timeline, jsPsych) {
 
     var make_prediction = {
       type: Click,
-      on_load: async function () {
+      on_load: function () {
         $('#counter').text(n_TrialPractice + 1 - n);
         $('#center-circle').css('background-color', colorStyleP);
         $('#circle').on('click', function (event) {

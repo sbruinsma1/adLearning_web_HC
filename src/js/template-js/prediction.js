@@ -215,8 +215,8 @@ var Click = (function (jspsych) {
         if (trial.response_ends_trial) {
           this.jsPsych.pluginAPI.setTimeout(function () {
             // after wait is over</div>';
-            after_response();
-          }, 10000);
+            end_trial();
+          }, trial.trial_duration);
         }
       };
     }
