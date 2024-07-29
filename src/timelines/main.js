@@ -190,7 +190,7 @@ function buildTimeline(jsPsych) {
     'They will stagger slowly around circle in clockwise direction',
     'Both option 1 & 2',
   ];
- // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
+  // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
 
   var check1_question = {
     type: jsPsychSurveyMultiChoice,
@@ -366,7 +366,6 @@ function buildTimeline(jsPsych) {
     return block_score;
   }
 
-    
  
   var practice_instruction = {
     type: jsPsychHtmlbuttonResponse,
@@ -378,7 +377,7 @@ function buildTimeline(jsPsych) {
       <b>Here's a hint:</b> In this round, the zombies will attack <u>around 12 o'clock</u> (shown in image above).
       You should place your bomb here everytime to kill as many zombies as possible! 
       </div>`,
-  };//In order to kill as many zombies as possible, you should place your bomb here everytime!
+  }; //In order to kill as many zombies as possible, you should place your bomb here everytime!
 
   var practice_intermed1 = {
     type: jsPsychHtmlbuttonResponse,
@@ -387,7 +386,7 @@ function buildTimeline(jsPsych) {
       <br>This round, we will not show where the zombies will attack, but you will have to find their general attack location on your own. This will be true for the rest of the task.
       <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location. Make sure to readjust your aim.
       </div>`,
-      // Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
+      //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
       //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
     choices: ['Start Practice'],
   };
@@ -494,14 +493,6 @@ function buildTimeline(jsPsych) {
       case 2:
         block3(timeline, jsPsych, sync_cp);
         break;
-      // case 3:
-      //   sync_cp = false;
-      //   block2(timeline, jsPsych, sync_cp);
-      //   break;
-      // case 4:
-      //   sync_cp = false;
-      //   block3(timeline, jsPsych, sync_cp);
-      // break;
       default:
         throw new Error('Called a block index that does not exist!');
     }

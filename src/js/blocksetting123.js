@@ -31,7 +31,6 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
   return jitters;
 }
 
-
 // shuffle all colors (even across blocks)
 const colors = jsPsych.randomization.shuffle(all_colors);
 
@@ -157,7 +156,7 @@ function assessPerformance(prediction, outcome) {
 /***
  *practice block n < n_TrialPractice + 1
  */
- function practice_block0(timeline, jsPsych) {
+ function practice_block0(timeline, jsPsych){
   let n_TrialPractice1 = 10;
   let counterP_1 = 0;
   let c1 = 0;
@@ -180,20 +179,20 @@ function assessPerformance(prediction, outcome) {
       c1++;
     }
     if (counterP_1 === 1) {
-      x1 = 270;//nums2_1[n];
+      x1 = 270; //nums2_1[n];
     }
     if (counterP_1 !== 1) {
       // x1 = x1
     }
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
     outcome = Math.mod(normalRandomScaled(x1, 20), 360);
-    //ENSURE THERE ARE examples of highly noisy outcomes 
+    //ENSURE THERE ARE examples of highly noisy outcomes
     //even though they are aiming in the right place, will not catch every zombie
-    if (n == 3){
+    if (n == 3) {
       outcome = 215;
     }
-    if(n == 5){
-      outcome = 320; 
+    if (n == 5) {
+      outcome = 320;
     }
     mean = x1;
     console.log(colorStyleP);
@@ -278,7 +277,7 @@ function practice_block1(timeline, jsPsych) {
       // x1 = x1
     }
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
-    outcome = Math.mod(normalRandomScaled(x1, 20), 360); //x1 = mean, 20 = stdev; 360 = 
+    outcome = Math.mod(normalRandomScaled(x1, 20), 360); //x1 = mean, 20 = stdev
     mean = x1;
     console.log(colorStyleP);
     console.log(mean);
