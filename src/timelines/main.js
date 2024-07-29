@@ -389,7 +389,7 @@ function buildTimeline(jsPsych) {
     type: jsPsychHtmlbuttonResponse,
     stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
     <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>This round, we will not show where the zombies will attack, but you will have to find their general attack location on your own. This will be true for the rest of the task.
+      <br>This round, we will not show where the zombies will attack, so you will have to find their general attack location on your own. This will be true for the rest of the task.
       <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location. Make sure to readjust your aim.
       </div>`,
     //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!

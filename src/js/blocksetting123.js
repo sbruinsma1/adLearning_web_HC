@@ -106,6 +106,9 @@ function normalRandomScaled(mean, stddev) {
   return r;
 }
 // make pseudo random position
+const numsPrac1_1 = angle_array();
+const numsPrac2_1 = angle_array();
+const numsPrac2_2 = angle_array();
 const nums1 = angle_array();
 const nums2_1 = angle_array();
 const nums2_2 = angle_array();
@@ -244,7 +247,7 @@ function practice_block1(timeline, jsPsych) {
       c1++;
     }
     if (counterP_1 === 1) {
-      x1 = nums2_1[n]; // this generates the random number 1 -359
+      x1 = numsPrac1_1[n]; // this generates the random number 1 -359
     }
     if (counterP_1 !== 1) {
       // x1 = x1
@@ -332,7 +335,7 @@ function practice_block2(timeline, jsPsych) {
         c1++;
       }
       if (counterP_1 === 1) {
-        x1 = nums2_1[n];
+        x1 = numsPrac2_1[n];
       }
       if (counterP_1 !== 1) {
         // x1 = x1
@@ -355,7 +358,7 @@ function practice_block2(timeline, jsPsych) {
         c2++;
       }
       if (counterP_2 === 1) {
-        x2 = nums2_2[n];
+        x2 = numsPrac2_2[n];
       }
       if (counterP_2 !== 1) {
         // x2 = x2
