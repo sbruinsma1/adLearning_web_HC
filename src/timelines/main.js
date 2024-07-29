@@ -3,7 +3,7 @@ const jsPsych = initJsPsych();
 
 import $ from 'jquery';
 
-// import * as Math from '../js/math.min';
+import * as Math from '../js/math.min';
 import Pass from '../js/pass';
 import { practice_block0, practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
@@ -72,7 +72,7 @@ function buildTimeline(jsPsych) {
     }
   }
 
-  // welcome message
+  // // welcome message
   var welcome = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<t class="size"> <p> Welcome to the experiment.</p>
@@ -86,7 +86,7 @@ function buildTimeline(jsPsych) {
     execute_script: 'true',
     cont_btn: 'next_button_hide',
   };
-  // start fullscreen:
+  // // start fullscreen:
   var fullscreen_trial = {
     type: jsPsychFullscreen,
     message: [
@@ -115,29 +115,29 @@ function buildTimeline(jsPsych) {
       <br><b>The colored square in the middle of your city indicates which group of zombies will attack on this trial.</b>
       </div>`,
       // pg 3
-      `<div><img src=${images['taskImg2.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg2_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>After you set the bomb, the bomb blast area will be displayed in red.
       <br>Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.
       <br>If you do not set a bomb in that time, you will not receive any points for that trial.
       </div>`,
       // pg 4
-      `<div><img src=${images['taskImg3.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg3_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>You will then see a small circle depicting where the zombies actually attacked.
       <br>If your red bomb blast region is overlapping with the small circle, you have successfully killed the zombie.
       <br>Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will not receive any points for that trial.
       </div>`,
       // pg 5
-      `<div><img src=${images['taskImg4.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's important to note that zombies of the same color will tend to attack the same general location, but <b>they won't always hit the exact same spot.</b>
       <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but, as you can see, they're inconsistent and may land in the area around it.
       <br>The arrows from the dot represent how far off their attacks can be from their targeted spot, where lighter lines indicate less likelihood of the zombies attacking there.
       <br><b>Tip:</b> try to find the usual location where they attack (here it would be where the darkest arrow is pointing) and use this for your prediction!
       </div>`,
-      // pg 6 
-      `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+      // pg 6
+      `<div><img src=${images['taskImg5_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location.</b>
       </div>`,
@@ -190,8 +190,7 @@ function buildTimeline(jsPsych) {
     'They will stagger slowly around circle in clockwise direction',
     'Both option 1 & 2',
   ];
-
-  // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
+ // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
 
   var check1_question = {
     type: jsPsychSurveyMultiChoice,
@@ -458,7 +457,7 @@ function buildTimeline(jsPsych) {
   timeline.push(age_check);
   timeline.push(fullscreen_trial);
 
-  // instructions + test questions
+  // // instructions + test questions
   timeline.push(instructions);
   // timeline.push(instruction1);
   // timeline.push(instruction2);

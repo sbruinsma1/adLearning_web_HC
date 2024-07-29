@@ -105,7 +105,7 @@ var Click = (function (jspsych) {
 
         const shieldRotate = (x, y) => {
           // 红色阴影的度数？？为什么不是上下两个呢
-          return rotate(x, y) + 20;
+          return rotate(x, y) + 25;
         };
 
         var clickTime = [];
@@ -123,7 +123,7 @@ var Click = (function (jspsych) {
           $('#v').toggle(true);
           $('#shield').toggle(true);
           shield.style[transform] =
-            'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(-50deg)';
+            'rotate(' + shieldRotate(event.pageX, event.pageY) + 'deg) skewX(-40deg)';
           console.log(event.pageX);
           console.log(event.pageY);
           picker.style[transform] = 'rotate(' + rotate(event.pageX, event.pageY) + 'deg)';
@@ -214,9 +214,9 @@ var Click = (function (jspsych) {
 
         if (trial.response_ends_trial) {
           this.jsPsych.pluginAPI.setTimeout(function () {
-            // after wait is over
-            end_trial();
-          }, trial.trial_duration);
+            // after wait is over</div>';
+            after_response();
+          }, 10000);
         }
       };
     }
