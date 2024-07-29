@@ -224,7 +224,7 @@ function assessPerformance(prediction, outcome) {
       on_load: function () {
         $('#shield').toggle(true);
         $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
-        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 25) + 'deg) skewX(-40deg)');
         $('#counter').text(n_TrialPractice1 + 1 - n);
         $('#picker-circle').css('background-color', colorStyleP);
         $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
