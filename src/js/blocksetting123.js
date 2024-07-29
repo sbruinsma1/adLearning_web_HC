@@ -188,6 +188,7 @@ function assessPerformance(prediction, outcome) {
     // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
     outcome = Math.mod(normalRandomScaled(x1, 20), 360);
     //ENSURE THERE ARE examples of highly noisy outcomes 
+    //even though they are aiming in the right place, will not catch every zombie
     if (n == 3){
       outcome = 215;
     }
