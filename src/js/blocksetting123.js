@@ -36,7 +36,10 @@ function GenerateJitter(TrialPerBlock, MaxJitter) {
 const colors = jsPsych.randomization.shuffle(all_colors);
 
 //colors for practice block
-let colorP1 = '#0173b2'; // change color choosing so not same as in main blocks?
+
+let colorP0 = '#0173b2';
+let colorP1 = '#ca9161'; // change color choosing so not same as in main blocks?
+
 const colorsP2 = ['#fbafe4', '#56b4e9'];
 let colorP2 = colorsP2;
 for (let h = 0; h < n_TrialPractice; h++) {
@@ -154,6 +157,91 @@ function assessPerformance(prediction, outcome) {
 /***
  *practice block n < n_TrialPractice + 1
  */
+ function practice_block0(timeline, jsPsych) {
+  let n_TrialPractice1 = 10;
+  let counterP_1 = 0;
+  let c1 = 0;
+  let jitters_1 = GenerateJitter(n_TrialPractice1, n_MaxJitter);
+  //let jitters_1 = 3; //ensure there are no changepoints in the practice
+  let trial_type_label = 'practice';
+
+  for (let n = 1; n < n_TrialPractice1 + 1; n++) {
+    const colorStyleP = colorP0;
+    var x1;
+    let prediction;
+    let outcome;
+    let mean;
+    counterP_1++;
+    if (counterP_1 <= n_SamePosition + jitters_1[c1]) {
+      // counterP_1 = counterP_1;
+    }
+    if (counterP_1 > n_SamePosition + jitters_1[c1]) {
+      counterP_1 = Math.mod(counterP_1, n_SamePosition + jitters_1[c1]);
+      c1++;
+    }
+    if (counterP_1 === 1) {
+      x1 = 270;//nums2_1[n];
+    }
+    if (counterP_1 !== 1) {
+      // x1 = x1
+    }
+    // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
+    outcome = Math.mod(normalRandomScaled(x1, 20), 360);
+    mean = x1;
+    console.log(colorStyleP);
+    console.log(mean);
+    console.log(c1);
+    console.log(jitters_1[c1]);
+    console.log(outcome);
+
+    var make_prediction = {
+      type: Click,
+      on_load: function () {
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+        $('#center-circle').css('background-color', colorStyleP);
+        $('#circle').on('click', function (event) {
+          if (event.target == this) {
+            $('#center-circle').css('background-color', '#A9A9A9');
+          }
+        });
+      },
+      on_finish: function () {
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
+      },
+    };
+
+    var blank = {
+      type: Blank,
+      on_load: function () {
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+      },
+    };
+
+    var observe_outcome = {
+      type: Position,
+      data: { type: trial_type_label },
+      on_load: function () {
+        $('#shield').toggle(true);
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 20) + 'deg) skewX(-50deg)');
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+        $('#picker-circle').css('background-color', colorStyleP);
+        $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
+      },
+      on_finish: function (data) {
+        data.outcome = outcome;
+        data.mean = mean;
+        data.color = colorStyleP;
+        data.score = assessPerformance(prediction, outcome);
+      },
+    };
+    var practice = {
+      timeline: [make_prediction, blank, observe_outcome],
+    };
+    timeline.push(practice);
+  }
+}
 function practice_block1(timeline, jsPsych) {
   let counterP_1 = 0;
   let c1 = 0;
@@ -700,4 +788,4 @@ function block3(timeline, jsPsych, sync_cp = true) {
   }
 }
 
-export { practice_block1, practice_block2, block1, block2, block3, rtDeadline };
+export { practice_block0, practice_block1, practice_block2, block1, block2, block3, rtDeadline };

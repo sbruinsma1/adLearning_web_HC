@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import { practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
+import { practice_block0, practice_block1, practice_block2, block1, block3, block2 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
@@ -132,7 +132,7 @@ function buildTimeline(jsPsych) {
       `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's important to note that zombies of the same color will tend to attack the same general location, but <b>they won't always hit the exact same spot.</b>
-      <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but as you can see, they're a bit inconsistent with their attacks.
+      <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but, as you can see, they're inconsistent and may land in the area around it.
       <br>The arrows from the dot represent how far off their attacks can be from their targeted spot, where lighter lines indicate less likelihood of the zombies attacking there.
       <br><b>Tip:</b> try to find the usual location where they attack (here it would be where the darkest arrow is pointing) and use this for your prediction!
       </div>`,
@@ -366,14 +366,33 @@ function buildTimeline(jsPsych) {
     return block_score;
   }
 
+    
+ 
   var practice_instruction = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
-    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Let's practice for a while!</h1> 
+    stimulus: `<div><img src=${images['taskImg6.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+    <p style='width: 960px;line-height:2;text-align:center;font-size:40px'><br>
+      <br>Let's practice!
+      <p style='width: 960px;line-height:2;text-align:left'>
+      <b>Here's a hint:</b> In this round, the zombies will attack <u>around 12 o'clock</u> (shown in image above).
+      You should place your bomb here everytime to kill as many zombies as possible! 
       </div>`,
+  };//In order to kill as many zombies as possible, you should place your bomb here everytime!
+
+  var practice_intermed1 = {
+    type: jsPsychHtmlbuttonResponse,
+    stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+    <p style='width: 960px;line-height:2;text-align:center'><br>
+      <br>This round, we will not show where the zombies will attack, but you will have to find their general attack location on your own. This will be true for the rest of the task.
+      <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location. Make sure to readjust your aim.
+      </div>`,
+      // Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
+      //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
+    choices: ['Start Practice'],
   };
 
-  var practice_intermed = {
+  var practice_intermed2 = {
     type: jsPsychHtmlbuttonResponse,
     choices: ['Start'],
     stimulus: `<div><p style='width: 960px;line-height:2;text-align:left'>
@@ -453,8 +472,10 @@ function buildTimeline(jsPsych) {
 
   // practice block
   timeline.push(practice_instruction);
+  practice_block0(timeline, jsPsych);
+  timeline.push(practice_intermed1);
   practice_block1(timeline, jsPsych);
-  timeline.push(practice_intermed);
+  timeline.push(practice_intermed2);
   practice_block2(timeline, jsPsych);
   timeline.push(practice_end);
 
