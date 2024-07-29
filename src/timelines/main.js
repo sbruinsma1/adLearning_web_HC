@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import * as Math from '../js/math.min';
 import Pass from '../js/pass';
-import { 
+import {
   practice_block0,
   practice_block1,
   practice_block2,
