@@ -7,7 +7,9 @@
 
  */
 import $ from 'jquery';
-import * as Math from 'mathjs';
+import Math from 'mathjs';
+//import * as Math from 'mathjs';
+// this star downloads all the functions
 // import { ParameterType } from 'jspsych';
 var Click = (function (jspsych) {
   'use strict';

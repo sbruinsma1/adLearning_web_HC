@@ -2,8 +2,7 @@ import { initJsPsych } from 'jspsych';
 const jsPsych = initJsPsych();
 
 import $ from 'jquery';
-import * as Math from 'mathjs';
-
+import Math from 'mathjs';
 // js-template but does not wokr
 import Click from '../js/prediction';
 import Blank from '../js/blank';
@@ -167,7 +166,7 @@ function practice_block0(timeline, jsPsych) {
     let outcome;
     let mean;
     let outcomes;
-    outcomes = [273.21, 281, 220.91, 269.05, 256.24, 293.57, 260.22, 301.25, 288.53, 250.93];
+    outcomes = [279.38, 246.37, 263.16, 254.01, 274.34, 280.86, 282.78, 306.51, 252.68, 286.5];
     //ENSURE THERE ARE examples of highly noisy outcomes
     //even though they are aiming in the right place, will not catch every zombie
     outcome = outcomes[n - 1];

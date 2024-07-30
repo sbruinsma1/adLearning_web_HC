@@ -13,7 +13,7 @@
 
 # Min Files
 /public/lib
-/src/js/math.min.js
+
 # No linting needed
 **/__tests__/
 **/participant_responses

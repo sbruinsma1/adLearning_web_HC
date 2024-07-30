@@ -3,7 +3,7 @@ const jsPsych = initJsPsych();
 
 import $ from 'jquery';
 
-import * as Math from '../js/math.min';
+import Math from 'mathjs';
 import Pass from '../js/pass';
 import {
   practice_block0,
