@@ -2,8 +2,7 @@ import { initJsPsych } from 'jspsych';
 const jsPsych = initJsPsych();
 
 import $ from 'jquery';
-import * as Math from 'mathjs';
-
+import Math from 'mathjs';
 // js-template but does not wokr
 import Click from '../js/prediction';
 import Blank from '../js/blank';

@@ -8,7 +8,8 @@
  */
 import $ from 'jquery';
 //
-import * as Math from 'mathjs';
+import Math from 'mathjs';
+//import * as Math from 'mathjs';
 import { ParameterType } from 'jspsych';
 import { rtDeadline } from './blocksetting123';
 import { images } from '../lib/utils';
