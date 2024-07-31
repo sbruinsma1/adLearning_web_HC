@@ -97,10 +97,10 @@ async function downloadAllDataFirebase(){
               // Get the path of the file to be saved
               const outputFileJSON =
                `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
-               `${"test"}/${pID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
+               `${STUDY_ID}/${pID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
               const outputFileCSV =
                `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
-               `${"test"}/${pID}/${experimentID}.csv`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
+               `${STUDY_ID}/${pID}/${experimentID}.csv`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
       
       
           // Determine if the file should be saved
