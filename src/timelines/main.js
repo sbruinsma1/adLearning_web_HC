@@ -138,10 +138,10 @@ function buildTimeline(jsPsych) {
       // pg 5
       `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
-      <br>It's important to note that zombies of the same color will tend to attack the same general location, but <b>they won't always hit the exact same spot.</b>
-      <br>The zombies have a specific spot in mind (represented by the smaller circle above the perimeter here), but, as you can see, they're inconsistent and may land in the area around it.
-      <br>The arrows from the dot represent how far off their attacks can be from their targeted spot, where lighter lines indicate less likelihood of the zombies attacking there.
-      <br><b>Tip:</b> try to find the usual location where they attack (here it would be where the darkest arrow is pointing) and use this for your prediction!
+      <br>Each group of zombies has a preferred attack location. However, due to their unpredictable clumsiness, <b>they won't always hit the exact same spot.</b>
+      <br> In the picture above, the preferred attack location of the blue zombie is depicted by the smaller circle above the perimeter and the dark arrow.
+      <br> The various paths the zombies may stagger down(away from their preferred location) are represented by the arrows, with lighter arrows indicate less likely attack locations.
+      <br><b>Tip:</b> try to find their preferred attack location and place your bomb there.
       </div>`,
       // pg 6
       `<div><img src=${images['taskImg5_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
@@ -390,7 +390,7 @@ function buildTimeline(jsPsych) {
     stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
     <p style='width: 960px;line-height:2;text-align:center'><br>
       <br>This round, we will not show where the zombies will attack, so you will have to find their general attack location on your own. This will be true for the rest of the task.
-      <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location. Make sure to readjust your aim.
+      <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location.
       </div>`,
     //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
     //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
