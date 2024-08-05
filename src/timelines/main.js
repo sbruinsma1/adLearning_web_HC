@@ -140,7 +140,7 @@ function buildTimeline(jsPsych) {
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>Each group of zombies has a preferred attack location. However, due to their unpredictable clumsiness, <b>they won't always hit the exact same spot.</b>
       <br> In the picture above, the preferred attack location of the blue zombie is depicted by the smaller circle above the perimeter and the dark arrow.
-      <br> The various paths the zombies may stagger down(away from their preferred location) are represented by the arrows, with lighter arrows indicate less likely attack locations.
+      <br> The various paths the zombies may stagger down(away from their preferred location) are represented by the arrows, with lighter arrows indicating less likely attack locations.
       <br><b>Tip:</b> try to find their preferred attack location and place your bomb there.
       </div>`,
       // pg 6
