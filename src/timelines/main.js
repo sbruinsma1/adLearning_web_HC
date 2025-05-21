@@ -198,10 +198,11 @@ function buildTimeline(jsPsych) {
     'Both option 1 & 2',
   ];
   // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
+// IMPLEMENTATION: 
 
   var check1_question = {
     type: jsPsychSurveyMultiChoice,
-    questions: [{ prompt: questions[0], options: check1_opts }],
+    questions: [{ prompt: questions[0], options: check1_opts, required: true }],
     response_ends_trial: true,
     //   on_finish: function(data) {
     //       //  psiturk.recordTrialData([data]);
@@ -210,7 +211,7 @@ function buildTimeline(jsPsych) {
   };
   var check2_question = {
     type: jsPsychSurveyMultiChoice,
-    questions: [{ prompt: questions[1], options: check2_opts }],
+    questions: [{ prompt: questions[1], options: check2_opts, required:true }],
     response_ends_trial: true,
     //   on_finish: function(data) {
     //       //  psiturk.recordTrialData([data]);
@@ -219,145 +220,46 @@ function buildTimeline(jsPsych) {
   };
   var check3_question = {
     type: jsPsychSurveyMultiChoice,
-    questions: [{ prompt: questions[2], options: check3_opts }],
+    questions: [{ prompt: questions[2], options: check3_opts, required: true}],
     response_ends_trial: true,
     //   on_finish: function(data) {
     //       //  psiturk.recordTrialData([data]);
     //       //   psiturk.saveData();
     //   }
   };
-
-  var check1_pop_up = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: [
-      '<p class="jspsych-slider-check-msg">' +
-        '<b>INCORRECT!</b>' +
-        '<br>' +
-        'Press any key to re-answer the previous question.',
-    ],
-    trial_duration: null,
-    response_ends_trial: true,
-  };
-  var check2_pop_up = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: [
-      '<p class="jspsych-slider-check-msg">' +
-        '<b>INCORRECT!</b>' +
-        '<br>' +
-        'Press any key to re-answer the previous question.',
-    ],
-    trial_duration: null,
-    response_ends_trial: true,
-  };
-  var check3_pop_up = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: [
-      '<p class="jspsych-slider-check-msg">' +
-        '<b>INCORRECT!</b>' +
-        '<br>' +
-        'Press any key to re-answer the previous question.',
-    ],
-    trial_duration: null,
-    response_ends_trial: true,
-  };
-
-  var check1 = {
-    timeline: [check1_pop_up],
-    conditional_function: function () {
-      var prev_data = jsPsych.data.get().last(1).values()[0].response;
-
-      var correct_answer = check1_opts[1];
-
-      if (prev_data.Q0 != correct_answer) {
-        return true;
-      } else {
-        return false;
-      }
+    
+ /* var quiz_questions = [
+    {
+      type: jsPsychSurveyMultiChoice,
+      questions: [{ prompt: '<b>What will you do in this task?</b>', options: check1_opts, required:true }],
     },
-  };
-  var check2 = {
-    timeline: [check2_pop_up],
-    conditional_function: function () {
-      var prev_data = jsPsych.data.get().last(1).values()[0].response;
-
-      var correct_answer = check2_opts[1];
-
-      if (prev_data.Q0 != correct_answer) {
-        return true;
-      } else {
-        return false;
-      }
+    {
+      type: jsPsychSurveyMultiChoice,
+      questions: [{ prompt: '<b>How will you know which group a zombie is from?</b>', check2_opts, required:true}],
     },
-  };
-  var check3 = {
-    timeline: [check3_pop_up],
-    //   conditional_function: function(data){
-    conditional_function: function () {
-      var prev_data = jsPsych.data.get().last(1).values()[0].response;
-
-      var correct_answer = check3_opts[3];
-
-      if (prev_data.Q0 != correct_answer) {
-        return true;
-      } else {
-        return false;
-      }
+    {
+      type: jsPsychSurveyMultiChoice,
+      questions: [{ prompt: '<b>How will zombies attack?</b>', options: check3_opts, required:true }],
     },
+  ];
+
+  const correct_answers= [check1_opts[1],check2_opts[1], check3_opts[3]];
+
+
+  let quiz_attempts = 0;
+  const MAX_ATTEMPTS = 3;
+
+  
+  var quiz_block = {
+    timeline: [check1_question, check2_question, check3_question],
+      
+    on_finish: function(data) {
+      console.log(data);
+      // We'll collect the responses after all 3 have run
+    }
   };
+*/
 
-  var check1_trial = {
-    timeline: [
-      check1_question,
-      check1,
-      // confidence_confirmation_correct_fb
-    ],
-    loop_function: function () {
-      var prev_data = jsPsych.data.get().last(1).values()[0].response;
-
-      var correct_answer = check1_opts[1];
-
-      if (prev_data.Q0 != correct_answer) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  };
-
-  var check2_trial = {
-    timeline: [
-      check2_question,
-      check2,
-      // confidence_confirmation_correct_fb
-    ],
-    loop_function: function () {
-      var prev_data = jsPsych.data.get().last(1).values()[0].response;
-      var correct_answer = check2_opts[1];
-
-      if (prev_data.Q0 != correct_answer) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  };
-
-  var check3_trial = {
-    timeline: [
-      check3_question,
-      check3,
-      // confidence_confirmation_correct_fb
-    ],
-    loop_function: function () {
-      var prev_data = jsPsych.data.get().last(1).values()[0].response;
-      var correct_answer = check3_opts[3];
-      if (prev_data.Q0 != correct_answer) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  };
 
   function get_n_elapsed_trials() {
     // return number of elapsed trials stored in jsPsych data object
@@ -463,17 +365,106 @@ function buildTimeline(jsPsych) {
   timeline.push(fullscreen_trial);
 
   // // instructions + test questions
-  timeline.push(instructions);
+
   // timeline.push(instruction1);
   // timeline.push(instruction2);
   // timeline.push(instruction3);
   // timeline.push(instruction4);
   // timeline.push(instruction5);
   // timeline.push(instruction6);
+let instruction_attempts = 0;
+//let msg = '<h2> You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
 
-  timeline.push(check1_trial);
-  timeline.push(check2_trial);
-  timeline.push(check3_trial);
+const instruction_and_quiz = {
+    timeline: [
+      instructions,
+      check1_question,
+      check2_question,
+      check3_question,
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+          const q1_correct = last_3[0].response.Q0 === check1_opts[1];
+          const q2_correct = last_3[1].response.Q0 === check2_opts[1];
+          const q3_correct = last_3[2].response.Q0 === check3_opts[3];
+  
+          const all_correct = q1_correct && q2_correct && q3_correct;
+  
+          if (all_correct) {
+            return '<h2>✅ All questions are correct!</h2><p>Press any key to continue to the practice trials.</p>';
+          } 
+       //   else if(instruction_attempts >= 3) {
+       //     #jsPsych.endExperiment('<h2>⚠️ You have failed the quiz too many times. Please return your submission.</h2>');
+       //     return "<h2>⚠️ You have failed the quiz too many times. Please return your submission.</h2>";
+      //    }
+          else {
+            let msg = '<h2>⚠️ You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
+            if (!q1_correct) msg += '<li>Question 1 was incorrect.</li>';
+            if (!q2_correct) msg += '<li>Question 2 was incorrect.</li>';
+            if (!q3_correct) msg += '<li>Question 3 was incorrect.</li>';
+            msg += '</ul><p>Press any key to go back and try again.</p>';
+            return msg;
+          }
+        },
+        on_finish: function(){
+          const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+          const correct =
+          last_3[0].response.Q0 === check1_opts[1] &&
+          last_3[1].response.Q0 === check2_opts[1] &&
+          last_3[2].response.Q0 === check3_opts[3];
+
+        if (!correct) {
+          instruction_attempts++;
+        }
+      },
+    },
+  ],
+  loop_function: function () {
+    const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+    const q1_correct = last_3[0].response.Q0 === check1_opts[1];
+    const q2_correct = last_3[1].response.Q0 === check2_opts[1];
+    const q3_correct = last_3[2].response.Q0 === check3_opts[3];
+
+    const all_correct = q1_correct && q2_correct && q3_correct;
+
+    if (all_correct) return false;
+
+    //instruction_attempts++;
+    if (instruction_attempts >= 3) {
+      // If the user has failed the quiz too many times, end the experiment
+      return false;
+    }
+
+    return true; // restart instructions + quiz
+  },
+};
+
+
+const exit_after_failures = {
+  timeline: [
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<h2>❌ You have failed the quiz too many times.</h2><p>Please return your submission. Press any key to exit.</p>',
+      on_finish: function () {
+        window.location.href = 'https://app.prolific.com/submissions/complete?cc=FAILCODE';
+      },
+    },
+  ],
+  conditional_function: function () {
+    return instruction_attempts >= 3;
+  },
+};
+  
+  
+
+  timeline.push(instruction_and_quiz);
+  timeline.push(exit_after_failures);
+
+  //timeline.push(instructions);
+  //timeline.push(check1_trial);
+  //timeline.push(check2_trial);
+  //timeline.push(check3_trial);
 
   // practice block
   timeline.push(practice_instruction);

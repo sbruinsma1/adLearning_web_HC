@@ -7,7 +7,7 @@ import Math from 'mathjs';
 import Click from '../js/prediction';
 import Blank from '../js/blank';
 import Position from '../js/outcome';
-import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
+import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 
 import { images } from '../lib/utils';
 
@@ -160,12 +160,16 @@ function assessPerformance(prediction, outcome) {
 function practice_block0(timeline, jsPsych) {
   let n_TrialPractice1 = 10;
   let trial_type_label = 'practice';
+  let hitThreshold = 7; // number of hits to pass practice block, restart (1x) if not
+  jsPsych.data.addDataToLastTrial({ totalScore: 0 });  // Initialize totalScore at the start
+  let totalScore = 0;
   for (let n = 1; n < n_TrialPractice1 + 1; n++) {
     const colorStyleP = colorP0;
     let prediction;
     let outcome;
     let mean;
     let outcomes;
+    let score;
     outcomes = [279.38, 246.37, 263.16, 254.01, 274.34, 280.86, 282.78, 306.51, 252.68, 286.5];
     //ENSURE THERE ARE examples of highly noisy outcomes
     //even though they are aiming in the right place, will not catch every zombie
@@ -174,7 +178,6 @@ function practice_block0(timeline, jsPsych) {
     console.log(colorStyleP);
     console.log(mean);
     console.log(outcome);
-
     var make_prediction = {
       type: Click,
       on_load: function () {
@@ -214,7 +217,13 @@ function practice_block0(timeline, jsPsych) {
         data.outcome = outcome;
         data.mean = mean;
         data.color = colorStyleP;
-        data.score = assessPerformance(prediction, outcome);
+        score = assessPerformance(prediction, outcome);
+        //let currentScore = jsPsych.data.get().last(1).values()[0].totalScore;
+       // currentScore += score;
+        totalScore += score;
+        // Store updated totalScore back into jsPsych.data
+        jsPsych.data.addDataToLastTrial({ totalScore: totalScore }); //stored globally
+        data.score = score
       },
     };
     var practice = {
@@ -222,6 +231,31 @@ function practice_block0(timeline, jsPsych) {
     };
     timeline.push(practice);
   }
+  var checkPerformance = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function () {
+      let totalScore = jsPsych.data.get().last(1).values()[0].totalScore;
+
+      if (totalScore >= hitThreshold) {
+        return `<div><p>Great job! Your score was ${totalScore}. You can proceed to the next practice.</p></div>`;
+      } else {
+        return `<div><p>Sorry, you did not perform well in the practice trials</p>
+        <p> You only hit ${totalScore} out of 10 trials.</p>
+        <p>Review the instructions and please try again.</p></div>`;
+      }
+    },
+    choices: ['Continue','Try Again'],
+    on_finish: function () {
+      let totalScore = jsPsych.data.get().last(1).values()[0].totalScore;
+
+      if (totalScore < hitThreshold) {
+        jsPsych.finishTrial();
+        timeline.splice(timeline.length - 1, 1);  // Remove current trial
+        practice_block0(timeline, jsPsych); 
+        } 
+    }
+  };
+  timeline.push(checkPerformance);
 }
 function practice_block1(timeline, jsPsych) {
   let counterP_1 = 0;
@@ -425,7 +459,7 @@ function practice_block2(timeline, jsPsych) {
  *****/
 function block1(timeline, jsPsych) {
   var block1_intro = {
-    type: jsPsychHtmlbuttonResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face one group of zombies.</p></div>`,
     choices: ['Start'],
   };
@@ -512,7 +546,7 @@ function block1(timeline, jsPsych) {
  ***/
 function block2(timeline, jsPsych, sync_cp = true) {
   var block2_intro = {
-    type: jsPsychHtmlbuttonResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face two groups of zombies.</p></div>`,
     choices: ['Start'],
   };
@@ -630,7 +664,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
  ****/
 function block3(timeline, jsPsych, sync_cp = true) {
   var block3_intro = {
-    type: jsPsychHtmlbuttonResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face three groups of zombies.</p></div>`,
 
     choices: ['Start'],
