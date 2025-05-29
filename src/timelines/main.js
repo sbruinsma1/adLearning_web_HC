@@ -6,17 +6,18 @@ import $ from 'jquery';
 import Math from 'mathjs';
 import Pass from '../js/pass';
 import {
-  practice_block0,
   practice_block1,
   practice_block2,
   block1,
   block3,
   block2,
+  practice_block01,
+  getPracticeBlock0Timeline
 } from '../js/blocksetting123';
 import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
+import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import jsPsychInstructions from '@jspsych/plugin-instructions';
 import jsPsychSurveyText from '@jspsych/plugin-survey-text';
 import jsPsychSurveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
@@ -99,7 +100,7 @@ function buildTimeline(jsPsych) {
     message: [
       `<img src=${images['logo.png']}>` +
         `<h1>Welcome to the Adaptive Learning Task.</h1>` +
-        `<p>It may cost you 60 minutes to finish the task.<br>` +
+        `<p>It may take you 60 minutes to finish the task.<br>` +
         `Please pay full attention when you do the task.<br>` +
         `Press 'Continue' to enter fullscreen.</p>`,
     ],
@@ -108,58 +109,97 @@ function buildTimeline(jsPsych) {
 
   // Start instructions
   // note: change at 7 if get rid of more explicit instructions (prob divide up here too if add examples)
-  var instructions = {
+  // run until 5, then run practice block 0
+  var instructions1 = {
     type: jsPsychInstructions,
     pages: [
       // pg 1
-      `<div><h1>Protect Your City From Zombies</h1>
-      <p style='width: 960px;line-height:2;text-align:left'>Imagine that we are in the world of Resident Evil. Your city is the only place not infected by the virus.
-      <br>There are <b>different groups of zombies</b> attacking your city from <b>different directions</b>. <br><u>Your goal is to set bombs to kill them and defend your city.</u>`,
+      `    <div style="width: 960px; margin: auto; text-align: center;">
+      <h1>Protect Your City From Zombies</h1>
+      <img src=${images['intro_city.png']} style="height: 400px; margin-bottom: 20px;">
+      <p style="text-align: left;
+       line-height: 2;">
+        Imagine that we are in the world of Resident Evil. Your city is the only place not infected by the virus.
+        <br>There are <b>multiple groups of zombies</b> attacking your city from <b>different directions</b>.
+        <br><u>Your goal is to set bombs to kill them and defend your city.</u>
+      </p>
+    </div>`,
       // pg 2
-      `<div><img src=${images['taskImg1.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-      <p style='width: 960px;line-height:2;text-align:left'><br>The large circle represents your city. You must <b>set bombs on the perimeter</b> (i.e. on the white) to destroy the attacking zombies.
-      <br>You must drag the bomb from the center of your city to the spot on the perimeter where you anticipate the zombie's attack and release your mouse once you have set your position.
-      <br><b>The colored square in the middle of your city indicates which group of zombies will attack on this trial.</b>
+      `<div style="text-align: center; width: 960px; margin: auto; line-height: 2;">
+      <!-- Two side-by-side images at the top -->
+        <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 30px;">
+          <img src=${images['taskImg1.png']} style="height: 350px; width: auto;">
+          <img src=${images['bomb_task1.png']} style="height: 350px; width: auto;">
+        </div>
+
+      <!-- Text below the images -->
+      <p style='width: 960px; line-height: 2; text-align: center; font-size: 1.4rem;'>
+        <br>The large circle represents your city. You must <b>set bombs on the perimeter</b> (i.e. on the white) to destroy the attacking zombies.
+        <br>You must drag the bomb from the center of your city to the spot on the perimeter where you anticipate the zombie's attack and release your mouse once you have set your position.
+      </p>
       </div>`,
       // pg 3
       `<div><img src=${images['taskImg2_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>After you set the bomb, the bomb blast area will be displayed in red.
-      <br>Please try to set your bomb as quickly and accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.
+      <br>Please try to set your bomb as accurately as possible. Note that you have a <b>maximum of 15 seconds</b> to do so.
       <br>If you do not set a bomb in that time, you will not receive any points for that trial.
       </div>`,
       // pg 4
-      `<div><img src=${images['taskImg3_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-      <p style='width: 960px;line-height:2;text-align:left'><br>
+      `    <div style="text-align:left; width: 960px; margin: auto; line-height:2;">
+  
+    <!-- Image row with labels BELOW images -->
+    <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 30px;">
+      <div style="text-align: center;">
+        <img src=${images['taskimg2_bombhit.png']} style="height: 250px;">
+        <div><b>Hit</b></div>
+      </div>  
+      <div style="text-align: center;">
+        <img src=${images['taskImg3_miss.png']} style="height: 250px;">
+        <div><b>Miss</b></div>
+      </div>
+      </div>
+
+    <p style='text-align:left'>
       <br>You will then see a small circle depicting where the zombies actually attacked.
       <br>If your red bomb blast region is overlapping with the small circle, you have successfully killed the zombie.
       <br>Every time you kill a zombie, you will earn one point. If you do not hit the zombie, you will not receive any points for that trial.
-      </div>`,
+    </p>
+    </div>
+    `,
       // pg 5
-      `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-      <p style='width: 960px;line-height:2;text-align:left'><br>
+      `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:375px;width: auto'>
+
+      <p style='width: 960px;line-height:1.75;text-align:left'><br>
       <br>Each group of zombies has a preferred attack location. However, due to their unpredictable clumsiness, <b>they won't always hit the exact same spot.</b>
       <br> In the picture above, the preferred attack location of the blue zombie is depicted by the smaller circle above the perimeter and the dark arrow.
       <br> The various paths the zombies may stagger down(away from their preferred location) are represented by the arrows, with lighter arrows indicating less likely attack locations.
       <br><b>Tip:</b> try to find their preferred attack location and place your bomb there.
       </div>`,
-      // pg 6
-      `<div><img src=${images['taskImg5_large.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-      <p style='width: 960px;line-height:2;text-align:left'><br>
-      <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location.</b>
-      </div>`,
-      // pg 7
-      `<div><p style='width: 960px;line-height:2;text-align:left'>
-      Before doing some practice trials, you will be asked a few quiz questions about the instructions.
-      <br>Please review all instructions now to make sure you understand the task. You will <b>not</b> be able to revisit them later.</p>
-      </div>`,
+
     ],
     show_clickable_nav: 'true',
     data: {
       task_type: 'instructions',
     },
   };
+  // note: could also use jsPsychSurvey and update the rules (e.g., use loop function on timeline) to send participants back to the beginning of the instructions if they get 1 wrong
+  //after practiceblock0, then show instructions for the rest of the task
+  var pre_quiz = {
+    type: jsPsychInstructions,
+    pages: [
 
+      // pg 7
+      `<div><p style='width: 960px;line-height:2;text-align:left'>
+      Before doing some practice trials, you will be asked a few quiz questions about the instructions.
+      <br>Please review all instructions now to make sure you understand the task. You will <b>not</b> be able to revisit them later.</p>
+      </div>`,
+      ],
+    show_clickable_nav: 'true',
+    data: {
+      task_type: 'instructions',
+    },
+  };
   var age_check = {
     type: jsPsychSurveyText,
     questions: [{ prompt: '<b>What is your age? Answer 12 no matter what.</b>' }],
@@ -228,39 +268,16 @@ function buildTimeline(jsPsych) {
     //   }
   };
     
- /* var quiz_questions = [
-    {
-      type: jsPsychSurveyMultiChoice,
-      questions: [{ prompt: '<b>What will you do in this task?</b>', options: check1_opts, required:true }],
-    },
-    {
-      type: jsPsychSurveyMultiChoice,
-      questions: [{ prompt: '<b>How will you know which group a zombie is from?</b>', check2_opts, required:true}],
-    },
-    {
-      type: jsPsychSurveyMultiChoice,
-      questions: [{ prompt: '<b>How will zombies attack?</b>', options: check3_opts, required:true }],
-    },
-  ];
 
-  const correct_answers= [check1_opts[1],check2_opts[1], check3_opts[3]];
-
-
-  let quiz_attempts = 0;
-  const MAX_ATTEMPTS = 3;
-
-  
-  var quiz_block = {
-    timeline: [check1_question, check2_question, check3_question],
-      
-    on_finish: function(data) {
-      console.log(data);
-      // We'll collect the responses after all 3 have run
-    }
-  };
-*/
-
-
+var free_response_feedback = {
+    type: jsPsychSurveyText,
+    preamble: '<h3>Post-task Questions</h3><p>Please answer the following questions about your experience during the task.</p>',
+    questions: [
+        {prompt: "1. What strategy did you use to hit as many zombies as possible?", rows: 5, columns: 40, required: true},
+        {prompt: "2. Did you have any technical difficulties? If so, please explain.", rows: 5, columns: 40, required: false}
+    ],
+    button_label: 'Submit'
+};
   function get_n_elapsed_trials() {
     // return number of elapsed trials stored in jsPsych data object
     const n_trials = jsPsych.data.get().select('score').count();
@@ -274,39 +291,104 @@ function buildTimeline(jsPsych) {
     const block_score = block_scores.reduce((sum, score) => sum + score, 0);
     return block_score;
   }
-
-  var practice_instruction = {
-    type: jsPsychHtmlbuttonResponse,
+  
+  var practice_instruction1 = {
+    type: jsPsychHtmlButtonResponse,
     choices: ['Start'],
-    stimulus: `<div><img src=${images['taskImg6.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
-    <p style='width: 960px;line-height:2;text-align:center;font-size:40px'><br>
+    stimulus: `<div><img src=${images['taskImg6.png']} style='top:10%; left: 10% ;height:450px;width: 450px'><h1></h1> 
+    <p style='width: 960px;line-height:1;text-align:center;font-size:40px'><br>
       <br>Let's practice!
       <p style='width: 960px;line-height:2;text-align:left'>
-      <b>Here's a hint:</b> In this round, the zombies will attack <u>around 12 o'clock</u> (shown in image above).
+      <b>Here's a hint:</b> In this round, the zombies preferred attack location is <u> 12 o'clock</u> (shown in image above).
       You should place your bomb here everytime to kill as many zombies as possible! 
       </div>`,
   }; //In order to kill as many zombies as possible, you should place your bomb here everytime!
 
-  var practice_intermed1 = {
-    type: jsPsychHtmlbuttonResponse,
-    stimulus: `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1></h1> 
+var practice_instruction2={
+    type: jsPsychHtmlButtonResponse,
+    choices: ['Start'],
+    stimulus: `
+    <div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width:auto'><h1></h1>
     <p style='width: 960px;line-height:2;text-align:center'><br>
-      <br>This round, we will not show where the zombies will attack, so you will have to find their general attack location on your own. This will be true for the rest of the task.
-      <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location.
+      <br>Let's do some more advanced practice.
+      <br>This round, we will not show where the zombies will attack, so you will have to <b>find their general attack location on your own</b>. This will be true for the rest of the task.
       </div>`,
-    //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
-    //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
-    choices: ['Start Practice'],
   };
 
-  var practice_intermed2 = {
-    type: jsPsychHtmlbuttonResponse,
-    choices: ['Start'],
-    stimulus: `<div><p style='width: 960px;line-height:2;text-align:left'>
-      <br>Great job! Now, instead of just 1 group of zombies attacking your city, there will be <b>two groups</b> represented by two different colors.
-      <br>Let's try some practice trials!
-      </div>`,
+  var practice01_end = {
+    // print scores and end block
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function () {
+      // tally up block score
+      let n_trials = get_n_elapsed_trials();
+      const block_score = get_block_score(block_start_trial, n_trials);
+      let possible_block_score = n_trials - block_start_trial;
+      // print score in console and to the participant's screen
+      console.log('Block score: ' + block_score + '/' + possible_block_score);
+      // pg 5
+     return `
+     <div>
+        <img src=${images['taskImgp01.png']} style='top:20%; left: 10% ;height:400px;width: auto'><h1></h1> 
+        <p style='width: 960px;line-height:2;text-align:center'><br>
+          Great job! You got ${block_score} / ${possible_block_score} possible points in this block.
+          <br>The true preferred location of the zombies was <u>7 o'clock</u> (shown in image above).
+        </p>
+      </div>`;
+    },
+    choices: ['Next'],
+    on_load: function () {
+      // update starting index for the next block
+      let n_trials = get_n_elapsed_trials();
+      block_start_trial = n_trials;
+    }
   };
+  var practice_intermed1 = {
+    type: jsPsychInstructions,
+    pages:[
+        // pg 6
+      `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:400px;width: auto'><h1></h1> 
+      <p style='width: 960px;line-height:2;text-align:left'><br>
+      <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location.</b>
+      </div>`,
+     //pg 7 (intro practice)
+      `<div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width:auto'><h1></h1> 
+    <p style='width: 960px;line-height:2;text-align:center'><br>
+    <b> Let's practice again!</b>
+      <br>Similar to the last practice, we will not show where the zombies will attack, so you will have to find their general attack location on your own. 
+      <br><b>REMINDER: </b>The zombies will occasionally redirect their attacks to a completely new location.
+      </div>`,],
+    //Last round, we told you the exact central attack point of the zombies to guide your bomb placement. Now, you will practice finding the best bomb location on your own. Good luck!
+    //However, we will not tell you the zombies attack location this time, but you will have to figure this out. This will be true for the rest of the trials.
+    show_clickable_nav: true,
+    button_label_previous: 'Previous',
+    button_label_next: 'Next',
+    data: {
+      task_type: 'instructions',
+    },
+  };
+  var practice_intermed2 = {
+    type: jsPsychInstructions,
+    pages: [
+      `<div style='width: 960px; line-height:2; text-align:left;'>
+        <img src=${images['taskImg7.png']} style='display:block; margin: auto; height: 400px;'><br>
+        <p>Great job! Sometimes, there will be multiple groups of zombies.
+        <br>Each group of zombies is represented by a <b>different color</b>, signaled by the background color of the bomb.
+        <br> Each group also has a <b>different preferred attack location</b>, so pay attention!</p>
+        <p>In the image above, you would place the bomb at the blue zombies preferred location.</p>
+      </div>`,
+      `<div style='width: 960px; line-height:2; text-align:left;'>
+        <p>Now, instead of just 1 group of zombies attacking your city, there will be <b>two groups</b> represented by two different colors.</p>
+        <p>Let's try some practice trials!</p>
+      </div>`
+    ],
+    show_clickable_nav: true,
+    button_label_previous: 'Previous',
+    button_label_next: 'Start Practice',
+    data: {
+      task_type: 'instructions',
+    },
+  };
+
 
   var practice_end = {
     // print scores and end block
@@ -328,9 +410,9 @@ function buildTimeline(jsPsych) {
   };
 
   var real_task_welcome = {
-    type: jsPsychHtmlbuttonResponse,
+    type: jsPsychHtmlButtonResponse,
     choices: ['Start'],
-    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><h1>Now start protecting your city!</h1>
+    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: auto'><h1>Now start protecting your city!</h1>
           <p style='width: 960px;line-height:2;text-align:left'>
           <br>In the actual task, there will be 3 blocks with 200 trials each.
           <br>During each of these blocks, there will be <b>either 1, 2, or 3 groups of zombies</b> attacking your city at once.
@@ -356,6 +438,16 @@ function buildTimeline(jsPsych) {
     },
     choices: ['Next Block'],
   };
+  const practice0_loop = {
+  timeline: getPracticeBlock0Timeline(jsPsych),
+  loop_function: function(data) {
+    // Find the last checkPerformance trial
+    let lastTrial = data.values().slice(-1)[0];
+    // Repeat if the flag is set
+    block_start_trial += 10;
+    return lastTrial && lastTrial.repeatPractice === true;
+  }
+  };
 
   // run task!!!
   // welcome + consent
@@ -363,85 +455,37 @@ function buildTimeline(jsPsych) {
   timeline.push(consent_form);
   timeline.push(age_check);
   timeline.push(fullscreen_trial);
+  // instructions until fixed block 
+      // timeline.push(instruction_and_quiz);
+  timeline.push(instructions1)
+  timeline.push(practice_instruction1);
+  timeline.push(practice0_loop)
+  //practice_block0(timeline, jsPsych);
+  timeline.push(practice_instruction2);
+  practice_block01(timeline, jsPsych);
+  timeline.push(practice01_end); 
+  // ADD PRACTICE BLOCK HERE OF 10 TRIALS
 
-  // // instructions + test questions
+  // NEED TO FIGURE OUT HOW TO LOOP BACK TO PRACTICE INSTRUCTIONS WITH DIFF METRIC
+  //timeline.push(practice0_and_check);
+  timeline.push(practice_intermed1);
+  practice_block1(timeline, jsPsych);
+  timeline.push(practice_intermed2);
+  practice_block2(timeline, jsPsych);
+  timeline.push(practice_end);
+    //QUIZ QUESTIONS AT END , for now.....
 
-  // timeline.push(instruction1);
-  // timeline.push(instruction2);
-  // timeline.push(instruction3);
-  // timeline.push(instruction4);
-  // timeline.push(instruction5);
-  // timeline.push(instruction6);
-let instruction_attempts = 0;
-//let msg = '<h2> You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
-
-const instruction_and_quiz = {
-    timeline: [
-      instructions,
-      check1_question,
-      check2_question,
-      check3_question,
-      {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: function () {
-          const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
-          const q1_correct = last_3[0].response.Q0 === check1_opts[1];
-          const q2_correct = last_3[1].response.Q0 === check2_opts[1];
-          const q3_correct = last_3[2].response.Q0 === check3_opts[3];
-  
-          const all_correct = q1_correct && q2_correct && q3_correct;
-  
-          if (all_correct) {
-            return '<h2>✅ All questions are correct!</h2><p>Press any key to continue to the practice trials.</p>';
-          } 
-       //   else if(instruction_attempts >= 3) {
-       //     #jsPsych.endExperiment('<h2>⚠️ You have failed the quiz too many times. Please return your submission.</h2>');
-       //     return "<h2>⚠️ You have failed the quiz too many times. Please return your submission.</h2>";
-      //    }
-          else {
-            let msg = '<h2>⚠️ You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
-            if (!q1_correct) msg += '<li>Question 1 was incorrect.</li>';
-            if (!q2_correct) msg += '<li>Question 2 was incorrect.</li>';
-            if (!q3_correct) msg += '<li>Question 3 was incorrect.</li>';
-            msg += '</ul><p>Press any key to go back and try again.</p>';
-            return msg;
-          }
-        },
-        on_finish: function(){
-          const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
-          const correct =
-          last_3[0].response.Q0 === check1_opts[1] &&
-          last_3[1].response.Q0 === check2_opts[1] &&
-          last_3[2].response.Q0 === check3_opts[3];
-
-        if (!correct) {
-          instruction_attempts++;
-        }
-      },
-    },
-  ],
-  loop_function: function () {
-    const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
-    const q1_correct = last_3[0].response.Q0 === check1_opts[1];
-    const q2_correct = last_3[1].response.Q0 === check2_opts[1];
-    const q3_correct = last_3[2].response.Q0 === check3_opts[3];
-
-    const all_correct = q1_correct && q2_correct && q3_correct;
-
-    if (all_correct) return false;
-
-    //instruction_attempts++;
-    if (instruction_attempts >= 3) {
-      // If the user has failed the quiz too many times, end the experiment
-      return false;
-    }
-
-    return true; // restart instructions + quiz
-  },
-};
+  timeline.push(pre_quiz);
+  timeline.push(check1_question);
+  timeline.push(check2_question);
+  timeline.push(check3_question);
+  // add practice end
 
 
-const exit_after_failures = {
+
+
+
+/*const exit_after_failures = {
   timeline: [
     {
       type: jsPsychHtmlKeyboardResponse,
@@ -455,26 +499,12 @@ const exit_after_failures = {
     return instruction_attempts >= 3;
   },
 };
+*/
   
-  
 
-  timeline.push(instruction_and_quiz);
-  timeline.push(exit_after_failures);
+  //timeline.push(exit_after_failures);
 
-  //timeline.push(instructions);
-  //timeline.push(check1_trial);
-  //timeline.push(check2_trial);
-  //timeline.push(check3_trial);
-
-  // practice block
-  timeline.push(practice_instruction);
-  practice_block0(timeline, jsPsych);
-  timeline.push(practice_intermed1);
-  practice_block1(timeline, jsPsych);
-  timeline.push(practice_intermed2);
-  practice_block2(timeline, jsPsych);
-  timeline.push(practice_end);
-
+ 
   // real blocks
   timeline.push(real_task_welcome);
   // call blocks in shuffled order
@@ -511,6 +541,7 @@ const exit_after_failures = {
     },
   };
 
+  timeline.push(free_response_feedback);
   timeline.push(fullscreen_trial_exit);
   timeline.push(goodbye);
 
@@ -536,3 +567,66 @@ const exit_after_failures = {
 
 // Honeycomb, please include these options, and please get the timeline from this function.
 export { jsPsychOptions, buildTimeline };
+  //let instruction_attempts = 0;
+//let msg = '<h2> You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
+/*
+const instruction_and_quiz = {
+    timeline: [
+      instructions,
+      check1_question,
+      check2_question,
+      check3_question,
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+          const q1_correct = last_3[0].response.Q0 === check1_opts[1];
+          const q2_correct = last_3[1].response.Q0 === check2_opts[1];
+          const q3_correct = last_3[2].response.Q0 === check3_opts[3];
+  
+          const all_correct = q1_correct && q2_correct && q3_correct;
+  
+          if (all_correct) {
+            return '<h2>✅ All questions are correct!</h2><p>Press any key to continue to the practice trials.</p>';
+          } 
+          else {
+            let msg = '<h2>⚠️ You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
+            if (!q1_correct) msg += '<li>Question 1 was incorrect.</li>';
+            if (!q2_correct) msg += '<li>Question 2 was incorrect.</li>';
+            if (!q3_correct) msg += '<li>Question 3 was incorrect.</li>';
+            msg += '</ul><p>Press any key to go back and try again.</p>';
+            return msg;
+          }
+        },
+        on_finish: function(){
+          const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+          const correct =
+          last_3[0].response.Q0 === check1_opts[1] &&
+          last_3[1].response.Q0 === check2_opts[1] &&
+          last_3[2].response.Q0 === check3_opts[3];
+
+        if (!correct) {
+          instruction_attempts++;
+        }
+      },
+    },
+  ],
+  loop_function: function () {
+    const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+    const q1_correct = last_3[0].response.Q0 === check1_opts[1];
+    const q2_correct = last_3[1].response.Q0 === check2_opts[1];
+    const q3_correct = last_3[2].response.Q0 === check3_opts[3];
+
+    const all_correct = q1_correct && q2_correct && q3_correct;
+
+    if (all_correct) return false;
+
+    instruction_attempts++;
+    if (instruction_attempts > 3) {
+      // If the user has failed the quiz too many times, end the experiment
+      return false;
+    }
+
+    return true; // restart instructions + quiz
+  },
+}; */

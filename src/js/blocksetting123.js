@@ -13,7 +13,7 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 30;
+const n_TrialPractice = 10; // FIX THIS !11
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
@@ -150,6 +150,7 @@ function assessPerformance(prediction, outcome) {
   return hit;
 }
 
+
 /***
  *define blocks
  ***/
@@ -160,21 +161,156 @@ function assessPerformance(prediction, outcome) {
 function practice_block0(timeline, jsPsych) {
   let n_TrialPractice1 = 10;
   let trial_type_label = 'practice';
-  let hitThreshold = 7; // number of hits to pass practice block, restart (1x) if not
-  jsPsych.data.addDataToLastTrial({ totalScore: 0 });  // Initialize totalScore at the start
+  let updateThreshold = 15; // if they are updating more than this, they are not doing well
+  let minUpdateCount = 7; // number of trials that must be below updateThreshold
+  let updates = [];
+  let predictions = [];
+  let outcomes = [279.38, 246.37, 263.16, 254.01, 274.34, 280.86, 282.78, 306.51, 252.68, 286.5];
   let totalScore = 0;
+
   for (let n = 1; n < n_TrialPractice1 + 1; n++) {
     const colorStyleP = colorP0;
     let prediction;
     let outcome;
     let mean;
-    let outcomes;
     let score;
-    outcomes = [279.38, 246.37, 263.16, 254.01, 274.34, 280.86, 282.78, 306.51, 252.68, 286.5];
     //ENSURE THERE ARE examples of highly noisy outcomes
     //even though they are aiming in the right place, will not catch every zombie
     outcome = outcomes[n - 1];
     mean = 270;
+    console.log(colorStyleP);
+    console.log(mean);
+    console.log(outcome);
+    var make_prediction = {
+      type: Click,
+      on_load: function () {
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+        $('#center-circle').css('background-color', colorStyleP);
+        $('#circle').on('click', function (event) {
+          if (event.target == this) {
+            $('#center-circle').css('background-color', '#A9A9A9');
+          }
+        });
+        if ($('#arrow').length === 0) {
+          $('body').append('<div id="arrow"></div>');
+        }
+        if ($('#arrow-tail').length === 0) {
+
+          $('body').append('<div id="arrow-tail"></div>');
+        }
+        $('#arrow').css('border-top-color', colorStyleP);
+        $('#arrow-tail').css('background-color', colorStyleP);
+      },
+      on_finish: function () {
+        let pred_idx = jsPsych.data.get().select('prediction').count();
+        prediction = jsPsych.data.get().select('prediction').values[pred_idx - 1];
+        predictions.push(prediction);
+      },
+    };
+
+    var blank = {
+      type: Blank,
+      on_load: function () {
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+      },
+    };
+
+    var observe_outcome = {
+      type: Position,
+      data: { type: trial_type_label },
+      on_load: function () {
+        $('#shield').toggle(true);
+        $('#picker').css('transform', 'rotate(' + prediction + 'deg)');
+        $('#shield').css('transform', 'rotate(' + (prediction + 25) + 'deg) skewX(-40deg)');
+        $('#counter').text(n_TrialPractice1 + 1 - n);
+        $('#picker-circle').css('background-color', colorStyleP);
+        $('#pickerOutcome').css('transform', 'rotate(' + outcome + 'deg)');
+      },
+      on_finish: function (data) {
+        data.outcome = outcome;
+        data.mean = mean;
+        data.color = colorStyleP;
+        score = assessPerformance(prediction, outcome);
+        // Store updated totalScore back into jsPsych.data
+        data.score = score
+        totalScore += score;
+        outcomes[n-1] = outcome; // store outcomes for later
+        if (n>1){
+          let update = Math.abs(predictions[n-1] - predictions[n-2]);
+          update = Math.min(Math.abs(update), 360 - Math.abs(update));
+          updates.push(update);
+          console.log("update between predictions", update);
+          // or do I want to do actual update
+        }
+      },
+    };
+    var practice = {
+      timeline: [make_prediction, blank, observe_outcome],
+    };
+    timeline.push(practice);
+  }
+  var checkPerformance = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function () {
+      
+      $('#arrow').remove();
+      $('#arrow-tail').remove();
+      let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
+      console.log("updates", updates);
+      if (sufficientUpdates >= minUpdateCount) {
+        return `<div><p>Great job! You got ${totalScore} out of 10 possible points in this block. You can proceed to the next practice.</p></div>`;
+      } else {
+        return `<div><p>Sorry, you did not correctly aim to capture as many zombies as possible.</p>
+        <p>Remember, the zombies preferred attack location is represented by the arrow. </p>
+        <p>Please try again.</p></div>`;
+        
+      }
+    },
+    choices: function () {
+      let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
+      return sufficientUpdates >= minUpdateCount ? ['Continue'] : ['Try Again'];
+    },
+    on_finish: function (data) {
+      //let totalScore = jsPsych.data.get().last(1).values()[0].totalScore;
+      $('#arrow').remove();
+      $('#arrow-tail').remove();
+
+      let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
+      print ("sufficientUpdates", sufficientUpdates);
+      data.repeatPractice = sufficientUpdates < minUpdateCount;
+      updates = []; // reset updates for next practice block'
+      predictions = []; // reset predictions for next practice block
+      totalScore=0;
+
+    }
+  };
+  timeline.push(checkPerformance);
+}
+
+//FOR PRACTICE BLOCK 0 LOOPING
+function getPracticeBlock0Timeline(jsPsych) {
+    let timeline = [];
+    practice_block0(timeline, jsPsych);
+    return timeline;
+}
+
+/***
+ *practice block n < n_TrialPractice + 1
+ */
+function practice_block01(timeline, jsPsych) {
+  let n_TrialPractice1 = 10;
+  let trial_type_label = 'practice';
+  //jsPsych.data.addDataToLastTrial({ totalScore: 0 });  // Initialize totalScore at the start
+  for (let n = 1; n < n_TrialPractice1 + 1; n++) {
+    const colorStyleP = colorP1; // same color as pblock 1.. sus?
+    let prediction;
+    let outcome;
+    let mean;
+    let score;
+    // no changepoint logic here
+    mean = 120;//Math.floor(Math.random() * 360);
+    outcome = Math.mod(normalRandomScaled(mean, 20), 360);
+
     console.log(colorStyleP);
     console.log(mean);
     console.log(outcome);
@@ -218,11 +354,6 @@ function practice_block0(timeline, jsPsych) {
         data.mean = mean;
         data.color = colorStyleP;
         score = assessPerformance(prediction, outcome);
-        //let currentScore = jsPsych.data.get().last(1).values()[0].totalScore;
-       // currentScore += score;
-        totalScore += score;
-        // Store updated totalScore back into jsPsych.data
-        jsPsych.data.addDataToLastTrial({ totalScore: totalScore }); //stored globally
         data.score = score
       },
     };
@@ -231,32 +362,8 @@ function practice_block0(timeline, jsPsych) {
     };
     timeline.push(practice);
   }
-  var checkPerformance = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function () {
-      let totalScore = jsPsych.data.get().last(1).values()[0].totalScore;
-
-      if (totalScore >= hitThreshold) {
-        return `<div><p>Great job! Your score was ${totalScore}. You can proceed to the next practice.</p></div>`;
-      } else {
-        return `<div><p>Sorry, you did not perform well in the practice trials</p>
-        <p> You only hit ${totalScore} out of 10 trials.</p>
-        <p>Review the instructions and please try again.</p></div>`;
-      }
-    },
-    choices: ['Continue','Try Again'],
-    on_finish: function () {
-      let totalScore = jsPsych.data.get().last(1).values()[0].totalScore;
-
-      if (totalScore < hitThreshold) {
-        jsPsych.finishTrial();
-        timeline.splice(timeline.length - 1, 1);  // Remove current trial
-        practice_block0(timeline, jsPsych); 
-        } 
-    }
-  };
-  timeline.push(checkPerformance);
 }
+
 function practice_block1(timeline, jsPsych) {
   let counterP_1 = 0;
   let c1 = 0;
@@ -284,7 +391,6 @@ function practice_block1(timeline, jsPsych) {
     if (counterP_1 !== 1) {
       // x1 = x1
     }
-    // make task slightly easier for practicing with lower noise stdev -- CHANGED SO NOT TRUE (REALISTIC TO TASK)
     outcome = Math.mod(normalRandomScaled(x1, 20), 360); //x1 = mean, 20 = stdev
     mean = x1;
     console.log(colorStyleP);
@@ -803,4 +909,4 @@ function block3(timeline, jsPsych, sync_cp = true) {
   }
 }
 
-export { practice_block0, practice_block1, practice_block2, block1, block2, block3, rtDeadline };
+export { getPracticeBlock0Timeline, practice_block01, practice_block1, practice_block2, block1, block2, block3, rtDeadline };
