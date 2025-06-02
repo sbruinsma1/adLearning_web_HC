@@ -13,7 +13,7 @@ import { images } from '../lib/utils';
 
 // design
 const n_TrialPerBlock = 200;
-const n_TrialPractice = 10; // FIX THIS !11
+const n_TrialPractice = 25; // FIX THIS !11
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
