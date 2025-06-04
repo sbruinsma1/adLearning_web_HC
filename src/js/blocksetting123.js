@@ -12,8 +12,8 @@ import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { images } from '../lib/utils';
 
 // design
-const n_TrialPerBlock = 200;
-const n_TrialPractice = 25; // FIX THIS !11
+const n_TrialPerBlock = 10;
+const n_TrialPractice = 5; // FIX THIS !11
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
@@ -276,8 +276,9 @@ function practice_block0(timeline, jsPsych) {
       $('#arrow-tail').remove();
 
       let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
-      print ("sufficientUpdates", sufficientUpdates);
+      console.log("sufficientUpdates", sufficientUpdates);
       data.repeatPractice = sufficientUpdates < minUpdateCount;
+      data.instructionAttempts += data.repeatPractice ? 1 : 0;
       updates = []; // reset updates for next practice block'
       predictions = []; // reset predictions for next practice block
       totalScore=0;
@@ -566,7 +567,7 @@ function practice_block2(timeline, jsPsych) {
 function block1(timeline, jsPsych) {
   var block1_intro = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face one group of zombies.</p></div>`,
+    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: auto'><p>In this block, you will face one group of zombies.</p></div>`,
     choices: ['Start'],
   };
   timeline.push(block1_intro);
@@ -653,7 +654,7 @@ function block1(timeline, jsPsych) {
 function block2(timeline, jsPsych, sync_cp = true) {
   var block2_intro = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face two groups of zombies.</p></div>`,
+    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: auto'><p>In this block, you will face two groups of zombies.</p></div>`,
     choices: ['Start'],
   };
   timeline.push(block2_intro);
@@ -771,7 +772,7 @@ function block2(timeline, jsPsych, sync_cp = true) {
 function block3(timeline, jsPsych, sync_cp = true) {
   var block3_intro = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: 300px'><p>In this block, you will face three groups of zombies.</p></div>`,
+    stimulus: `<div><img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width: auto'><p>In this block, you will face three groups of zombies.</p></div>`,
 
     choices: ['Start'],
   };

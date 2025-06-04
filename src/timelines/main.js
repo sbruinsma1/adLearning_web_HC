@@ -265,11 +265,13 @@ var practice_instruction2={
         <p>Lastly, up to three different groups of zombies may attack at the same time.
         <br>Each group of zombies is represented by a <b>different color</b>, signaled by the background color of the bomb.
         <br> Each group also has a <b>different preferred attack location</b>, so pay attention!</p>
-        <p>In the image above, you would place the  <span style="color: blue; font-weight: bold;">blue bomb</span> where the blue zombies usually hit.</p>
+        <p>In the image above, you would place the  <u>blue</u> bomb where the <u>blue</u> zombies usually hit.</p>
       </div>`,
-      `<div style='width: 960px; line-height:2; text-align:left;'>
-      <h2>Practice Round 4: Multiple Zombie Groups</h2>
-        <p>With that, you will now practice finding the attack locations of <b>two zombie groups</b> represented by two different colors.</p>
+
+      ` <div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width:auto'>
+        <h2>Practice Round 4</h2>
+        <p style='width: 960px;line-height:2;text-align:center'><br>
+        With that, you will now practice finding the attack locations  of <b>two zombie groups</b> represented by two different colors.</p>
         <p>Let's try some practice trials!</p>
       </div>`
     ],
@@ -478,13 +480,15 @@ var free_response_feedback = {
     return lastTrial && lastTrial.repeatPractice === true;
   }
   };
-  const quiz_instruction_reset = {
+let quiz_attempts = 0;
+
+const quiz_instruction_reset = {
   timeline: [
-    instructions1,
-    instructions2,
+    // 1. Quiz questions first
     check1_question,
     check2_question,
     check3_question,
+    // 2. Feedback and conditional instructions
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function () {
@@ -495,14 +499,31 @@ var free_response_feedback = {
 
         if (q1_correct && q2_correct && q3_correct) {
           return '<h2>✅ All questions are correct!</h2><p>Press any key to continue.</p>';
+        } else if (quiz_attempts >= 2) {
+          return '<h2>⚠️ You have reached the maximum number of attempts.</h2><p>You may continue. Press any key to proceed.</p>';
         } else {
           let msg = '<h2>⚠️ You did not answer all questions correctly.</h2><p>Let\'s review the instructions.</p><ul>';
           if (!q1_correct) msg += '<li>Question 1 was incorrect.</li>';
           if (!q2_correct) msg += '<li>Question 2 was incorrect.</li>';
           if (!q3_correct) msg += '<li>Question 3 was incorrect.</li>';
-          msg += '</ul><p>Press any key to go back and try again.</p>';
+          msg += '</ul><p>Press any key to review the instructions and try again.</p>';
           return msg;
         }
+      },
+      on_finish: function(data) {
+        quiz_attempts++;
+        data.quiz_attempts = quiz_attempts; // Store the number of attempts in the data
+      }
+    },
+    // 3. Show instructions only if not all correct and attempts < 3
+    {
+      timeline: [instructions1, instructions2],
+      conditional_function: function() {
+        const last_3 = jsPsych.data.get().filter({ trial_type: 'survey-multi-choice' }).last(3).values();
+        const q1_correct = last_3[0].response.Q0 === check1_opts[1];
+        const q2_correct = last_3[1].response.Q0 === check2_opts[1];
+        const q3_correct = last_3[2].response.Q0 === check3_opts[3];
+        return !(q1_correct && q2_correct && q3_correct) && quiz_attempts < 3;
       }
     }
   ],
@@ -512,10 +533,10 @@ var free_response_feedback = {
     const q2_correct = last_3[1].response.Q0 === check2_opts[1];
     const q3_correct = last_3[2].response.Q0 === check3_opts[3];
 
-    // If all correct, exit loop; otherwise, repeat
-    return !(q1_correct && q2_correct && q3_correct);
+    // If all correct, or attempts >= 3, exit loop; otherwise, repeat
+    return !(q1_correct && q2_correct && q3_correct) && quiz_attempts < 3;
   }
-};
+}; 
 
   // run task!!!
   // welcome + consent
@@ -544,9 +565,9 @@ var free_response_feedback = {
     //QUIZ QUESTIONS AT END , for now.....
 
   timeline.push(pre_quiz);
-  timeline.push(check1_question);
-  timeline.push(check2_question);
-  timeline.push(check3_question);
+  //timeline.push(check1_question);
+  //timeline.push(check2_question);
+  //timeline.push(check3_question);
   timeline.push(quiz_instruction_reset);
   // add practice end
 
