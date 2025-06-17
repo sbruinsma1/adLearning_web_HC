@@ -115,11 +115,12 @@ function buildTimeline(jsPsych) {
     pages: [
       // pg 1
       `    <div style="width: 960px; margin: auto; text-align: center;">
-      <h1>Protect Your City From Zombies</h1>
+      <h1><b>Protect Your City From Zombie</b>s</h1>
       <img src=${images['intro_city.png']} style="height: 400px; margin-bottom: 20px;">
       <p style="text-align: left;
        line-height: 2;">
-        Imagine that we are in the world of Resident Evil. Your city is the only place not infected by the virus.
+        Imagine that we are in the world of a zombie apocalypse. Your city is the only place not yet infected by the zombie 
+        virus.
         <br>There are <b>multiple groups of zombies</b> attacking your city from <b>different directions</b>.
         <br><u>Your goal is to set bombs to kill the zombies and defend your city.</u>
       </p>
@@ -134,7 +135,7 @@ function buildTimeline(jsPsych) {
 
       <!-- Text below the images -->
       <p style='width: 960px; line-height: 2; text-align: center; font-size: 1.4rem;'>
-        <br>The large circle represents your city. You must <b>set bombs on the perimeter</b> (i.e. on the white) to destroy the attacking zombies.
+        <br>The large circle represents your city. You must <b>set bombs on the perimeter</b> (i.e. on the white) to stop the attacking zombies.
         <br>You must drag the bomb from the center of your city to the spot on the perimeter where you anticipate the zombie's attack and release your mouse once you have set your position.
       </p>
       </div>`,
