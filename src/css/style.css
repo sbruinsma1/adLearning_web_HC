@@ -145,3 +145,26 @@
 	user-select:none;
 }
 
+#arrow {
+    position: absolute;
+    top: calc(50% - 175px); /* Adjust based on circle radius */
+    left: 50%;
+    transform: translateX(-50%) ;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid rgb(255, 47, 0); /* Now points upward */
+    z-index: 999;
+}
+#arrow-tail {
+    position: absolute;
+    top: calc(50% - 205px); /* Tail starts above arrowhead */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;            /* Tail thickness */
+    height: 30px;          /* Tail length */
+    z-index: 998;
+	background-color: rgb(255, 64, 0);
+
+}
