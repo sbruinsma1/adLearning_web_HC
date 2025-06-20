@@ -64,11 +64,11 @@ function App() {
       // If MTURK
       if (config.USE_MTURK) {
         /* eslint-disable */
-        window.lodash = _.noConflict()
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
-        setMethod('mturk')
+        window.lodash = _.noConflict();
+        setPsiturk(new PsiTurk(turkUniqueId, '/complete'));
+        setMethod('mturk');
         // TODO 145: Function signature
-        handleLogin('mturk', turkUniqueId)
+        handleLogin('mturk', turkUniqueId);
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId();
@@ -95,7 +95,7 @@ function App() {
       }
     }
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   /** VALIDATION FUNCTIONS */
 

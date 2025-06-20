@@ -17,7 +17,6 @@ import Position from '../js/outcome';
 // import Blank from '../js/template-js/blank';
 // import Position from '../js/template-js/outcome';
 
-
 import jsPsychHtmlbuttonResponse from '@jspsych/plugin-html-button-response';
 
 import { images } from '../lib/utils';

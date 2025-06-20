@@ -12,8 +12,8 @@ import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { images } from '../lib/utils';
 
 // design
-const n_TrialPerBlock = 20;
-const n_TrialPractice = 25; // FIX THIS !11
+const n_TrialPerBlock = 10;
+const n_TrialPractice = 10; // FIX THIS !11
 const n_SamePosition = 7;
 const n_MaxJitter = 4; // 7-11, avg of 9
 const rtDeadline = 15000;
@@ -150,7 +150,6 @@ function assessPerformance(prediction, outcome) {
   return hit;
 }
 
-
 /***
  *define blocks
  ***/
@@ -195,7 +194,6 @@ function practice_block0(timeline, jsPsych) {
           $('body').append('<div id="arrow"></div>');
         }
         if ($('#arrow-tail').length === 0) {
-
           $('body').append('<div id="arrow-tail"></div>');
         }
         $('#arrow').css('border-top-color', colorStyleP);
@@ -232,14 +230,14 @@ function practice_block0(timeline, jsPsych) {
         data.color = colorStyleP;
         score = assessPerformance(prediction, outcome);
         // Store updated totalScore back into jsPsych.data
-        data.score = score
+        data.score = score;
         totalScore += score;
-        outcomes[n-1] = outcome; // store outcomes for later
-        if (n>1){
-          let update = Math.abs(predictions[n-1] - predictions[n-2]);
+        outcomes[n - 1] = outcome; // store outcomes for later
+        if (n > 1) {
+          let update = Math.abs(predictions[n - 1] - predictions[n - 2]);
           update = Math.min(Math.abs(update), 360 - Math.abs(update));
           updates.push(update);
-          console.log("update between predictions", update);
+          console.log('update between predictions', update);
           // or do I want to do actual update
         }
       },
@@ -252,20 +250,18 @@ function practice_block0(timeline, jsPsych) {
   var checkPerformance = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function () {
-      
       $('#arrow').remove();
       $('#arrow-tail').remove();
-      let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
-      console.log("updates", updates);
-      if (sufficientUpdates >=9){
+      let sufficientUpdates = updates.filter((u) => u <= updateThreshold).length;
+      console.log('updates', updates);
+      if (sufficientUpdates >= 9) {
         return `<div style= "line-height:1.75;">
         <p>Great job! You got ${totalScore} out of 10 possible points in this block.</p>
         <p style = "text-align: center;">
         <br>Hitting <b> 9 out of 10 zombies </b> means that you used the best possible strategy for this block.
         <br>The zombies stagger unpredictably, so <u>it is not always possible to hit every zombie</u>.
         <br> You can proceed to the next practice.</p></div>`;
-      }
-      else if (sufficientUpdates >= minUpdateCount) {
+      } else if (sufficientUpdates >= minUpdateCount) {
         return `<div style= "line-height:1.75;">
         <p>Great job! You got <b>${totalScore} out of 10</b> possible points in this block.</p>
         <p>
@@ -276,11 +272,10 @@ function practice_block0(timeline, jsPsych) {
         return `<div><p>Sorry, you did not correctly aim to capture as many zombies as possible.</p>
         <p>Remember, the zombies preferred attack location is represented by the arrow. </p>
         <p>Please try again.</p></div>`;
-        
       }
     },
     choices: function () {
-      let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
+      let sufficientUpdates = updates.filter((u) => u <= updateThreshold).length;
       return sufficientUpdates >= minUpdateCount ? ['Continue'] : ['Try Again'];
     },
     on_finish: function (data) {
@@ -288,24 +283,23 @@ function practice_block0(timeline, jsPsych) {
       $('#arrow').remove();
       $('#arrow-tail').remove();
 
-      let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
-      console.log("sufficientUpdates", sufficientUpdates);
+      let sufficientUpdates = updates.filter((u) => u <= updateThreshold).length;
+      console.log('sufficientUpdates', sufficientUpdates);
       data.repeatPractice = sufficientUpdates < minUpdateCount;
       data.instructionAttempts += data.repeatPractice ? 1 : 0;
       updates = []; // reset updates for next practice block'
       predictions = []; // reset predictions for next practice block
-      totalScore=0;
-
-    }
+      totalScore = 0;
+    },
   };
   timeline.push(checkPerformance);
 }
 
 //FOR PRACTICE BLOCK 0 LOOPING
 function getPracticeBlock0Timeline(jsPsych) {
-    let timeline = [];
-    practice_block0(timeline, jsPsych);
-    return timeline;
+  let timeline = [];
+  practice_block0(timeline, jsPsych);
+  return timeline;
 }
 
 /***
@@ -322,7 +316,7 @@ function practice_block01(timeline, jsPsych) {
     let mean;
     let score;
     // no changepoint logic here
-    mean = 120;//Math.floor(Math.random() * 360);
+    mean = 120; //Math.floor(Math.random() * 360);
     outcome = Math.mod(normalRandomScaled(mean, 20), 360);
 
     console.log(colorStyleP);
@@ -368,7 +362,7 @@ function practice_block01(timeline, jsPsych) {
         data.mean = mean;
         data.color = colorStyleP;
         score = assessPerformance(prediction, outcome);
-        data.score = score
+        data.score = score;
       },
     };
     var practice = {
@@ -923,4 +917,13 @@ function block3(timeline, jsPsych, sync_cp = true) {
   }
 }
 
-export { getPracticeBlock0Timeline, practice_block01, practice_block1, practice_block2, block1, block2, block3, rtDeadline };
+export {
+  getPracticeBlock0Timeline,
+  practice_block01,
+  practice_block1,
+  practice_block2,
+  block1,
+  block2,
+  block3,
+  rtDeadline,
+};
