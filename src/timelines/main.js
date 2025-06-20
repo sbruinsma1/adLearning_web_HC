@@ -169,12 +169,12 @@ function buildTimeline(jsPsych) {
     </div>
     `,
       // pg 5
-      `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:375px;width: auto'>
+      `<div><img src=${images['taskImg4_large.png']} style='top:30%; left: 10% ;height:425px;width: auto'>
 
-      <p style='width: 960px;line-height:1.75;text-align:left'><br>
+      <p style='width: 960px;line-height:1.8;text-align:left'>
       <br>Each group of zombies has a preferred attack location. However, due to their unpredictable clumsiness, <b>they won't always hit the exact same spot.</b>
-      <br> In the picture above, the preferred attack location of the blue zombie is depicted by the smaller circle above the perimeter and the dark arrow.
-      <br> The various paths the zombies may stagger down(away from their preferred location) are represented by the arrows, with lighter arrows indicating less likely attack locations.
+      <br> In the picture above, the preferred attack location of the blue zombies is depicted by the <b>dark arrow</b> coming from the smaller circle above the perimeter.
+      <br> The various paths the zombies may stagger down (away from their preferred location) are represented by the arrows, with lighter arrows indicating less likely attack locations.
       <br><b>Tip:</b> try to find their preferred attack location and place your bomb there.
       </div>`,
 
@@ -187,7 +187,7 @@ function buildTimeline(jsPsych) {
   var practice_instruction1 = {
     type: jsPsychHtmlButtonResponse,
     choices: ['Start'],
-    stimulus: `<div><img src=${images['taskImg6.png']} style='top:10%; left: 10% ;height:450px;width: 450px'><h1></h1> 
+    stimulus: `<div><img src=${images['taskImg6.png']} style='top:10%; left: 10% ;height:475px;width: auto'><h1></h1> 
       <h2>Practice Round 1: Known Attack Spot </h2>
       <p style='width: 960px;line-height:2;text-align:left'>
       <b>Here's a hint:</b> In this round, the zombies preferred attack location is <u> 12 o'clock</u> (shown in image above).
@@ -200,7 +200,7 @@ var practice_instruction2={
     choices: ['Start'],
     stimulus: `
     <div><<img src=${images['zombie.png']} style='top:20%; left: 10% ;height:300px;width:auto'><h1></h1>
-      <h2>Practice Round 2: Find the Attack Spot Yourself</h2>
+      <h2>Practice Round 2: Find the Attack Location Yourself</h2>
       <p style='width: 960px;line-height:2;text-align:center'><br>
       <br>In the next practice, we <strong> will not</strong> show you the zombies preferred attack location ahead of time.
       <br>You must <b>figure out their general attack location on your own</b>. This will be true for the rest of the task.
@@ -238,7 +238,7 @@ var practice_instruction2={
     type: jsPsychInstructions,
     pages:[
         // pg 6
-      `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:400px;width: auto'><h1></h1> 
+      `<div><img src=${images['taskImg5_new.png']} style='top:20%; left: 10% ;height:400px;width: auto'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location on the perimeter.</b>
       </div>`,
@@ -398,7 +398,7 @@ var free_response_feedback = {
     type: jsPsychInstructions,
     pages: [
       // pg 6
-      `<div><img src=${images['taskImg5.png']} style='top:20%; left: 10% ;height:400px;width: auto'><h1></h1> 
+      `<div><img src=${images['taskImg5_new.png']} style='top:20%; left: 10% ;height:400px;width: auto'><h1></h1> 
       <p style='width: 960px;line-height:2;text-align:left'><br>
       <br>It's also important to note that zombies of the same color will <b>occasionally redirect their attacks to a completely new location.</b>
       </div>`,

@@ -257,8 +257,21 @@ function practice_block0(timeline, jsPsych) {
       $('#arrow-tail').remove();
       let sufficientUpdates = updates.filter(u => u <= updateThreshold).length;
       console.log("updates", updates);
-      if (sufficientUpdates >= minUpdateCount) {
-        return `<div><p>Great job! You got ${totalScore} out of 10 possible points in this block. You can proceed to the next practice.</p></div>`;
+      if (sufficientUpdates >=9){
+        return `<div style= "line-height:1.75;">
+        <p>Great job! You got ${totalScore} out of 10 possible points in this block.</p>
+        <p style = "text-align: center;">
+        <br>Hitting <b> 9 out of 10 zombies </b> means that you used the best possible strategy for this block.
+        <br>The zombies stagger unpredictably, so <u>it is not always possible to hit every zombie</u>.
+        <br> You can proceed to the next practice.</p></div>`;
+      }
+      else if (sufficientUpdates >= minUpdateCount) {
+        return `<div style= "line-height:1.75;">
+        <p>Great job! You got <b>${totalScore} out of 10</b> possible points in this block.</p>
+        <p>
+        The zombies stagger unpredictably, so <u>it is not always possible to hit every zombie.</u>
+        <br> You can proceed to the next practice.</p></div>`;
+        //could include, "refining your strategy may result in more hits, but a perfect score in not expected"
       } else {
         return `<div><p>Sorry, you did not correctly aim to capture as many zombies as possible.</p>
         <p>Remember, the zombies preferred attack location is represented by the arrow. </p>
